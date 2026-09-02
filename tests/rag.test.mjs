@@ -275,6 +275,28 @@ test("API explains the bounded three-day browser memory without calling a model"
   assert.equal(payload.citations.length, 0);
 });
 
+test("API handles bounded small talk locally and redirects off-topic chat", async () => {
+  resetMemoryControlsForTest();
+  const env = {
+    NODE_ENV: "test", ASK_JOHN_ENABLED: "true", ASK_JOHN_PROVIDER: "fixture", ASK_JOHN_CONTROL_MODE: "memory", ASK_JOHN_IP_HASH_SALT: "small-talk-test",
+    ASK_JOHN_PER_IP_LIMIT: "20", ASK_JOHN_DAILY_REQUEST_LIMIT: "20", ASK_JOHN_DAILY_BUDGET_USD: "1", ASK_JOHN_MAX_COST_PER_REQUEST_USD: "0.01"
+  };
+  const ask = async (question) => {
+    const request = new Request("https://portfolio.example/api/ask", {
+      method: "POST", headers: { "Content-Type": "application/json", "x-forwarded-for": "203.0.113.55" }, body: JSON.stringify({ question })
+    });
+    return (await handleRequest(request, env)).json();
+  };
+  for (const question of ["你好", "你是谁？", "谢谢", "How are you?", "Goodbye"]) {
+    const response = await ask(question);
+    assert.equal(response.mode, "system", question);
+    assert.equal(response.citations.length, 0, question);
+  }
+  const offTopic = await ask("今天天气怎么样？");
+  assert.equal(offTopic.mode, "no_evidence");
+  assert.match(offTopic.answer, /公开职业资料范围/);
+});
+
 test("API metadata exposes the exact built corpus version", () => {
   const metadata = corpusMetadata();
   assert.equal(metadata.version, index.document_version);
