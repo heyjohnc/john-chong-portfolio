@@ -1,4 +1,5 @@
 node_modules/
+.npm-cache/
 public/
 previews/
 portfolio-rag/evals/results/

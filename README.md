@@ -2,6 +2,8 @@
 
 Source for [johnchong.info](https://johnchong.info), the public portfolio of John Chong (Shing Yip Chong).
 
+Production: [https://johnchong.info](https://johnchong.info)
+
 The site presents John’s product responsibility and selected AI work through five pages:
 
 - `index.html` — introduction and responsibility model
@@ -47,6 +49,8 @@ The checked-in suite covers the 29-section public corpus, retrieval expectations
 - `UPSTASH_REDIS_REST_TOKEN`
 
 Rate and budget ceilings are configurable through the `ASK_JOHN_*` control variables in `api/_lib/controls.mjs`. Never commit real environment values or provider credentials.
+
+The website is deployed independently of the assistant switch. When the global control store or provider configuration is incomplete, `/api/ask` fails closed while every portfolio page remains available.
 
 ## Public-content boundary
 
