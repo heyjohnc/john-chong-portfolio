@@ -37,7 +37,7 @@ The checked-in suite covers the 29-section public corpus, retrieval expectations
 
 ## Deployment
 
-`vercel.json` builds the public static directory and keeps `api/ask.mjs` as a server-side function. A production assistant additionally requires server-only configuration:
+`vercel.json` builds the public static directory. The public assistant runs on an owner-operated VPS so its provider credential and global controls remain outside the browser and Vercel. A production assistant requires server-only configuration:
 
 - `ASK_JOHN_ENABLED`
 - `ASK_JOHN_PROVIDER`
@@ -45,20 +45,22 @@ The checked-in suite covers the 29-section public corpus, retrieval expectations
 - `ASK_JOHN_SITE_URL`
 - `OPENROUTER_API_KEY` or `OPENAI_API_KEY`
 - `ASK_JOHN_IP_HASH_SALT`
-- `UPSTASH_REDIS_REST_URL`
-- `UPSTASH_REDIS_REST_TOKEN`
+- `ASK_JOHN_CONTROL_MODE=redis`
+- `ASK_JOHN_REDIS_HOST`
+- `ASK_JOHN_REDIS_PORT`
+- `ASK_JOHN_ALLOWED_ORIGINS`
 
-Rate and budget ceilings are configurable through the `ASK_JOHN_*` control variables in `api/_lib/controls.mjs`. Never commit real environment values or provider credentials.
+The VPS entry point is `scripts/serve-bot14-ask-john.mjs`. Rate and budget ceilings are configurable through the `ASK_JOHN_*` control variables in `api/_lib/controls.mjs`. A serverless deployment can still use the existing Upstash REST mode. Never commit real environment values or provider credentials.
 
 Before enabling the public assistant:
 
-1. create a Portfolio-only OpenRouter key with an explicit USD limit and reset period instead of sharing another project's key;
-2. create a Portfolio-only Upstash Redis database for atomic per-IP and daily limits;
-3. add the variables above as server-only Vercel settings for each intended environment;
-4. redeploy, because Vercel environment changes do not alter an existing deployment; and
-5. verify one supported question, one sensitive-question refusal and the configured rate limit before switching production traffic on.
+1. load the provider key only through the protected VPS service environment;
+2. use the VPS-local persistent Redis instance for atomic per-IP and daily limits;
+3. expose only the bounded Ask John endpoint through HTTPS with an exact origin allowlist;
+4. verify one supported question, one sensitive-question refusal and the configured rate limit; and
+5. keep the service fail-closed whenever its provider or global control store is unavailable.
 
-The website is deployed independently of the assistant switch. When the global control store or provider configuration is incomplete, `/api/ask` fails closed while every portfolio page remains available.
+The website is deployed independently of the assistant service. When the global control store or provider configuration is incomplete, the endpoint fails closed while every portfolio page remains available.
 
 ## Public-content boundary
 

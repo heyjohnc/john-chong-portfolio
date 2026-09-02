@@ -146,6 +146,9 @@
   const MEMORY_KEY = "john-chong-ask-memory-v1";
   const MEMORY_TTL_MS = 3 * 24 * 60 * 60 * 1000;
   const MEMORY_TURN_LIMIT = 4;
+  const ASK_ENDPOINT = ["johnchong.info", "www.johnchong.info"].includes(window.location.hostname)
+    ? "https://ask-john.37.187.136.100.sslip.io/api/ask"
+    : "/api/ask";
 
   function loadConversation() {
     try {
@@ -411,7 +414,7 @@
     setLoading(true);
     const loading = appendLoading(text);
     try {
-      const response = await fetch("/api/ask", {
+      const response = await fetch(ASK_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: text, history })

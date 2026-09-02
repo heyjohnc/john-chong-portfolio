@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { enforceOperationalControls, hashClientAddress, resetMemoryControlsForTest } from "../api/_lib/controls.mjs";
+import { encodeRedisCommand, enforceOperationalControls, hashClientAddress, parseRedisReply, resetMemoryControlsForTest } from "../api/_lib/controls.mjs";
 import { evaluatePolicy, noEvidenceResponse } from "../api/_lib/policy.mjs";
 import { answerWithOpenAI, answerWithOpenRouter, estimateProviderCostUsd } from "../api/_lib/provider.mjs";
 import { corpusMetadata, index, queryConcepts, retrieve } from "../api/_lib/retrieval.mjs";
@@ -141,6 +141,12 @@ test("global serverless control path uses an atomic Redis script", async () => {
     assert.equal(command[2], "2");
     assert.match(command[1], /daily/);
   } finally { globalThis.fetch = originalFetch; }
+});
+
+test("owner-operated VPS control path speaks bounded Redis RESP", () => {
+  const command = encodeRedisCommand(["INCR", "ask-john:test"]);
+  assert.equal(command.toString("utf8"), "*2\r\n$4\r\nINCR\r\n$13\r\nask-john:test\r\n");
+  assert.deepEqual(parseRedisReply(Buffer.from("*4\r\n:1\r\n:2\r\n:3\r\n:0\r\n")), { value: [1, 2, 3, 0], offset: 20 });
 });
 
 test("OpenAI adapter keeps the key server-side and requests strict stored-off JSON", async () => {

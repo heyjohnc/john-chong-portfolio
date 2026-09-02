@@ -1,4 +1,5 @@
 import { createHmac } from "node:crypto";
+import { createConnection } from "node:net";
 
 const memoryCounters = globalThis.__askJohnCounters || new Map();
 globalThis.__askJohnCounters = memoryCounters;
@@ -43,6 +44,7 @@ export function controlConfig(env = process.env) {
   const dailyBudgetUsd = numberEnv(env, "ASK_JOHN_DAILY_BUDGET_USD", 0.5, 0.01, 100);
   const maximumRequestCostUsd = numberEnv(env, "ASK_JOHN_MAX_COST_PER_REQUEST_USD", 0.01, 0.0001, 1);
   const budgetDerivedLimit = Math.max(1, Math.floor(dailyBudgetUsd / maximumRequestCostUsd));
+  const keyPrefix = (env.ASK_JOHN_REDIS_PREFIX || "ask-john").replace(/[^a-zA-Z0-9:_-]/g, "").slice(0, 80) || "ask-john";
   return {
     enabled: env.ASK_JOHN_ENABLED === "true",
     perIpLimit,
@@ -50,7 +52,8 @@ export function controlConfig(env = process.env) {
     dailyBudgetUsd,
     maximumRequestCostUsd,
     dailyLimit: Math.min(dailyRequestLimit, budgetDerivedLimit),
-    storeMode: env.ASK_JOHN_CONTROL_MODE || "upstash"
+    storeMode: env.ASK_JOHN_CONTROL_MODE || "upstash",
+    keyPrefix
   };
 }
 
@@ -97,11 +100,97 @@ async function upstashCommand(command, env = process.env) {
 async function enforceUpstash({ ipHash, config, now, env }) {
   const result = await upstashCommand([
     "EVAL", atomicLimitScript, "2",
-    `ask-john:ip:${ipHash}`,
-    `ask-john:daily:${dayKey(now)}`,
+    `${config.keyPrefix}:ip:${ipHash}`,
+    `${config.keyPrefix}:daily:${dayKey(now)}`,
     String(config.perIpLimit), String(config.dailyLimit), String(config.windowSeconds), String(secondsUntilUtcMidnight(now))
   ], env);
   if (!Array.isArray(result) || result.length < 4) throw new Error("Invalid global control-store response.");
+  return {
+    allowed: Number(result[0]) === 1,
+    ipCount: Number(result[1]),
+    dailyCount: Number(result[2]),
+    reason: Number(result[3]) === 1 ? "per_ip" : Number(result[3]) === 2 ? "daily" : null
+  };
+}
+
+function encodeRedisCommand(command) {
+  const parts = command.map((item) => Buffer.from(String(item)));
+  return Buffer.concat([
+    Buffer.from(`*${parts.length}\r\n`),
+    ...parts.flatMap((part) => [Buffer.from(`$${part.length}\r\n`), part, Buffer.from("\r\n")])
+  ]);
+}
+
+function parseRedisReply(buffer, offset = 0) {
+  if (offset >= buffer.length) return null;
+  const prefix = String.fromCharCode(buffer[offset]);
+  const lineEnd = buffer.indexOf("\r\n", offset + 1);
+  if (lineEnd === -1) return null;
+  const line = buffer.subarray(offset + 1, lineEnd).toString("utf8");
+  const next = lineEnd + 2;
+  if (prefix === "+") return { value: line, offset: next };
+  if (prefix === "-") throw new Error("Local Redis rejected the command.");
+  if (prefix === ":") return { value: Number(line), offset: next };
+  if (prefix === "$") {
+    const length = Number(line);
+    if (length === -1) return { value: null, offset: next };
+    if (!Number.isInteger(length) || length < 0 || buffer.length < next + length + 2) return null;
+    return { value: buffer.subarray(next, next + length).toString("utf8"), offset: next + length + 2 };
+  }
+  if (prefix === "*") {
+    const count = Number(line);
+    if (!Number.isInteger(count) || count < 0) return count === -1 ? { value: null, offset: next } : null;
+    const value = [];
+    let cursor = next;
+    for (let index = 0; index < count; index += 1) {
+      const parsed = parseRedisReply(buffer, cursor);
+      if (!parsed) return null;
+      value.push(parsed.value);
+      cursor = parsed.offset;
+    }
+    return { value, offset: cursor };
+  }
+  throw new Error("Unsupported local Redis response.");
+}
+
+async function localRedisCommand(command, env = process.env) {
+  const host = env.ASK_JOHN_REDIS_HOST || "127.0.0.1";
+  const port = integerEnv(env, "ASK_JOHN_REDIS_PORT", 6379, 1, 65535);
+  const timeoutMs = integerEnv(env, "ASK_JOHN_REDIS_TIMEOUT_MS", 1500, 100, 5000);
+  return new Promise((resolve, reject) => {
+    const socket = createConnection({ host, port });
+    let settled = false;
+    let received = Buffer.alloc(0);
+    const finish = (error, value) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      socket.destroy();
+      if (error) reject(error); else resolve(value);
+    };
+    const timer = setTimeout(() => finish(new Error("Local Redis timed out.")), timeoutMs);
+    socket.once("error", (error) => finish(error));
+    socket.once("connect", () => socket.write(encodeRedisCommand(command)));
+    socket.on("data", (chunk) => {
+      received = Buffer.concat([received, chunk]);
+      try {
+        const parsed = parseRedisReply(received);
+        if (parsed) finish(null, parsed.value);
+      } catch (error) {
+        finish(error);
+      }
+    });
+  });
+}
+
+async function enforceLocalRedis({ ipHash, config, now, env }) {
+  const result = await localRedisCommand([
+    "EVAL", atomicLimitScript, "2",
+    `${config.keyPrefix}:ip:${ipHash}`,
+    `${config.keyPrefix}:daily:${dayKey(now)}`,
+    String(config.perIpLimit), String(config.dailyLimit), String(config.windowSeconds), String(secondsUntilUtcMidnight(now))
+  ], env);
+  if (!Array.isArray(result) || result.length < 4) throw new Error("Invalid local Redis response.");
   return {
     allowed: Number(result[0]) === 1,
     ipCount: Number(result[1]),
@@ -117,7 +206,9 @@ export async function enforceOperationalControls({ clientAddress, env = process.
   try {
     const result = config.storeMode === "memory"
       ? await enforceMemory({ ipHash, config, now })
-      : await enforceUpstash({ ipHash, config, now, env });
+      : config.storeMode === "redis"
+        ? await enforceLocalRedis({ ipHash, config, now, env })
+        : await enforceUpstash({ ipHash, config, now, env });
     return { ...result, mode: result.allowed ? "allowed" : "rate_limited", config };
   } catch (error) {
     return { allowed: false, mode: "disabled", reason: "control_store_unavailable", config, internalError: error };
@@ -125,13 +216,16 @@ export async function enforceOperationalControls({ clientAddress, env = process.
 }
 
 export async function recordAggregateTelemetry({ mode, language, corpusVersion, env = process.env, now = new Date() }) {
-  if ((env.ASK_JOHN_CONTROL_MODE || "upstash") !== "upstash") return;
-  const key = `ask-john:metrics:${dayKey(now)}`;
+  const storeMode = env.ASK_JOHN_CONTROL_MODE || "upstash";
+  if (!["upstash", "redis"].includes(storeMode)) return;
+  const keyPrefix = controlConfig(env).keyPrefix;
+  const key = `${keyPrefix}:metrics:${dayKey(now)}`;
   try {
-    await upstashCommand(["HINCRBY", key, `mode:${mode}`, "1"], env);
-    await upstashCommand(["HINCRBY", key, `language:${language}`, "1"], env);
-    await upstashCommand(["HSET", key, "corpus_version", corpusVersion], env);
-    await upstashCommand(["EXPIRE", key, "2592000"], env);
+    const command = storeMode === "redis" ? localRedisCommand : upstashCommand;
+    await command(["HINCRBY", key, `mode:${mode}`, "1"], env);
+    await command(["HINCRBY", key, `language:${language}`, "1"], env);
+    await command(["HSET", key, "corpus_version", corpusVersion], env);
+    await command(["EXPIRE", key, "2592000"], env);
   } catch (_) {
     // Aggregate telemetry is deliberately best-effort and never exposes request text.
   }
@@ -140,3 +234,5 @@ export async function recordAggregateTelemetry({ mode, language, corpusVersion, 
 export function resetMemoryControlsForTest() {
   memoryCounters.clear();
 }
+
+export { encodeRedisCommand, localRedisCommand, parseRedisReply };
