@@ -111,6 +111,19 @@ Production validation on 2026-09-03:
 - recent service journal output contained lifecycle messages only and no
   visitor question text.
 
+Evidence-trail interface release on 2026-09-03:
+
+- frontend revision: `4e3597b780fbbe11585b00969279d8571d28cb87`;
+- Vercel production deployment: `dpl_BSDWni9yAQspYv6e3f3KKBnndMfH`, aliased
+  to `https://johnchong.info`;
+- 27/27 repository tests and 54/54 deterministic retrieval/policy cases passed;
+- desktop, mobile, 320px, keyboard disclosure, bilingual labels and external
+  link browser checks passed;
+- the live interface labelled profile answers as approved public profile
+  evidence and a focused Niulai question displayed `NL-*` sources with the
+  pinned short commit `9489e1f`;
+- the interface exposes evidence provenance, not hidden model chain of thought.
+
 Current claim state: `PRODUCTION_VALIDATED`. The owner approved adding these two
 source types and previously authorized direct Ask John production deployment.
 Acceptance of the feature's final rendered wording remains `PENDING` until the
