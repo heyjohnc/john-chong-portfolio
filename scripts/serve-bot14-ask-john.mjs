@@ -42,7 +42,7 @@ const server = http.createServer(async (request, response) => {
     return writeJson(response, 200, { status: "ok", service: "ask-john" });
   }
   if (url.pathname !== "/api/ask") return writeJson(response, 404, { error: "not_found" }, origin);
-  if (origin && !allowedOrigins.has(origin)) return writeJson(response, 403, { error: "origin_not_allowed" });
+  if (!origin || !allowedOrigins.has(origin)) return writeJson(response, 403, { error: "origin_not_allowed" });
   if (request.method === "OPTIONS") {
     response.writeHead(204, corsHeaders(origin));
     return response.end();
