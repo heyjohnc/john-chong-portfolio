@@ -17,6 +17,9 @@ Included:
 - a sanitized local FightGame evidence pack linked to the public case page;
 - source document, revision, hash and section identity in the generated index;
 - citations that link to the pinned public Niulai commit or FightGame case.
+- a compact visible evidence trail that identifies the source type and shows the
+  short pinned Niulai commit without exposing private reasoning or raw private
+  material.
 
 Not included:
 
@@ -38,6 +41,8 @@ Not included:
 6. Retrieval can distinguish project-specific evidence, verification,
    limitations and failure-recovery questions.
 7. Existing privacy, refusal, rate, cost and citation controls continue to pass.
+8. The rendered answer distinguishes approved profile evidence, reviewed
+   FightGame case evidence and the pinned public Niulai GitHub snapshot.
 
 ## Material decisions
 

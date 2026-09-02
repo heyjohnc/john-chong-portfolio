@@ -92,6 +92,58 @@ await waitForAnswer(failurePage);
 checks.push({ name: "disabled backend state is visible inside chat", passed: await failurePage.locator('.ask-widget-message--answer[data-mode="disabled"]').count() === 1 });
 await failurePage.close();
 
+const evidencePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+monitor(evidencePage, "evidence-trail");
+await evidencePage.route("**/api/ask", (route) => route.fulfill({
+  status: 200,
+  contentType: "application/json",
+  body: JSON.stringify({
+    mode: "answer",
+    answer: "Approved project evidence.",
+    citations: [
+      {
+        section_id: "NL-06",
+        heading: "Reproducible verification",
+        snippet: "Verification evidence.",
+        source_url: "https://github.com/heyjohnc/niulai-shengmi-squad/tree/9489e1ff4710351ce5eba11f33790e4241b293ff",
+        source_revision: "9489e1ff4710351ce5eba11f33790e4241b293ff"
+      },
+      {
+        section_id: "FG-03",
+        heading: "Failure recovery",
+        snippet: "Reviewed public case evidence.",
+        source_url: "/fightgame.html",
+        source_revision: "portfolio-case-2026-09-03"
+      }
+    ]
+  })
+}));
+await evidencePage.goto(`${baseUrl}/index.html`, { waitUntil: "networkidle" });
+await evidencePage.locator(".ask-widget-launcher").click();
+await evidencePage.locator("#ask-widget-question").fill("Show project evidence");
+await evidencePage.locator("[data-ask-widget-submit]").click();
+await waitForAnswer(evidencePage);
+const evidenceText = await evidencePage.locator(".ask-widget-sources").innerText();
+checks.push({
+  name: "evidence trail shows source types and short public revision",
+  passed: ["EVIDENCE TRAIL", "Public GitHub snapshot · Commit 9489e1f", "Reviewed public case evidence"].every((text) => evidenceText.includes(text)),
+  details: evidenceText
+});
+checks.push({
+  name: "external evidence link opens safely in a new tab",
+  passed: await evidencePage.locator('.ask-widget-sources a[href^="https://github.com/"]').first().getAttribute("rel") === "noreferrer"
+});
+await evidencePage.locator("[data-language-toggle]").click();
+await evidencePage.locator("#ask-widget-question").fill("顯示項目證據");
+await evidencePage.locator("[data-ask-widget-submit]").click();
+await waitForAnswer(evidencePage);
+checks.push({
+  name: "evidence trail labels follow Chinese language switch",
+  passed: (await evidencePage.locator(".ask-widget-sources").last().innerText()).includes("公開 GitHub 快照 · Commit 9489e1f")
+});
+await evidencePage.screenshot({ path: path.join(outputDir, "ask-widget-evidence-trail-mobile.png") });
+await evidencePage.close();
+
 const navigationPage = await browser.newPage({ viewport: { width: 320, height: 760 } });
 monitor(navigationPage, "navigation");
 for (const route of routes) {
