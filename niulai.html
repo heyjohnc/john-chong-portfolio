@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>牛来生米小队 Case Study — John Chong</title>
+  <meta name="description" content="牛来生米小队 case study: a Level 3 four-Agent BSC market-event product with frozen random votes, controlled execution, channel publishing and one canonical timeline.">
+  <link rel="canonical" href="https://johnchong.info/niulai.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="John Chong">
+  <meta property="og:title" content="牛来生米小队 Case Study — John Chong">
+  <meta property="og:description" content="牛来生米小队 case study by John Chong: a Level 3 four-Agent BSC market-event product with controlled execution, channel publishing and one canonical timeline.">
+  <meta property="og:url" content="https://johnchong.info/niulai.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="牛来生米小队 Case Study — John Chong">
+  <meta name="twitter:description" content="牛来生米小队 case study by John Chong: a Level 3 four-Agent BSC market-event product with controlled execution, channel publishing and one canonical timeline.">
+  <meta name="theme-color" content="#f7f7f4">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"牛来生米小队 Case Study","url":"https://johnchong.info/niulai.html","author":{"@type":"Person","@id":"https://johnchong.info/#person","name":"John Chong","alternateName":"Shing Yip Chong"}}</script>
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem("csy-portfolio-theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2317171a'/%3E%3Cpath d='M16 43V21h7v8h18v-8h7v22h-7v-8H23v8z' fill='%23ffffff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="site.js" defer></script>
+  <script src="ask-widget.js" defer></script>
+</head>
+<body id="top">
+  <header class="site-header">
+    <nav class="site-nav wrap" aria-label="Primary navigation">
+      <a class="brand" href="index.html">John Chong</a>
+      <div class="nav-links"><a href="index.html">Home</a><a class="active" href="projects.html">Projects</a><a href="about.html">About</a><a href="index.html#contact">Contact</a></div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero wrap">
+      <a class="back-link" href="projects.html">← Projects</a>
+      <p class="eyebrow">Case study · Multi-Agent product</p>
+      <h1 class="cjk">牛来生米小队</h1>
+      <p class="page-lead">A four-Agent BSC market-event product that turns sourced signals, frozen random votes, controlled single-position lifecycles and channel publishing into one traceable story timeline.</p>
+      <dl class="case-facts">
+        <div><dt>Status</dt><dd>Level 3 baseline · active operations</dd></div>
+        <div><dt>My role</dt><dd>Product &amp; architecture owner</dd></div>
+        <div><dt>System</dt><dd>Four Agents · separated control planes</dd></div>
+        <div><dt>Frozen evidence</dt><dd>779 / 779 baseline tests + funded UAT</dd></div>
+      </dl>
+      <div class="actions"><a class="button primary" href="https://niulaishengmi.lol" target="_blank" rel="noreferrer">Open live read-only demo ↗</a></div>
+      <div class="case-visual system-stage"><div class="mini-system" aria-label="Four Agent roles around one shared timeline"><span>云雀</span><span>牛来</span><b>One room · One Case · One timeline</b><span>牛来妈妈</span><span>豹拉</span></div></div>
+    </section>
+
+    <section class="case-section wrap">
+      <div class="content-grid">
+        <h2>The product problem</h2>
+        <div class="content-body">
+          <p>Market monitoring can surface metrics, but it does not naturally create an entertaining, replayable story—and adding models can easily blur facts, opinions, decisions and external permissions. I designed the product so every sourced candidate, vote, lifecycle result, role reaction and channel record remains addressable from one event history.</p>
+          <p>The central product decision was to separate random choice from model expression, and public presentation from money and publishing authority. I remain responsible for the product direction, architecture boundaries, strategy revisions, failure review, release decisions and full-flow acceptance.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section section--soft">
+      <div class="wrap content-grid">
+        <h2>Four roles</h2>
+        <div class="role-grid">
+          <article><div class="role-top"><h3>云雀</h3><span>Read-only discovery</span></div><p>Finds public GMGN hotspot candidates and records provenance, freshness and evidence labels. It can nominate a Case; it cannot decide or execute alone.</p></article>
+          <article><div class="role-top"><h3>牛来</h3><span>Vote · gated execution</span></div><p>Votes with the other three Agents. In the show it records paper outcomes; a separate server-side worker may consume an eligible decision only after every execution gate passes.</p></article>
+          <article><div class="role-top"><h3>牛来妈妈</h3><span>Controlled X publishing</span></div><p>Turns canonical lifecycle events and validated room dialogue into X content. Lifecycle and editorial publishing use narrow, idempotent workers with explicit activation and stop boundaries.</p></article>
+          <article><div class="role-top"><h3>豹拉</h3><span>Controlled Square publishing</span></div><p>Builds Binance Square posts from the same lifecycle evidence. A standing entry/exit publisher is enabled, while its first natural lifecycle-event UAT remains explicitly pending.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section wrap case-map-section" aria-labelledby="decision-control-title">
+      <div class="case-map-heading">
+        <div><p class="eyebrow">Decision &amp; control map</p><h2 id="decision-control-title">One timeline, with every authority boundary visible.</h2></div>
+        <p>The system keeps evidence, decision, expression and external action separate. A model can narrate a frozen outcome, but it cannot invent the evidence or rewrite the decision.</p>
+      </div>
+      <div class="decision-control-map">
+        <ol class="control-rail">
+          <li data-plane="evidence"><span>01</span><div><small>Read-only signals</small><strong>Public sources with provenance and freshness</strong></div></li>
+          <li data-plane="evidence"><span>02</span><div><small>Canonical timeline</small><strong>One addressable history for each Case</strong></div></li>
+          <li data-plane="decision"><span>03</span><div><small>Eligibility &amp; evidence</small><strong>Rules decide whether a round may open</strong></div></li>
+          <li data-plane="decision"><span>04</span><div><small>Four frozen votes</small><strong>Independent random choices recorded before dialogue</strong></div></li>
+          <li data-plane="decision"><span>05</span><div><small>Business decision</small><strong>3-of-4 or 4-of-4 becomes the fixed result</strong></div></li>
+          <li data-plane="authority"><span>06</span><div><small>Permission gate</small><strong>Server-only checks isolate external authority</strong></div></li>
+          <li data-plane="authority"><span>07</span><div><small>Act or stop</small><strong>Execute, publish or fail closed</strong></div></li>
+          <li data-plane="record"><span>08</span><div><small>Audit &amp; recovery</small><strong>Receipts, lifecycle events and correction evidence return to the timeline</strong></div></li>
+        </ol>
+        <aside class="control-principles" aria-label="Control principles">
+          <div><span>Expression boundary</span><strong>Models express the decision. They do not make or rewrite it.</strong></div>
+          <div><span>Safety boundary</span><strong>Ambiguous state → stop safely, never guess.</strong></div>
+          <div class="control-key"><span><i data-key="evidence"></i>Evidence</span><span><i data-key="decision"></i>Decision</span><span><i data-key="authority"></i>Authority</span><span><i data-key="record"></i>Record</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="case-section section--soft">
+      <div class="wrap content-grid">
+        <div><p class="eyebrow">Failure becomes evidence</p><h2>Recovery without rewriting history.</h2></div>
+        <div class="content-body">
+          <p>An unexpected asset-unit projection exposed a gap between a receipt and its interpretation. Instead of patching the displayed result, I used the incident to tighten the product rule and re-accept the affected scope.</p>
+          <ol class="recovery-trace" aria-label="Failure review and recovery sequence">
+            <li><span>Observed</span><strong>Unexpected projection</strong></li>
+            <li><span>Traced</span><strong>Receipt interpretation</strong></li>
+            <li><span>Bounded</span><strong>Tighter evidence rule</strong></li>
+            <li><span>Protected</span><strong>Regression coverage</strong></li>
+            <li><span>Re-run</span><strong>Controlled lifecycle</strong></li>
+            <li><span>Accepted</span><strong>Scoped re-acceptance</strong></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section wrap">
+      <div class="content-grid">
+        <h2>What is already evidenced</h2>
+        <ol class="decision-list">
+          <li><span>01</span><div><h3>Decision and expression are separated</h3><p>Models speak only after the four random votes are frozen. A model timeout, fallback or weak line cannot alter candidate eligibility, the vote or execution authority.</p></div></li>
+          <li><span>02</span><div><h3>Controlled real lifecycles were validated</h3><p>The frozen baseline records three funded route UATs, real TP, SL and time-exit outcomes, one confirmed-revert recovery path, and zero-exposure closure checks.</p></div></li>
+          <li><span>03</span><div><h3>The technical baseline is frozen and deployed</h3><p>The Owner-accepted 29 August 2026 baseline recorded 779/779 automated tests, full validation and a verified responsive read-only deployment.</p></div></li>
+          <li><span>04</span><div><h3>Publishing has its own control plane</h3><p>Real X entry/exit posts were validated. Later evidence adds a bounded X editorial cadence and a standing Square lifecycle service without granting general social-account authority.</p></div></li>
+          <li><span>05</span><div><h3>Failures become product evidence</h3><p>A real asset-unit projection error was traced to receipt interpretation, corrected with stricter evidence rules and regression tests, then re-accepted without rewriting unsupported history.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="case-section wrap">
+      <div class="content-grid">
+        <h2>Contribution</h2>
+        <div class="split-cards">
+          <article><h3>What I owned</h3><ul><li>Product purpose, four-Agent structure and single-timeline architecture</li><li>Voting, strategy revisions and permission boundaries</li><li>Go / no-go decisions for real actions and public release</li><li>Failure review, iterative full-flow UAT and milestone acceptance</li></ul></article>
+          <article><h3>What Agents accelerated</h3><ul><li>Substantial implementation, tests and evidence records</li><li>Provider adapters, isolated workers and regression checks</li><li>Incident diagnosis and recovery-path implementation</li><li>Deployment and operating tasks inside explicit project rules</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section wrap">
+      <div class="content-grid">
+        <h2>Status and boundary</h2>
+        <div class="content-body">
+          <div class="notice"><p><strong>The Level 3 technical portfolio baseline is frozen; the product remains in active operation and development.</strong></p><p>Post-baseline work has added a controlled project-token lifecycle, a bounded X editorial cadence and standing Square lifecycle publishing. These are separately evidenced increments, not a claim of unrestricted autonomy.</p></div>
+          <p style="margin-top:24px">The public website is a read-only view and never receives the protected signer. I do not claim long-term unattended reliability, formal SLA, verified user adoption, revenue or business impact; unified cost and stable-window operating metrics remain incomplete.</p>
+          <p style="margin-top:16px">The project is an unofficial fan-parody work and does not claim an official relationship, cooperation, sponsorship or endorsement. Public portfolio material excludes credentials, private infrastructure, raw provider responses and sensitive transaction data.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wrap contact">
+      <div><p class="eyebrow">Compare another product shape</p><h2>See the completed core-playability game case.</h2></div>
+      <div class="contact-copy"><p>FightGame shows how the same product-direction and acceptance role applies to a branching multiplayer product.</p><div class="actions"><a class="button primary" href="fightgame.html">View FightGame</a><a class="button" href="projects.html">All projects</a></div></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="wrap"><strong>John Chong</strong><span>牛来生米小队 case study</span><a href="#top">Back to top ↑</a></div></footer>
+</body>
+</html>

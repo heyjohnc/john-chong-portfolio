@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FightGame Case Study — John Chong</title>
+  <meta name="description" content="FightGame case study: a personalized-avatar multiplayer pixel RPG with synchronized online skill-card battles.">
+  <link rel="canonical" href="https://johnchong.info/fightgame.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="John Chong">
+  <meta property="og:title" content="FightGame Case Study — John Chong">
+  <meta property="og:description" content="FightGame case study by John Chong: a personalized-avatar multiplayer pixel RPG with synchronized online skill-card battles.">
+  <meta property="og:url" content="https://johnchong.info/fightgame.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="FightGame Case Study — John Chong">
+  <meta name="twitter:description" content="FightGame case study by John Chong: a personalized-avatar multiplayer pixel RPG with synchronized online skill-card battles.">
+  <meta name="theme-color" content="#f7f7f4">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"FightGame Case Study","url":"https://johnchong.info/fightgame.html","author":{"@type":"Person","@id":"https://johnchong.info/#person","name":"John Chong","alternateName":"Shing Yip Chong"}}</script>
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem("csy-portfolio-theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2317171a'/%3E%3Cpath d='M16 43V21h7v8h18v-8h7v22h-7v-8H23v8z' fill='%23ffffff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="site.js" defer></script>
+  <script src="ask-widget.js" defer></script>
+</head>
+<body id="top">
+  <header class="site-header">
+    <nav class="site-nav wrap" aria-label="Primary navigation">
+      <a class="brand" href="index.html">John Chong</a>
+      <div class="nav-links"><a href="index.html">Home</a><a class="active" href="projects.html">Projects</a><a href="about.html">About</a><a href="index.html#contact">Contact</a></div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero wrap">
+      <a class="back-link" href="projects.html">← Projects</a>
+      <p class="eyebrow">Case study · Multiplayer product system</p>
+      <h1>FightGame</h1>
+      <p class="page-lead">A personalized-avatar multiplayer pixel RPG where player identity, online presence, skill-card state and turn resolution have to remain coherent across a branching client–server product.</p>
+      <dl class="case-facts">
+        <div><dt>Status</dt><dd>Core playability completed</dd></div>
+        <div><dt>My role</dt><dd>Product direction &amp; acceptance</dd></div>
+        <div><dt>Delivery</dt><dd>Persistent multi-Agent workflow</dd></div>
+        <div><dt>Evidence</dt><dd>Code paths, checks &amp; browser captures</dd></div>
+      </dl>
+      <figure class="case-visual"><img src="assets/fightgame/turn-battle.png" alt="FightGame synchronized online battle showing two player states and a Guard Break action" width="1178" height="560"></figure>
+    </section>
+
+    <section class="case-section wrap">
+      <div class="content-grid">
+        <h2>The challenge</h2>
+        <div class="content-body">
+          <p>The difficult part was not producing another game screen. The same player identity had to survive the profile, overworld, remote-player and battle contexts. Two online players also needed to submit different actions but receive one shared, authoritative round result.</p>
+          <p>I translated the broad game direction into staged systems, set module boundaries and acceptance priorities, coordinated persistent Agent ownership, and reviewed the actual playable flows as the product grew.</p>
+        </div>
+      </div>
+      <div class="media-pair">
+        <figure><img src="assets/fightgame/world-and-npcs.png" alt="FightGame shared world with a player and named NPCs" width="1178" height="560"><figcaption>Shared world and NPC layer</figcaption></figure>
+        <figure><img src="assets/fightgame/profile-and-loadout.png" alt="FightGame profile with avatar and equipped cards" width="1178" height="560"><figcaption>Persistent identity and card loadout</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="case-section wrap case-map-section" aria-labelledby="fight-delivery-title">
+      <div class="case-map-heading">
+        <div><p class="eyebrow">Product delivery map</p><h2 id="fight-delivery-title">From a broad game idea to an accepted playable system.</h2></div>
+        <p>The difficult work sits between the brief and the build: defining what “playable” means, dividing persistent ownership, integrating the parts and sending failures back through the loop.</p>
+      </div>
+      <div class="fight-delivery-map">
+        <ol class="delivery-track">
+          <li><span>01</span><small>Client intent</small><strong>Personalized multiplayer retro game</strong></li>
+          <li><span>02</span><small>Scope &amp; acceptance</small><strong>Identity, world, cards and synchronized battle</strong></li>
+          <li class="delivery-agents"><span>03</span><small>Persistent Agent owners</small><strong>Five bounded workstreams</strong><ul><li>Client &amp; interface</li><li>Server &amp; contracts</li><li>Battle &amp; cards</li><li>World &amp; NPCs</li><li>QA &amp; integration</li></ul></li>
+          <li><span>04</span><small>Integrate</small><strong>One coherent client–server product</strong></li>
+          <li><span>05</span><small>Cross-device UAT</small><strong>Desktop, mobile and two-player flows</strong></li>
+          <li><span>06</span><small>Correct</small><strong>Reproduce, fix and regress</strong></li>
+          <li class="delivery-accepted"><span>07</span><small>Accepted milestone</small><strong>Core playability completed</strong></li>
+        </ol>
+        <p class="delivery-feedback"><span>↶</span><strong>UAT feedback loop</strong> Integration failures return to the responsible workstream until the full flow—not an isolated screen—passes acceptance.</p>
+      </div>
+    </section>
+
+    <section class="case-section section--soft">
+      <div class="wrap content-grid">
+        <h2>How one round works</h2>
+        <div class="content-body">
+          <p>Player actions are treated as submitted intentions. The server waits for the required inputs, validates and stores them, resolves the rules and persists the round. Both clients then render the same result.</p>
+          <div class="flow-simple"><div><small>Player A</small><strong>Submit command</strong></div><span>→</span><div><small>Server authority</small><strong>Validate · resolve · persist</strong></div><span>→</span><div><small>Both clients</small><strong>Render one outcome</strong></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section section--soft">
+      <div class="wrap content-grid">
+        <div><p class="eyebrow">Hands-on acceptance</p><h2>My UAT correction loop</h2></div>
+        <div class="content-body">
+          <p>I personally tested the complete flows. When an Agent-delivered feature looked finished but failed inside the product, I turned the failure into a specific correction cycle.</p>
+          <ol class="uat-loop" aria-label="User acceptance testing correction loop">
+            <li><span>01</span><strong>Observe</strong><small>See the failure in context</small></li>
+            <li><span>02</span><strong>Reproduce</strong><small>Make the defect repeatable</small></li>
+            <li><span>03</span><strong>Assign</strong><small>Route it to the right owner</small></li>
+            <li><span>04</span><strong>Fix</strong><small>Correct the bounded cause</small></li>
+            <li><span>05</span><strong>Re-test</strong><small>Check the flow and regression</small></li>
+            <li><span>06</span><strong>Accept</strong><small>Decide what is actually ready</small></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section wrap">
+      <div class="content-grid">
+        <h2>Three product decisions</h2>
+        <ol class="decision-list">
+          <li><span>01</span><div><h3>Separate intention from resolution</h3><p>Each player submits a command; the server owns the authoritative round result instead of trusting either client.</p></div></li>
+          <li><span>02</span><div><h3>Keep identity consistent</h3><p>Profile, overworld, remote-player and battle views use the same player identity rather than disconnected representations.</p></div></li>
+          <li><span>03</span><div><h3>Make mechanical depth readable</h3><p>A code-verified 79-card catalogue supports limits, elements, counters, statuses and combo setup/payoff while preserving an explainable core loop.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="case-section wrap">
+      <div class="content-grid">
+        <h2>Contribution</h2>
+        <div class="split-cards">
+          <article><h3>What I owned</h3><ul><li>Product direction and staged priorities</li><li>System and Agent ownership boundaries</li><li>Review of multiplayer, battle, cards, identity, map and interface results</li><li>Playable-flow acceptance and correction decisions</li></ul></article>
+          <article><h3>What Agents accelerated</h3><ul><li>Substantial client, server and tooling implementation</li><li>Tests, contract checks, documentation and handoffs</li><li>Module debugging and integration corrections</li><li>Authorised deployment and operational tasks</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-section wrap">
+      <div class="content-grid">
+        <h2>Status and boundary</h2>
+        <div class="content-body">
+          <div class="notice"><p><strong>The core-playability milestone was completed.</strong></p><p>A later phase covering tournaments, live streaming and operations was planned or partially scaffolded, but the client did not commission that expansion.</p></div>
+          <p style="margin-top:24px">This case does not claim public launch, production readiness, revenue, user count or verified business impact. The selected captures use an ephemeral guest identity and contain no wallet address, credential, client material or transaction data.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wrap contact">
+      <div><p class="eyebrow">Next case</p><h2>Four Agents. One shared timeline.</h2></div>
+      <div class="contact-copy"><p>Continue with the Level 3 牛来生米小队 multi-Agent system and its active operating model.</p><div class="actions"><a class="button primary" href="niulai.html">View next case</a><a class="button" href="projects.html">All projects</a></div></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="wrap"><strong>John Chong</strong><span>FightGame case study</span><a href="#top">Back to top ↑</a></div></footer>
+</body>
+</html>

@@ -1,0 +1,9 @@
+node_modules/
+public/
+previews/
+portfolio-rag/evals/results/
+.vercel/
+.env
+.env.*
+!.env.example
+npm-debug.log*
