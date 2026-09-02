@@ -73,6 +73,8 @@ commissioned scope or remained planned/partially scaffolded. This public case
 does not claim a public launch, production readiness, revenue, user count,
 long-term reliability or verified business impact.
 
-The FightGame source repository remains private. Ask John has no access to that
-private repository and uses only this sanitized evidence pack and the public
-portfolio case page.
+The FightGame source repository remains private. The portfolio assistant named
+**Ask John** has no access to that private repository; the assistant uses only
+this sanitized evidence pack and the public portfolio case page. This is an
+assistant data-access boundary, not a statement about the person John's own
+access to his project.

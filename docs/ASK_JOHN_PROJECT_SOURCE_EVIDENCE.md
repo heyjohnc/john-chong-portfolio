@@ -85,6 +85,12 @@ evidence pack and retrieval concept were tightened so the answer must retrieve
 representative evidence-grounding correction rather than a change to repository
 access.
 
+The next live probe cited `FG-04` but blurred the subject by describing the
+assistant's access limit as if it were John's personal access limit. The model
+instruction and evidence wording were tightened to keep **John** (the person)
+separate from **Ask John** (the bounded portfolio assistant). No data or
+permission boundary changed.
+
 Current claim state: `TESTED`. Production validation and scoped owner
 acceptance remain `PENDING` until the service revision is deployed and the two
 project question paths are checked live.
