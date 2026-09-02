@@ -1,6 +1,6 @@
 # Ask John — owner-operated VPS deployment
 
-Status: Level 2 feature batch, pending owner acceptance  
+Status: Level 2 feature batch, pending owner acceptance
 Date: 2026-09-02
 
 ## Objective and scope
