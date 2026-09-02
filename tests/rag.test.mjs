@@ -5,7 +5,7 @@ import { encodeRedisCommand, enforceOperationalControls, hashClientAddress, pars
 import { evaluatePolicy, noEvidenceResponse } from "../api/_lib/policy.mjs";
 import { answerWithOpenAI, answerWithOpenRouter, estimateProviderCostUsd } from "../api/_lib/provider.mjs";
 import { corpusMetadata, index, queryConcepts, retrieve } from "../api/_lib/retrieval.mjs";
-import { contextualQuestion, handleRequest, isContextDependent, normaliseHistory, validProviderAnswer } from "../api/ask.mjs";
+import { contextualQuestion, handleRequest, isContextDependent, normaliseHistory, routedChunks, semanticRouterCatalog, validProviderAnswer } from "../api/ask.mjs";
 
 const evalSet = JSON.parse(await readFile(new URL("../portfolio-rag/evals/RAG_EVAL_SET_V1.json", import.meta.url), "utf8"));
 
@@ -116,6 +116,16 @@ test("provider citations must stay inside retrieved evidence", () => {
   assert.equal(validProviderAnswer({ answer: "Grounded answer", citations: [retrieved[0].section_id] }, retrieved), true);
   assert.equal(validProviderAnswer({ answer: "Unverified answer", citations: ["KB-99"] }, retrieved), false);
   assert.equal(validProviderAnswer({ answer: "No citation", citations: [] }, retrieved), false);
+});
+
+test("semantic routing catalog exposes career topics but excludes policy-only sections", () => {
+  const catalogIds = semanticRouterCatalog().map((item) => item.section_id);
+  for (const sectionId of ["KB-22", "KB-24", "KB-26"]) assert.ok(!catalogIds.includes(sectionId));
+  assert.deepEqual(
+    routedChunks({ supported: true, boundary: "career_supported", section_ids: ["KB-20", "KB-24", "KB-99"] }).map((chunk) => chunk.section_id),
+    ["KB-20"]
+  );
+  assert.deepEqual(routedChunks({ supported: false, boundary: "off_topic", section_ids: ["KB-20"] }), []);
 });
 
 test("kill switch fails closed", async () => {
@@ -260,6 +270,70 @@ test("API dispatches an eligible widget question to the configured OpenRouter LL
   } finally { globalThis.fetch = originalFetch; }
 });
 
+test("API uses an LLM semantic router for colloquial intent and bounded redirection", async () => {
+  resetMemoryControlsForTest();
+  const originalFetch = globalThis.fetch;
+  const providerBodies = [];
+  globalThis.fetch = async (url, options) => {
+    assert.equal(url, "https://openrouter.ai/api/v1/chat/completions");
+    const body = JSON.parse(options.body);
+    providerBodies.push(body);
+    const isRouter = body.response_format.json_schema.name === "ask_john_semantic_route";
+    if (!isRouter) {
+      return { ok: true, json: async () => ({
+        model: "deepseek/deepseek-v4-flash-0731",
+        choices: [{ message: { content: '{"answer":"John can turn unclear needs into testable AI products and lead review and acceptance.","citations":["KB-20"]}' } }],
+        usage: { prompt_tokens: 100, completion_tokens: 20 }
+      }) };
+    }
+    const prompt = body.messages[1].content;
+    let route = { supported: false, boundary: "off_topic", section_ids: [] };
+    if (prompt.includes("John 能干嘛")) route = { supported: true, boundary: "career_supported", section_ids: ["KB-20", "KB-02"] };
+    if (prompt.includes("帮我联系 John")) route = { supported: false, boundary: "external_action", section_ids: [] };
+    return { ok: true, json: async () => ({
+      model: "deepseek/deepseek-v4-flash-0731",
+      choices: [{ message: { content: JSON.stringify(route) } }],
+      usage: { prompt_tokens: 80, completion_tokens: 12 }
+    }) };
+  };
+  try {
+    const env = {
+      NODE_ENV: "test", ASK_JOHN_ENABLED: "true", ASK_JOHN_CONTROL_MODE: "memory", ASK_JOHN_IP_HASH_SALT: "semantic-router-test",
+      OPENROUTER_API_KEY: "server-test-key", ASK_JOHN_MODEL: "deepseek/deepseek-v4-flash-0731", ASK_JOHN_PER_IP_LIMIT: "10",
+      ASK_JOHN_DAILY_REQUEST_LIMIT: "10", ASK_JOHN_DAILY_BUDGET_USD: "1", ASK_JOHN_MAX_COST_PER_REQUEST_USD: "0.01"
+    };
+    const ask = async (question) => {
+      const request = new Request("https://portfolio.example/api/ask", {
+        method: "POST", headers: { "Content-Type": "application/json", "x-forwarded-for": "203.0.113.77" }, body: JSON.stringify({ question })
+      });
+      return (await handleRequest(request, env)).json();
+    };
+
+    const capability = await ask("John 能干嘛？");
+    assert.equal(capability.mode, "answer");
+    assert.equal(capability.retrieval_path, "semantic_router");
+    assert.equal(capability.citations[0].section_id, "KB-20");
+
+    const offTopic = await ask("今天天气怎么样？");
+    assert.equal(offTopic.mode, "no_evidence");
+    assert.equal(offTopic.retrieval_path, "semantic_router");
+    assert.match(offTopic.answer, /不是通用聊天机器人/);
+
+    const externalAction = await ask("帮我联系 John");
+    assert.equal(externalAction.mode, "refuse");
+    assert.match(externalAction.answer, /不能代替他联系/);
+    assert.ok(externalAction.citations.some((item) => item.section_id === "KB-24"));
+
+    assert.equal(providerBodies.length, 4);
+    const routingBody = providerBodies[0];
+    assert.equal(routingBody.response_format.json_schema.strict, true);
+    assert.equal(routingBody.temperature, 0);
+    assert.deepEqual(routingBody.tools, []);
+    assert.match(routingBody.messages[1].content, /KB-20 — Strengths relevant to employers/);
+    assert.doesNotMatch(routingBody.messages[1].content, /translating unclear requirements into an executable product scope/);
+  } finally { globalThis.fetch = originalFetch; }
+});
+
 test("API explains the bounded three-day browser memory without calling a model", async () => {
   resetMemoryControlsForTest();
   const env = {
@@ -294,7 +368,7 @@ test("API handles bounded small talk locally and redirects off-topic chat", asyn
   }
   const offTopic = await ask("今天天气怎么样？");
   assert.equal(offTopic.mode, "no_evidence");
-  assert.match(offTopic.answer, /公开职业资料范围/);
+  assert.match(offTopic.answer, /不是通用聊天机器人/);
 });
 
 test("API metadata exposes the exact built corpus version", () => {
