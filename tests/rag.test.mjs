@@ -12,7 +12,7 @@ const evalSet = JSON.parse(await readFile(new URL("../portfolio-rag/evals/RAG_EV
 test("built index is pinned to the approved corpus contract", () => {
   assert.equal(evalSet.cases.length, evalSet.release_requirements.case_count);
   assert.equal(index.document_id, "john-chong-public-career-kb");
-  assert.equal(index.document_version, "1.1.1-draft");
+  assert.equal(index.document_version, "1.2.0-draft");
   assert.equal(index.last_updated, "2026-09-02");
   assert.equal(index.chunk_count, 29);
   assert.equal(new Set(index.chunks.map((chunk) => chunk.section_id)).size, 29);
@@ -318,5 +318,5 @@ test("Web-standard API returns bounded answer, refusal and no-evidence modes", a
   assert.ok(supported.citations.length > 0);
   assert.equal(sensitive.mode, "refuse");
   assert.equal(unknown.mode, "no_evidence");
-  assert.equal(supported.corpus.version, "1.1.1-draft");
+  assert.equal(supported.corpus.version, "1.2.0-draft");
 });

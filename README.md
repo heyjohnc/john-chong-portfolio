@@ -12,7 +12,7 @@ The site presents John’s product responsibility and selected AI work through f
 - `niulai.html` — controlled multi-Agent product case study
 - `about.html` — experience, education and capabilities
 
-It is a dependency-light bilingual static site with dark/light themes, responsive layouts and an optional server-side “Ask John” assistant. The assistant retrieves only from the versioned public knowledge base in `portfolio-rag/`, keeps citations visible, handles bounded greetings locally and redirects off-topic chat to its public-career scope.
+It is a dependency-light bilingual static site with dark/light themes, responsive layouts and an optional server-side “Ask John” assistant. The assistant retrieves only from the versioned public knowledge base in `portfolio-rag/`, keeps citations visible, handles bounded greetings locally and redirects off-topic chat to its public-career scope. Its starter-question pool contains 12 aligned English/Chinese topics and randomly presents three per page load.
 
 ## Run locally
 

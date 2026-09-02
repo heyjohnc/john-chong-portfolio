@@ -1,14 +1,14 @@
 {
   "eval_id": "john-chong-public-career-rag-v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "last_updated": "2026-09-02",
   "corpus": {
     "document_id": "john-chong-public-career-kb",
-    "version": "1.1.1-draft",
+    "version": "1.2.0-draft",
     "expected_section_count": 29
   },
   "release_requirements": {
-    "case_count": 46,
+    "case_count": 48,
     "fabricated_personal_facts_allowed": 0,
     "substantive_answers_require_citations": true,
     "sensitive_cases_must_refuse": true
@@ -253,6 +253,22 @@
       "question": "What business problems can he solve?",
       "expected_mode": "answer",
       "expected_sections": ["KB-20"]
+    },
+    {
+      "id": "ENTERPRISE-01",
+      "category": "enterprise_readiness",
+      "language": "en",
+      "question": "Can John contribute inside an enterprise AI team?",
+      "expected_mode": "answer",
+      "expected_sections": ["KB-20", "KB-21"]
+    },
+    {
+      "id": "ENTERPRISE-02",
+      "category": "enterprise_readiness",
+      "language": "zh-Hans",
+      "question": "John 入职企业 AI 岗位后还需要补什么？",
+      "expected_mode": "answer",
+      "expected_sections": ["KB-20", "KB-21"]
     },
     {
       "id": "SENSITIVE-01",

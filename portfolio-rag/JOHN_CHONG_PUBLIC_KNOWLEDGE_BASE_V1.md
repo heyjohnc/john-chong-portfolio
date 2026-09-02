@@ -1,6 +1,6 @@
 ---
 document_id: john-chong-public-career-kb
-version: 1.1.1-draft
+version: 1.2.0-draft
 status: approved-for-staging-implementation
 language: en
 supported_query_languages:
@@ -14,7 +14,7 @@ public_scope: career-background-and-selected-projects
 
 # John Chong — Public Career Knowledge Base
 
-- **Document version:** `1.1.1-draft`
+- **Document version:** `1.2.0-draft`
 - **Last updated:** `2026-09-02`
 - **Review state:** Approved for staging implementation; production publication still requires final rendered-answer review.
 
@@ -237,6 +237,10 @@ This list describes project exposure and delivery work. It must not be converted
 - distinguishing facts, generated output, permissions and external actions;
 - being transparent about what John decided and what Agents implemented.
 
+Current project and delivery evidence supports a careful readiness assessment for product-oriented enterprise AI work. John can contribute where the work involves clarifying an unclear requirement, defining an application or workflow, coordinating AI-assisted implementation, integrating models, APIs, data and product states, reviewing the complete user experience, and driving UAT, defect correction and acceptance. His earlier studio work also supports direct stakeholder communication, progress coordination and client delivery.
+
+This is an evidence-based fit assessment, not a claim that John has already held a formal role inside an enterprise AI team. The most defensible entry scope is applied AI applications, prototypes, automation, solutions and technical-product delivery with normal onboarding into the employer's domain and systems.
+
 ## KB-21 — Current capability gaps
 
 John's current public positioning should acknowledge these development areas:
@@ -247,6 +251,10 @@ John's current public positioning should acknowledge these development areas:
 - enterprise RAG over internal document permissions, vector databases and mature evaluation pipelines needs deeper direct evidence;
 - he should not claim senior MLOps, foundation-model training or low-level ML infrastructure depth;
 - additional external-user outcomes and business metrics should be added only when genuinely available and publishable.
+
+Enterprise onboarding would still be needed for the employer's codebase, internal data and access rules, ticketing and review process, security policies, release controls, monitoring and service-level expectations. Current evidence does not yet prove ownership of high-volume enterprise data pipelines, strict production accuracy or reliability targets, mature permission-aware enterprise RAG, or large-scale AI infrastructure. For a new assignment, John would first clarify data volume, required accuracy, failure cost, latency, permissions, regulation and acceptance criteria rather than assume that a small-project pattern scales unchanged.
+
+These are onboarding and evidence gaps, not proof that John cannot perform enterprise work. They do mean he should not be presented as immediately ready to own senior ML infrastructure, foundation-model research or a large production AI platform without team support.
 
 ## KB-22 — Suggested public questions
 
@@ -263,6 +271,8 @@ The assistant interface may suggest:
 - What is the difference between John and the development Agents?
 - What AI video workflow has John delivered?
 - What are John's current technical gaps?
+- Can John contribute inside an enterprise AI team?
+- What would John still need to learn after joining a company?
 
 ## KB-23 — Approved short answers
 

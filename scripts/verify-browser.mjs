@@ -43,6 +43,8 @@ async function inspectViewport(name, viewport, screenshotName) {
 
   await page.locator(".ask-widget-launcher").click();
   checks.push({ name: `${name} opens compact dialog`, passed: await page.locator(".ask-widget-panel").isVisible() && await page.locator(".ask-widget-launcher").getAttribute("aria-expanded") === "true" });
+  const initialSuggestionIndexes = await page.locator("[data-ask-widget-suggestions] button").evaluateAll((buttons) => buttons.map((button) => button.dataset.suggestionIndex));
+  checks.push({ name: `${name} shows three unique suggestions`, passed: initialSuggestionIndexes.length === 3 && new Set(initialSuggestionIndexes).size === 3, details: initialSuggestionIndexes });
   await page.locator("[data-ask-widget-suggestions] button").first().click();
   await waitForAnswer(page);
   checks.push({ name: `${name} LLM route returns cited answer`, passed: await page.locator('.ask-widget-message--answer[data-mode="answer"]').count() > 0 && await page.locator(".ask-widget-sources details").count() > 0 });
@@ -50,6 +52,8 @@ async function inspectViewport(name, viewport, screenshotName) {
 
   await page.locator("[data-language-toggle]").click();
   checks.push({ name: `${name} widget follows language switch`, passed: await page.locator("html").getAttribute("data-language") === "zh" && (await page.locator("#ask-widget-title").innerText()).includes("問問") });
+  const translatedSuggestionIndexes = await page.locator("[data-ask-widget-suggestions] button").evaluateAll((buttons) => buttons.map((button) => button.dataset.suggestionIndex));
+  checks.push({ name: `${name} keeps the same suggestion topics after translation`, passed: JSON.stringify(initialSuggestionIndexes) === JSON.stringify(translatedSuggestionIndexes) });
   await page.locator("[data-theme-toggle]").click();
   checks.push({ name: `${name} widget follows light theme`, passed: await page.locator("html").getAttribute("data-theme") === "light" });
   await page.locator("[data-ask-widget-close]").click();

@@ -23,11 +23,12 @@ const conceptRules = [
   ["flagship", /\b(flagship|best project|strongest project|most relevant project|project.*look at first|start with.*project)\b|旗舰项目|旗艦項目|代表项目|代表項目|哪个项目.*(?:先看|最值得)|哪個項目.*(?:先睇|最值得)|最值得看.*项目|最值得睇.*項目/i],
   ["project_classification", /\b(which selected projects|project types?|client delivery|self-directed|delivered workflow|commissioned)\b|项目类型|項目類型|客户项目|客戶項目|自主项目|自主項目/i],
   ["ml_research", /\b(machine.learning research|ml research|researcher|model training|applied ai product)\b|机器学习研究|機器學習研究|模型训练|模型訓練|应用型 ai|應用型 ai/i],
+  ["enterprise_readiness", /\b(?:enterprise|corporate).*(?:ai|team|work|environment|ready|readiness|contribute)|(?:ai|ready|readiness|contribute).*(?:enterprise|corporate)\b|企业.*(?:ai|岗位|職位|工作|团队|團隊|环境|環境|胜任|勝任)|公司.*(?:ai|岗位|職位|工作|团队|團隊|环境|環境|胜任|勝任)|入职后.*(?:工作|能做|需要补|要补)|入職後.*(?:工作|做到|需要補|要補)/i],
   ["background", /\b(career background|professional background|introduce john|about john|know john|who is john|profile|positioning|career story|career history|work history|professional experience|ai experience|experience in ai|tell me about (?:john|him|his experience))\b|职业背景|職業背景|核心定位|工作经历|工作經歷|职业经历|職業經歷|从业经历|從業經歷|有什么经验|有什麼經驗|AI.*经验|AI.*經驗|介绍\s*john|介紹\s*john|了解\s*john|john\s*是谁|john\s*是誰|关于\s*john|關於\s*john/i],
   ["delivery", /\b(deliver(?:y|ed|ing)?|client-facing|ship(?:ped|ping)?|end-to-end|from requirement to acceptance)\b|交付|落地|从需求到验收|從需求到驗收|端到端|完整流程/i],
   ["technical", /\b(technology|technologies|technical|tech stack|architecture|frontend|front-end|backend|back-end|built with|what does (?:it|this|that).*(?:use|run on)|javascript|typescript|react|node|postgres|redis|playwright|vercel)\b|技术|技術|技能|技术栈|技術棧|架构|架構|前端|后端|後端|用了什么|用了什麼|使用什么技术|使用咩技術/i],
   ["strengths", /\b(strengths?|capabilit(?:y|ies)|competenc(?:e|ies)|what can (?:john|he) do|value|valuable|positioned|why hire|contribution|fit for|suitable for|qualified for|help (?:our|the) team|bring to (?:our|the) team|problems? can (?:john|he) solve)\b|能力|本领|本領|优势|優勢|强项|強項|价值|價值|贡献|貢獻|为什么适合|為什麼適合|适合我们|適合我們|能否胜任|能否勝任|可以胜任|可以勝任|团队带来|團隊帶來|解决什么问题|解決什麼問題|能做什么|能做什麼|会做什么|會做什麼/i],
-  ["gaps", /\b(gap|gaps|weakness|development area|lack|limitation)\b|短板|差距|不足|缺口|弱点|弱點/i],
+  ["gaps", /\b(gap|gaps|weakness|development area|lack|limitation|need to learn|need to improve|onboarding|not yet)\b|短板|差距|不足|缺口|弱点|弱點|还需要学|還需要學|需要补|需要補|入职后要补|入職後要補/i],
   ["salary", /\b(salary|income|pay|compensation)\b|薪资|薪資|工资|工資|收入/i],
   ["private", /\b(age|birth|birthday|phone|address|commute|wallet|transaction|private|secret|credential|client identity|payment)\b|年龄|年齡|出生|电话|電話|地址|通勤|钱包|錢包|交易|隐私|隱私|秘密|凭据|憑據|客户身份|客戶身份|付款/i],
   ["action", /\b(send|submit|apply|promise|negotiate|change|update|browse|search private|act on behalf)\b|发送|發送|申请|申請|承诺|承諾|代替|代表|更改|更新资料|更新資料|浏览|瀏覽/i]
@@ -37,11 +38,11 @@ const sectionConcepts = new Map([
   ["KB-01", ["identity"]], ["KB-02", ["roles", "agents", "strengths", "ml_research", "background"]], ["KB-03", ["roles", "gaps", "ml_research"]],
   ["KB-04", ["visa", "availability"]], ["KB-05", ["languages"]], ["KB-06", ["education"]],
   ["KB-07", ["pingan", "background"]], ["KB-08", ["studio", "background", "delivery"]], ["KB-09", ["studio", "roles", "gaps", "background"]],
-  ["KB-10", ["agents", "uat", "technical", "delivery"]], ["KB-11", ["agents", "strengths", "delivery"]],
+  ["KB-10", ["agents", "uat", "technical", "delivery", "enterprise_readiness"]], ["KB-11", ["agents", "strengths", "delivery"]],
   ["KB-12", ["fightgame", "project_classification", "flagship", "delivery"]], ["KB-13", ["fightgame", "rag", "technical"]], ["KB-14", ["fightgame", "agents", "uat", "delivery"]],
   ["KB-15", ["niulai", "agents", "uat", "private", "project_classification", "flagship", "delivery"]], ["KB-16", ["video", "uat", "project_classification", "delivery"]],
   ["KB-17", ["video", "uat", "project_classification", "delivery"]], ["KB-18", ["technical"]], ["KB-19", ["technical", "rag"]],
-  ["KB-20", ["strengths", "agents", "uat", "ml_research", "delivery"]], ["KB-21", ["gaps", "rag", "ml_research"]], ["KB-22", ["roles"]],
+  ["KB-20", ["strengths", "agents", "uat", "ml_research", "delivery", "enterprise_readiness"]], ["KB-21", ["gaps", "rag", "ml_research", "enterprise_readiness"]], ["KB-22", ["roles", "enterprise_readiness"]],
   ["KB-23", ["roles", "agents", "visa", "studio"]], ["KB-24", ["private", "salary", "action"]],
   ["KB-25", ["identity"]], ["KB-26", ["private", "action", "rag"]],
   ["KB-27", ["portfolio_hierarchy", "flagship", "video", "nft_workflow", "developer_tools"]],
@@ -86,7 +87,7 @@ export function retrieve(question, { topK = 6 } = {}) {
   const results = index.chunks.map((chunk) => {
     const tags = sectionConcepts.get(chunk.section_id) || [];
     const matchedConcepts = concepts.filter((concept) => tags.includes(concept));
-    const conceptScore = matchedConcepts.reduce((sum, concept) => sum + (concept === "portfolio_hierarchy" ? 12 : concept === "flagship" ? 10 : concept === "project_classification" ? 9 : concept === "ml_research" ? 9.5 : 3.2), 0);
+    const conceptScore = matchedConcepts.reduce((sum, concept) => sum + (concept === "portfolio_hierarchy" ? 12 : concept === "flagship" ? 10 : concept === "project_classification" ? 9 : concept === "ml_research" ? 9.5 : concept === "enterprise_readiness" ? 8 : 3.2), 0);
     const headingMatch = cleanQuestion.includes(normalise(chunk.heading)) ? 2.5 : 0;
     const sectionMatch = cleanQuestion.includes(chunk.section_id.toLocaleLowerCase("en")) ? 5 : 0;
     const sectionFactor = chunk.section_id === "KB-22" ? 0.24 : chunk.section_id === "KB-23" ? 0.78 : 1;
