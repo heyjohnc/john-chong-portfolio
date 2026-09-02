@@ -16,12 +16,14 @@ Included:
 - sensitive-question refusal, citation validation and fail-closed behavior;
 - recruiter-style intent aliases and bounded context resolution for follow-up questions;
 - an LLM semantic-routing fallback for slang, typos, incomplete wording and previously unseen recruiter phrasing;
+- read-only retrieval from a checked-in, commit-pinned snapshot of selected Niulai public-repository documentation;
+- retrieval from a sanitized FightGame evidence pack without private-repository access;
 - local, model-free responses for greetings, thanks, capability questions and farewells;
 - aggregate telemetry without question text.
 
 Not included:
 
-- browsing, private-file access or external actions;
+- runtime browsing, arbitrary GitHub access, private-file access or external actions;
 - storage of prompts, answers or raw IP addresses;
 - an SLA, adoption claim or business-impact claim;
 - unrestricted use of the owner's model account.
@@ -35,6 +37,8 @@ Not included:
 5. Keep the existing provider, control-store and citation checks fail-closed.
 6. Improve answerability at the retrieval layer first: map common recruiter phrasing to approved evidence, carry context only for reference-dependent follow-ups, and never broaden unsupported questions into a previous topic.
 7. When the fast retrieval path cannot understand a question, let the configured LLM classify its meaning against section headings only. The router may select approved career sections or one fixed boundary category: missing public fact, off-topic, private/sensitive, or external action. It never receives private files and its free-form wording is never shown to the visitor.
+8. Treat public GitHub content as a controlled ingestion source rather than a model tool. The source sync has no credential support, accepts one exact allowlisted public repository and selected Markdown ranges, resolves a full commit SHA, and produces a checked-in snapshot for review before release.
+9. Keep FightGame private. Supply only a sanitized evidence pack linked to its public case page; do not give the service or model a private-repository token.
 
 ## Acceptance criteria
 
@@ -47,6 +51,7 @@ Not included:
 - Redis enforces the configured per-IP and daily ceilings across service restarts;
 - stopping the service or control store does not affect the static portfolio;
 - no credential, raw IP address, prompt or answer is committed or logged.
+- only approved project-source IDs are retrievable, and their citations retain a public source URL and revision.
 
 ## Contribution boundary
 

@@ -18,7 +18,7 @@ public_scope: career-background-and-selected-projects
 - **Last updated:** `2026-09-02`
 - **Review state:** Approved for staging implementation; production publication still requires final rendered-answer review.
 
-This document is the approved staging source for an `Ask John` portfolio assistant. It is written as retrieval-friendly, public-safe sections rather than as marketing copy. A staging implementation may index it, but public production deployment still requires review of the exact rendered answers and citations.
+This document is the primary approved profile source for an `Ask John` portfolio assistant. It is written as retrieval-friendly, public-safe sections rather than as marketing copy. The assistant may also index explicitly allowlisted public-project snapshots and sanitized project evidence packs stored beside this document. It must not browse arbitrary repositories or private sources. Public production deployment still requires review of the exact rendered answers and citations.
 
 The assistant should answer in the visitor's language, use only this approved corpus, cite the relevant `KB` section IDs, and say when the requested information is not available in the public profile. It must not infer missing facts or search private sources.
 
@@ -317,12 +317,13 @@ The assistant has no authority to send messages, submit applications, promise av
 
 - Portfolio: <https://johnchong.info>
 - GitHub: <https://github.com/heyjohnc>
+- Niulai Squad public reference: <https://github.com/heyjohnc/niulai-shengmi-squad>
 
-Direct contact details and project-specific repository links should be added only after a final owner review and an anonymous-access check.
+Direct contact details and additional project-specific repository links should be added only after a final owner review and an anonymous-access check.
 
 ## KB-26 — Answering and citation rule
 
-Every substantive answer should cite one or more section IDs in a visible format such as `[KB-12]` or `[KB-10, KB-14]` and offer a link to the relevant portfolio page when available.
+Every substantive answer should cite one or more approved section IDs such as `[KB-12]`, `[FG-03]` or `[NL-06]` and offer a link to the relevant portfolio page or pinned public repository snapshot when available.
 
 If retrieval does not return adequate support, the assistant should say:
 

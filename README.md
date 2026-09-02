@@ -12,7 +12,7 @@ The site presents John’s product responsibility and selected AI work through f
 - `niulai.html` — controlled multi-Agent product case study
 - `about.html` — experience, education and capabilities
 
-It is a dependency-light bilingual static site with dark/light themes, responsive layouts and an optional server-side “Ask John” assistant. The assistant retrieves only from the versioned public knowledge base in `portfolio-rag/`, keeps citations visible, handles bounded greetings locally and redirects off-topic chat to its public-career scope. Its starter-question pool contains 12 aligned English/Chinese topics and randomly presents three per page load. Known intents use a fast deterministic retrieval path; unfamiliar colloquial wording falls back to an LLM semantic router that can select only approved public section headings or one of four bounded redirect categories.
+It is a dependency-light bilingual static site with dark/light themes, responsive layouts and an optional server-side “Ask John” assistant. The assistant retrieves only from approved, versioned material in `portfolio-rag/`: the public career profile, a sanitized FightGame evidence pack and an allowlisted snapshot of selected Markdown from the public Niulai repository. It keeps citations visible, handles bounded greetings locally and redirects off-topic chat to its public-career scope. Its starter-question pool contains 12 aligned English/Chinese topics and randomly presents three per page load. Known intents use a fast deterministic retrieval path; unfamiliar colloquial wording falls back to an LLM semantic router that can select only approved public section headings or one of four bounded redirect categories.
 
 ## Run locally
 
@@ -33,7 +33,20 @@ Open `http://127.0.0.1:4174/`. Local development uses a deterministic fixture pr
 npm run verify:rag
 ```
 
-The checked-in suite covers the 29-section public corpus, natural recruiter phrasing, context-dependent follow-ups, retrieval expectations, sensitive-question refusal, citation validation, bounded browser memory, provider adapters and fail-closed operating controls.
+The checked-in suite covers 29 profile sections and 11 project-evidence sections, natural recruiter phrasing, context-dependent follow-ups, retrieval expectations, sensitive-question refusal, citation validation, bounded browser memory, provider adapters and fail-closed operating controls.
+
+## Refresh approved project sources
+
+The Niulai connector is a build-time, read-only public-source sync—not a general GitHub browser and not a runtime tool available to the model:
+
+```bash
+npm run sync:project-sources
+npm run verify:rag
+```
+
+`portfolio-rag/project-source-allowlist.json` fixes the one permitted repository, public Markdown paths and extracted ranges. The sync refuses private repositories, resolves `main` to a full commit SHA, fetches only those paths without credentials and writes a reviewable snapshot under `portfolio-rag/project-sources/`. A normal build uses the checked-in snapshot and therefore remains reproducible and offline. Refreshing the snapshot is a deliberate review-and-release action.
+
+FightGame has no public repository. Its assistant evidence comes only from `portfolio-rag/project-sources/FIGHTGAME_PUBLIC_EVIDENCE.md`, which is a sanitized public pack linked to the portfolio case page. The model never receives private FightGame source code or repository access.
 
 ## Deployment
 

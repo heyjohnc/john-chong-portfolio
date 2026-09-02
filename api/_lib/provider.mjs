@@ -3,7 +3,7 @@ const answerSchema = {
   additionalProperties: false,
   properties: {
     answer: { type: "string", minLength: 1, maxLength: 1800 },
-    citations: { type: "array", minItems: 1, maxItems: 6, uniqueItems: true, items: { type: "string", pattern: "^KB-[0-9]{2}$" } }
+    citations: { type: "array", minItems: 1, maxItems: 6, uniqueItems: true, items: { type: "string", pattern: "^(?:KB|FG|NL)-[0-9]{2}$" } }
   },
   required: ["answer", "citations"]
 };
@@ -22,7 +22,7 @@ const semanticRouteSchema = {
       minItems: 0,
       maxItems: 6,
       uniqueItems: true,
-      items: { type: "string", pattern: "^KB-[0-9]{2}$" }
+      items: { type: "string", pattern: "^(?:KB|FG|NL)-[0-9]{2}$" }
     }
   },
   required: ["supported", "boundary", "section_ids"]

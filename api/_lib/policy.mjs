@@ -86,7 +86,8 @@ export function citationObjects(sectionIds, { snippetLength = 360 } = {}) {
     section_id: chunk.section_id,
     heading: chunk.heading,
     snippet: chunk.text.replace(/\s+/g, " ").slice(0, snippetLength).trim(),
-    source_url: chunk.source_url
+    source_url: chunk.source_url,
+    source_revision: chunk.source_revision || null
   }));
 }
 
