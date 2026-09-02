@@ -146,9 +146,9 @@
   const MEMORY_KEY = "john-chong-ask-memory-v1";
   const MEMORY_TTL_MS = 3 * 24 * 60 * 60 * 1000;
   const MEMORY_TURN_LIMIT = 4;
-  const ASK_ENDPOINT = ["johnchong.info", "www.johnchong.info"].includes(window.location.hostname)
-    ? "https://ask-john.37.187.136.100.sslip.io/api/ask"
-    : "/api/ask";
+  const ASK_ENDPOINT = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+    ? "/api/ask"
+    : "https://ask-john.37.187.136.100.sslip.io/api/ask";
 
   function loadConversation() {
     try {
