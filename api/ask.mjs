@@ -1,14 +1,15 @@
 import { randomUUID } from "node:crypto";
 import { enforceOperationalControls, recordAggregateTelemetry } from "./_lib/controls.mjs";
-import { estimateProviderCostUsd, generateAnswer } from "./_lib/provider.mjs";
+import { estimateProviderCostUsd, generateAnswer, routeQuestion } from "./_lib/provider.mjs";
 import { assistantCapabilityResponse, citationObjects, evaluatePolicy, noEvidenceResponse } from "./_lib/policy.mjs";
-import { corpusMetadata, queryConcepts, retrieve } from "./_lib/retrieval.mjs";
+import { corpusMetadata, getChunk, index, queryConcepts, retrieve } from "./_lib/retrieval.mjs";
 
 const QUESTION_LIMIT = 600;
 const HISTORY_LIMIT = 6;
 const HISTORY_ITEM_LIMIT = 700;
 const HISTORY_TOTAL_LIMIT = 3600;
 const MINIMUM_SCORE = 2.2;
+const ROUTER_EXCLUDED_SECTIONS = new Set(["KB-22", "KB-24", "KB-26"]);
 export const maxDuration = 35;
 
 function json(status, payload, extraHeaders = {}) {
@@ -78,6 +79,58 @@ function validProviderAnswer(answer, retrieved) {
   return answer.citations.every((sectionId) => allowed.has(sectionId));
 }
 
+function semanticRouterCatalog() {
+  return index.chunks
+    .filter((chunk) => !ROUTER_EXCLUDED_SECTIONS.has(chunk.section_id))
+    .map((chunk) => ({ section_id: chunk.section_id, heading: chunk.heading }));
+}
+
+function routedChunks(route) {
+  if (!route || route.supported !== true || route.boundary !== "career_supported" || !Array.isArray(route.section_ids)) return [];
+  const allowed = new Set(semanticRouterCatalog().map((item) => item.section_id));
+  return [...new Set(route.section_ids)]
+    .filter((sectionId) => allowed.has(sectionId))
+    .map((sectionId) => getChunk(sectionId))
+    .filter(Boolean)
+    .slice(0, 6);
+}
+
+function semanticBoundaryResponse(boundary, language) {
+  const cantonese = language === "zh-Hant-yue";
+  const chinese = language === "zh";
+  if (["private_or_sensitive", "external_action"].includes(boundary)) {
+    return {
+      mode: "refuse",
+      answer: cantonese
+        ? "我只可以根據 John 已審批的公開求職資料回答，唔會提供私人資料，亦唔可以代佢聯絡、申請或執行外部操作。你可以改問佢嘅公開經歷、項目、能力或者工作方式。"
+        : chinese
+          ? "我只能依据 John 已审核的公开求职资料回答，不能提供私人资料，也不能代替他联系、申请或执行外部操作。你可以改问他的公开经历、项目、能力或工作方式。"
+          : "I can only use John's approved public career information. I cannot provide private information or contact, apply or act on his behalf. You can instead ask about his public experience, projects, capabilities or working method.",
+      citation_ids: ["KB-24", "KB-26"]
+    };
+  }
+  if (boundary === "missing_public_fact") {
+    return {
+      mode: "no_evidence",
+      answer: cantonese
+        ? "你問緊 John，但呢項資料唔喺已審批的公開求職資料入面，所以我唔會估。你可以改問：佢做過咩、擅長咩、適合咩職位，或者邊個項目最值得先睇。"
+        : chinese
+          ? "你问的是 John，但这项内容不在已审核的公开求职资料里，所以我不会猜。你可以改问：他做过什么、擅长什么、适合哪些岗位，或者应该先看哪个项目。"
+          : "That is about John, but the requested detail is not in his approved public career profile, so I will not guess. Try asking what he has built, what he is good at, which roles fit him, or which project to review first.",
+      citation_ids: ["KB-26"]
+    };
+  }
+  return {
+    mode: "no_evidence",
+    answer: cantonese
+      ? "我主要幫你了解 John 的求職背景，唔係一般聊天機械人。你可以問：John 可以做咩、適合咩團隊、點樣同 Agent 協作，或者佢有咩代表項目。"
+      : chinese
+        ? "我主要帮助你了解 John 的求职背景，不是通用聊天机器人。你可以问：John 能做什么、适合什么团队、怎样与 Agent 协作，或者有哪些代表项目。"
+        : "I focus on John's career profile rather than general chat. You can ask what John can do, what teams suit him, how he works with Agents, or which projects best represent his work.",
+    citation_ids: ["KB-26"]
+  };
+}
+
 export async function handleRequest(request, env = process.env) {
   const startedAt = Date.now();
   const requestId = randomUUID();
@@ -118,10 +171,31 @@ export async function handleRequest(request, env = process.env) {
   }
 
   const retrievalQuestion = contextualQuestion(question, history);
-  const retrieved = retrieve(retrievalQuestion, { topK: 6 });
-  if (!queryConcepts(retrievalQuestion).length || !retrieved.length || retrieved[0].score < MINIMUM_SCORE) {
-    const empty = noEvidenceResponse(policy.language);
-    const payload = { ...basePayload(requestId), mode: empty.mode, answer: empty.answer, citations: citationObjects(empty.citation_ids), timing_ms: Date.now() - startedAt };
+  let retrieved = retrieve(retrievalQuestion, { topK: 6 });
+  let semanticRoute = null;
+  let retrievalPath = "lexical";
+  const needsSemanticRouting = !queryConcepts(retrievalQuestion).length || !retrieved.length || retrieved[0].score < MINIMUM_SCORE;
+  if (needsSemanticRouting) {
+    try {
+      semanticRoute = await routeQuestion({
+        question: retrievalQuestion,
+        catalog: semanticRouterCatalog(),
+        language: policy.language
+      }, env);
+      retrieved = routedChunks(semanticRoute);
+      retrievalPath = "semantic_router";
+    } catch (_) {
+      const payload = { ...basePayload(requestId), mode: "error", answer: operationalText("error", policy.language), citations: [], timing_ms: Date.now() - startedAt };
+      void recordAggregateTelemetry({ mode: payload.mode, language: policy.language, corpusVersion: payload.corpus.version, env });
+      return json(503, payload);
+    }
+  }
+
+  if (!retrieved.length) {
+    const empty = semanticRoute
+      ? semanticBoundaryResponse(semanticRoute.boundary, policy.language)
+      : noEvidenceResponse(policy.language);
+    const payload = { ...basePayload(requestId), mode: empty.mode, answer: empty.answer, citations: citationObjects(empty.citation_ids), retrieval_path: retrievalPath, timing_ms: Date.now() - startedAt };
     void recordAggregateTelemetry({ mode: payload.mode, language: policy.language, corpusVersion: payload.corpus.version, env });
     return json(200, payload);
   }
@@ -129,8 +203,10 @@ export async function handleRequest(request, env = process.env) {
   try {
     const generated = await generateAnswer({ question, history, chunks: retrieved, language: policy.language }, env);
     if (!validProviderAnswer(generated, retrieved)) throw new Error("Provider answer failed citation validation.");
-    const payload = { ...basePayload(requestId), mode: "answer", answer: generated.answer, citations: citationObjects(generated.citations), timing_ms: Date.now() - startedAt };
-    const cost = estimateProviderCostUsd(generated.usage, generated.model);
+    const payload = { ...basePayload(requestId), mode: "answer", answer: generated.answer, citations: citationObjects(generated.citations), retrieval_path: retrievalPath, timing_ms: Date.now() - startedAt };
+    const answerCost = estimateProviderCostUsd(generated.usage, generated.model);
+    const routeCost = semanticRoute ? estimateProviderCostUsd(semanticRoute.usage, semanticRoute.model) : 0;
+    const cost = answerCost === null || (semanticRoute && routeCost === null) ? null : Number((answerCost + routeCost).toFixed(6));
     if (cost !== null) payload.approximate_cost_usd = cost;
     void recordAggregateTelemetry({ mode: payload.mode, language: policy.language, corpusVersion: payload.corpus.version, env });
     return json(200, payload);
@@ -142,4 +218,4 @@ export async function handleRequest(request, env = process.env) {
 }
 
 export default { fetch: handleRequest };
-export { HISTORY_LIMIT, MINIMUM_SCORE, QUESTION_LIMIT, contextualQuestion, isContextDependent, normaliseHistory, validProviderAnswer };
+export { HISTORY_LIMIT, MINIMUM_SCORE, QUESTION_LIMIT, contextualQuestion, isContextDependent, normaliseHistory, routedChunks, semanticRouterCatalog, validProviderAnswer };

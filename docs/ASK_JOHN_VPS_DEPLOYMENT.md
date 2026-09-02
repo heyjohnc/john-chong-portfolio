@@ -15,6 +15,7 @@ Included:
 - persistent Redis counters for per-IP and daily ceilings;
 - sensitive-question refusal, citation validation and fail-closed behavior;
 - recruiter-style intent aliases and bounded context resolution for follow-up questions;
+- an LLM semantic-routing fallback for slang, typos, incomplete wording and previously unseen recruiter phrasing;
 - local, model-free responses for greetings, thanks, capability questions and farewells;
 - aggregate telemetry without question text.
 
@@ -33,11 +34,14 @@ Not included:
 4. Allow only the published portfolio origins in browser CORS responses.
 5. Keep the existing provider, control-store and citation checks fail-closed.
 6. Improve answerability at the retrieval layer first: map common recruiter phrasing to approved evidence, carry context only for reference-dependent follow-ups, and never broaden unsupported questions into a previous topic.
+7. When the fast retrieval path cannot understand a question, let the configured LLM classify its meaning against section headings only. The router may select approved career sections or one fixed boundary category: missing public fact, off-topic, private/sensitive, or external action. It never receives private files and its free-form wording is never shown to the visitor.
 
 ## Acceptance criteria
 
 - the HTTPS health endpoint responds without exposing configuration;
 - a supported English and Chinese question returns a grounded answer with approved citations;
+- previously unseen colloquial questions about John's capabilities or employer fit are semantically routed to approved evidence;
+- off-topic, unavailable, private and external-action intents receive bounded server-authored guidance rather than an invented answer;
 - a sensitive question returns the bounded refusal;
 - a disallowed browser origin is rejected;
 - Redis enforces the configured per-IP and daily ceilings across service restarts;
