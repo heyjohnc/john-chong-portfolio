@@ -282,6 +282,7 @@
     "Hong Kong opportunities": "香港職位機會",
     "Open to AI product and application roles in Hong Kong.": "尋找香港的 AI 產品及應用職位。",
     "I am based in Shenzhen and available for Hong Kong full-time roles. I hold Hong Kong permanent residency and do not require visa sponsorship.": "我現居深圳，可接受香港全職職位。我持有香港永久性居民身份，毋須僱主提供工作簽證擔保。",
+    "Email John": "電郵聯絡 John",
     "View GitHub": "查看 GitHub",
     "Read my background": "了解我的背景",
     "Back to top ↑": "返回頂部 ↑",
@@ -326,7 +327,7 @@
     "AI Application, Prototype / POC, Solutions, Automation and Technical Product roles where delivery judgment matters.": "重視交付判斷的 AI 應用、原型／POC、解決方案、自動化及技術產品職位。",
     "Hong Kong work right": "香港工作權利",
     "Hong Kong permanent resident. No visa sponsorship required. Currently based in Shenzhen.": "香港永久性居民，毋須工作簽證擔保，目前居於深圳。",
-    "Cantonese, Mandarin and English. English interview fluency remains an active practice area; no unsupported proficiency score is claimed.": "粵語、普通話及英語。現正持續加強英語面試流暢度，並不聲稱未有證據支持的語言評分。",
+    "Cantonese and Mandarin at native level. Professional English reading and written communication; actively improving spoken interview fluency.": "粵語及普通話達母語水平。英語具備專業閱讀及書面溝通能力，並正積極提升面試口語流暢度。",
     "Working model": "工作模式",
     "Agent-assisted implementation with human product direction, constraints, review, correction and acceptance.": "由 Agent 輔助實作，並由人負責產品方向、限制、審查、修正及驗收。",
     "Selected projects": "精選項目",
@@ -523,11 +524,11 @@
     "Scoped re-acceptance": "按範圍重新驗收",
 
     "Two current cases show different parts of my work: a playable multiplayer product and a Level 3 multi-Agent system in active operation. Each case separates my decisions from Agent-accelerated implementation.": "目前兩個案例呈現我工作的不同面向：一個已達基本可玩階段的多人產品，以及一個已凍結 Level 3 技術基線並持續運作的多 Agent 系統。每個案例都清楚區分我的決策與 Agent 加速的實作。",
-    "Level 3 baseline · Active operations": "Level 3 基線 · 持續運作",
+    "Validated baseline · Active operations": "已驗證基線 · 持續運作",
     "02 · Multi-Agent system": "02 · 多 Agent 系統",
-    "A four-Agent BSC market-event product that separates evidence, frozen random votes, model dialogue, controlled execution and channel publishing on one canonical timeline.": "一個四 Agent 的 BSC 市場事件產品，把證據、已凍結的隨機投票、模型對話、受控執行及渠道發佈，分隔並記錄在同一條標準時間線上。",
+    "A four-Agent BNB Smart Chain product that turns sourced market signals into a traceable story while keeping voting, execution and publishing independently controlled.": "一個四 Agent 的 BNB Smart Chain 產品，把有來源的市場訊號轉化為可追溯故事，同時讓投票、執行及發佈保持獨立受控。",
     "product architecture, operating rules, permission boundaries, failure review, release decisions and iterative full-flow UAT.": "產品架構、運作規則、權限邊界、失敗審查、發佈決策及反覆完整流程驗收。",
-    "Level 3 baseline · active": "Level 3 基線 · 持續運作",
+    "Validated baseline · active": "已驗證基線 · 持續運作",
     "Four Agents · one timeline": "四個 Agent · 一條時間線",
     "779/779 baseline tests + funded UAT": "779/779 項基線測試 + 小額實測驗收",
     "The work between an idea and an operating system": "概念與可運作系統之間的工作",
@@ -553,8 +554,8 @@
     "FightGame demonstrates a completed core-playability milestone. Niulai Squad demonstrates a Level 3 multi-Agent technical baseline that remains in active operation.": "FightGame 展示已完成的基本可玩性里程碑；牛来生米小队則展示已凍結 Level 3 技術基線、並持續運作的多 Agent 系統。",
     "Continue with the Level 3 Niulai Squad multi-Agent system and its active operating model.": "繼續了解已達 Level 3 技術基線、並持續運作的牛来生米小队多 Agent 系統。",
 
-    "A four-Agent BSC market-event product that turns sourced signals, frozen random votes, controlled single-position lifecycles and channel publishing into one traceable story timeline.": "一個四 Agent 的 BSC 市場事件產品，把有來源的訊號、已凍結的隨機投票、受控單倉生命週期及渠道發佈，組織成一條可追溯的故事時間線。",
-    "Level 3 baseline · active operations": "Level 3 基線 · 持續運作",
+    "A four-Agent product that turns live BNB Smart Chain market signals into a traceable story—from sourced evidence and voting to controlled execution and channel publishing.": "一個四 Agent 產品，把 BNB Smart Chain 即時市場訊號轉化為可追溯的故事，由有來源的證據與投票，延伸至受控執行及渠道發佈。",
+    "Validated technical baseline · active operations": "已驗證技術基線 · 持續運作",
     "Product & architecture owner": "產品與架構負責人",
     "Four Agents · separated control planes": "四個 Agent · 分離的控制面",
     "Frozen evidence": "凍結證據",
@@ -613,7 +614,7 @@
     "Nine selected projects by John Chong: two flagship case studies, five focused AI systems and two public developer tools.": "John Chong 的九個精選項目：兩個旗艦案例、五個聚焦 AI 系統及兩個公開開發者工具。",
     "Background, experience and working approach of John Chong (Shing Yip Chong), an AI Product and Solutions Builder.": "AI 產品與解決方案建構者 John Chong（Shing Yip Chong）的背景、經驗及工作方法。",
     "FightGame case study: a personalized-avatar multiplayer pixel RPG with synchronized online skill-card battles.": "FightGame 案例研究：一款支援個人化角色及同步線上技能卡對戰的多人像素 RPG。",
-    "Niulai Squad case study: a Level 3 four-Agent BSC market-event product with frozen random votes, controlled execution, channel publishing and one canonical timeline.": "牛来生米小队案例研究：一個已凍結 Level 3 技術基線的四 Agent BSC 市場事件產品，具已凍結的隨機投票、受控執行、渠道發佈及單一標準時間線。"
+    "Niulai Squad case study: a four-Agent BNB Smart Chain market-event product with traceable evidence, controlled execution and coordinated publishing.": "牛来生米小队案例研究：一個四 Agent 的 BNB Smart Chain 市場事件產品，具可追溯證據、受控執行及協調發佈。"
   };
 
   const textRecords = [];

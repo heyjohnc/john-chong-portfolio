@@ -6,7 +6,7 @@
     "build": "npm run build:rag && node scripts/build-static.mjs",
     "build:rag": "node scripts/build-rag-index.mjs",
     "dev": "node scripts/dev-server.mjs",
-    "test": "node --test tests",
+    "test": "node --test tests/*.test.mjs",
     "eval:rag": "node scripts/run-rag-evals.mjs",
     "verify:rag": "npm run build:rag && npm test && npm run eval:rag"
   },
