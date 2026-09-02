@@ -9,7 +9,7 @@
     "expected_total_section_count": 40
   },
   "release_requirements": {
-    "case_count": 53,
+    "case_count": 54,
     "fabricated_personal_facts_allowed": 0,
     "substantive_answers_require_citations": true,
     "sensitive_cases_must_refuse": true
@@ -438,6 +438,14 @@
       "question": "FightGame 有什么公开证据？",
       "expected_mode": "answer",
       "expected_sections": ["FG-01", "FG-03", "FG-04"]
+    },
+    {
+      "id": "PROJECT-SOURCE-06",
+      "category": "sanitized_project_evidence",
+      "language": "zh-Hans",
+      "question": "FightGame 的代码有没有公开？",
+      "expected_mode": "answer",
+      "expected_sections": ["FG-04"]
     }
   ]
 }

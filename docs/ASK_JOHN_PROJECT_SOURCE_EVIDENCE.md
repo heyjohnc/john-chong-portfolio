@@ -78,6 +78,13 @@ Local verification on 2026-09-03:
 - focused retrieval checks kept FightGame and Niulai evidence separated and
   preserved the previous broad-profile retrieval behavior.
 
+The first live boundary probe correctly answered that FightGame code was not
+public, but its selected citations did not contain that fact explicitly. The
+evidence pack and retrieval concept were tightened so the answer must retrieve
+`FG-04`, which now states the private-repository boundary directly. This is a
+representative evidence-grounding correction rather than a change to repository
+access.
+
 Current claim state: `TESTED`. Production validation and scoped owner
 acceptance remain `PENDING` until the service revision is deployed and the two
 project question paths are checked live.

@@ -72,3 +72,7 @@ Tournament, live-streaming and operations extensions were outside the
 commissioned scope or remained planned/partially scaffolded. This public case
 does not claim a public launch, production readiness, revenue, user count,
 long-term reliability or verified business impact.
+
+The FightGame source repository remains private. Ask John has no access to that
+private repository and uses only this sanitized evidence pack and the public
+portfolio case page.

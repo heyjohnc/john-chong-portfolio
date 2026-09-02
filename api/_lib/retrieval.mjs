@@ -14,7 +14,7 @@ const conceptRules = [
   ["rag", /\b(rag|retrieval|grounded|grounding|vector|embedding|knowledge base)\b|检索|檢索|知识库|知識庫|有根据|有根據/i],
   ["agents", /\b(agent|agents|multi-agent|development agents|human contribution|rely on ai|depend on ai|manually coded?|write all the code)\b|智能体|代理|多 agent|多个 agent|多個 agent|本人|亲自|親自|依赖 ai|依賴 ai|全靠 ai|手写代码|手寫代碼/i],
   ["uat", /\b(uat|test|testing|accept|acceptance|validate|validation|verify|verification|failure|recover|recovery|regression)\b|测试|測試|验收|驗收|验证|驗證|核验|核驗|失败|失敗|恢复|恢復|修复|修復/i],
-  ["project_evidence", /\b(public repository|public repo|project evidence|evidence pack|proof|what.*(?:verify|prove))\b|公开仓库|公開倉庫|公开证据|公開證據|项目证据|項目證據|证明|證明/i],
+  ["project_evidence", /\b(public repository|public repo|public code|open.source code|project evidence|evidence pack|proof|what.*(?:verify|prove))\b|公开仓库|公開倉庫|公开证据|公開證據|项目证据|項目證據|代码.*公开|公開.*程式碼|源码.*公开|原始碼.*公開|证明|證明/i],
   ["video", /\b(video|seedance|ffmpeg|storyboard|render|channel|playout)\b|视频|影片|影像|分镜|分鏡|渲染/i],
   ["document_intelligence", /\b(document intelligence|evidence.first|ocr|provenance|diary|source.linked)\b|文件智能|文件智慧|证据优先|證據優先|来源脉络|來源脈絡/i],
   ["public_data", /\b(public.data|data dashboard|explainable metrics|official sources)\b|公共数据|公共資料|数据仪表板|資料儀表板|可解释指标|可解釋指標/i],
