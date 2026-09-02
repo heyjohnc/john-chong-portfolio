@@ -7,7 +7,7 @@
       closeShort: "Close",
       title: "Ask about John",
       subtitle: "Verified portfolio assistant",
-      notice: "Answers use John's approved public profile. Recent chat stays in this browser for up to 3 days and can be cleared anytime.",
+      notice: "Answers use John's approved public evidence. Recent chat stays in this browser for up to 3 days and can be cleared anytime.",
       greeting: "Hi — ask about my work, experience, projects or fit for an AI product role.",
       suggestions: [
         "What did John personally own in FightGame?",
@@ -26,7 +26,7 @@
       placeholder: "Ask a question…",
       send: "Send question",
       close: "Close assistant",
-      answer: "Verified profile answer",
+      answer: "Verified evidence answer",
       refuse: "Private boundary",
       no_evidence: "No approved evidence",
       rate_limited: "Request limit",
@@ -40,7 +40,7 @@
       loadingBoundary: "Public evidence only · no browsing or private files",
       loadingSteps: [
         "Understand the question and its evidence boundary",
-        "Search 29 approved profile sections",
+        "Search approved profile and project evidence",
         "Rank relevant project and career evidence",
         "Cross-check claims and prepare citations"
       ],
@@ -52,8 +52,16 @@
         default: ["Career profile", "Project evidence"]
       },
       grounded: (count) => `Grounded in ${count} approved ${count === 1 ? "section" : "sections"}`,
-      bounded: "Approved public profile only",
-      sources: "Sources",
+      bounded: "Approved public evidence only",
+      sources: "Evidence trail",
+      evidencePath: "Approved evidence → matched section → original source",
+      sourceTypes: {
+        niulai: "Public GitHub snapshot",
+        fightgame: "Reviewed public case evidence",
+        profile: "Approved public profile",
+        fallback: "Approved public source"
+      },
+      commit: "Commit",
       openSource: "Open related page",
       retry: "The answer service could not be reached. Please try again later."
     },
@@ -62,7 +70,7 @@
       closeShort: "關閉",
       title: "問問 John",
       subtitle: "已審核作品集助手",
-      notice: "回答以 John 已審核的公開資料為依據；最近對話可在這個瀏覽器保留最多 3 日，並可隨時清除。",
+      notice: "回答以 John 已審核的公開證據為依據；最近對話可在這個瀏覽器保留最多 3 日，並可隨時清除。",
       greeting: "你好——你可以詢問我的工作經歷、項目、工作方法，或我與 AI 產品職位的匹配度。",
       suggestions: [
         "John 在 FightGame 中親自負責了甚麼？",
@@ -81,7 +89,7 @@
       placeholder: "輸入你的問題…",
       send: "發送問題",
       close: "關閉助手",
-      answer: "已核實檔案回答",
+      answer: "已核實證據回答",
       refuse: "私隱邊界",
       no_evidence: "沒有已審核依據",
       rate_limited: "請求次數限制",
@@ -95,7 +103,7 @@
       loadingBoundary: "只使用公開證據 · 不瀏覽網頁或私人檔案",
       loadingSteps: [
         "理解問題及可使用的證據邊界",
-        "檢索 29 個已審核檔案章節",
+        "檢索已審核履歷及項目證據",
         "排序相關項目與履歷證據",
         "交叉核對陳述並準備引用"
       ],
@@ -107,8 +115,16 @@
         default: ["職業檔案", "項目證據"]
       },
       grounded: (count) => `依據 ${count} 個已審核章節`,
-      bounded: "僅使用已審核公開檔案",
-      sources: "資料來源",
+      bounded: "僅使用已審核公開證據",
+      sources: "證據鏈",
+      evidencePath: "已審核證據 → 匹配章節 → 原始來源",
+      sourceTypes: {
+        niulai: "公開 GitHub 快照",
+        fightgame: "已審核公開案例證據",
+        profile: "已審核公開履歷",
+        fallback: "已審核公開來源"
+      },
+      commit: "Commit",
       openSource: "查看相關頁面",
       retry: "目前無法連接問答服務，請稍後再試。"
     }
@@ -357,6 +373,18 @@
     return article;
   }
 
+  function sourceProvenance(item, current) {
+    const sectionId = String(item.section_id || "");
+    const revision = String(item.source_revision || "");
+    if (sectionId.startsWith("NL-")) {
+      const shortRevision = /^[a-f0-9]{40}$/i.test(revision) ? ` · ${current.commit} ${revision.slice(0, 7)}` : "";
+      return `${current.sourceTypes.niulai}${shortRevision}`;
+    }
+    if (sectionId.startsWith("FG-")) return current.sourceTypes.fightgame;
+    if (sectionId.startsWith("KB-")) return current.sourceTypes.profile;
+    return current.sourceTypes.fallback;
+  }
+
   function appendAnswer(payload, remembered = true) {
     const current = labels();
     const article = document.createElement("article");
@@ -388,16 +416,29 @@
       sourceList.className = "ask-widget-sources";
       const heading = document.createElement("strong");
       heading.textContent = current.sources;
-      sourceList.appendChild(heading);
+      const evidencePath = document.createElement("small");
+      evidencePath.className = "ask-widget-evidence-path";
+      evidencePath.textContent = current.evidencePath;
+      sourceList.append(heading, evidencePath);
       payload.citations.forEach((item) => {
         const details = document.createElement("details");
         const summary = document.createElement("summary");
-        summary.textContent = `${item.section_id} · ${item.heading}`;
+        const sourceHeading = document.createElement("span");
+        sourceHeading.className = "ask-widget-source-heading";
+        sourceHeading.textContent = `${item.section_id} · ${item.heading}`;
+        const provenance = document.createElement("small");
+        provenance.className = "ask-widget-source-provenance";
+        provenance.textContent = sourceProvenance(item, current);
+        summary.append(sourceHeading, provenance);
         const snippet = document.createElement("p");
         snippet.textContent = item.snippet;
         const link = document.createElement("a");
         link.href = item.source_url;
         link.textContent = `${current.openSource} ↗`;
+        if (/^https?:\/\//i.test(item.source_url || "")) {
+          link.target = "_blank";
+          link.rel = "noreferrer";
+        }
         details.append(summary, snippet, link);
         sourceList.appendChild(details);
       });

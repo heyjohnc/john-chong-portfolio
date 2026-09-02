@@ -594,12 +594,15 @@ html[data-language="zh"] .system-strip::before { content: "流程示意"; }
 .ask-widget-answer-trace span { position: relative; padding-left: 10px; }
 .ask-widget-answer-trace span::before { content: ""; width: 4px; height: 4px; border-radius: 50%; position: absolute; top: .55em; left: 0; background: var(--status); box-shadow: 0 0 0 3px color-mix(in srgb, var(--status) 12%, transparent); }
 .ask-widget-sources { margin-top: 16px; border-top: 1px solid var(--line); }
-.ask-widget-sources > strong { padding: 12px 0 5px; display: block; color: var(--muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.ask-widget-sources > strong { padding: 12px 0 3px; display: block; color: var(--muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.ask-widget-evidence-path { padding-bottom: 8px; display: block; color: color-mix(in srgb, var(--muted) 82%, transparent); font-size: 9px; line-height: 1.4; }
 .ask-widget-sources details { border-bottom: 1px solid var(--line); }
-.ask-widget-sources summary { min-height: 42px; padding: 9px 24px 9px 0; position: relative; color: var(--body-copy); font-size: 12px; font-weight: 680; cursor: pointer; list-style: none; }
+.ask-widget-sources summary { min-height: 48px; padding: 9px 24px 9px 0; position: relative; color: var(--body-copy); cursor: pointer; list-style: none; display: grid; gap: 3px; align-content: center; }
 .ask-widget-sources summary::-webkit-details-marker { display: none; }
-.ask-widget-sources summary::after { content: "+"; position: absolute; right: 2px; color: var(--accent); }
+.ask-widget-sources summary::after { content: "+"; position: absolute; top: 50%; right: 2px; color: var(--accent); transform: translateY(-50%); }
 .ask-widget-sources details[open] summary::after { content: "−"; }
+.ask-widget-source-heading { font-size: 12px; font-weight: 680; line-height: 1.35; }
+.ask-widget-source-provenance { color: var(--muted); font: 650 9px/1.35 var(--sans); letter-spacing: .015em; }
 .ask-widget-sources details p { margin: 0 0 8px; color: var(--muted); font-size: 12px; line-height: 1.5; }
 .ask-widget-sources details a { margin-bottom: 11px; display: inline-block; color: var(--accent); font-size: 11px; font-weight: 720; }
 .ask-widget-composer { min-height: 66px; padding: 9px 10px 9px 15px; border-top: 1px solid var(--line); display: flex; gap: 9px; align-items: flex-end; background: var(--surface); }
