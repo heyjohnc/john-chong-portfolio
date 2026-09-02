@@ -19,9 +19,9 @@ function refusalText(language) {
 }
 
 function noEvidenceText(language) {
-  if (language === "zh-Hant-yue") return "我喺已審批的公開資料入面搵唔到足夠證據回答。你可以查看 John 的作品集或直接聯絡佢。";
-  if (language === "zh") return "我在已审核的公开资料中找不到足够依据回答。你可以查看 John 的作品集或直接联系他。";
-  return "I don't have enough approved public information to answer that. You can review John's portfolio or contact him directly.";
+  if (language === "zh-Hant-yue") return "呢個問題唔喺我已審批的公開職業資料範圍內。你可以問 John 的經歷、項目、技能、工作方式或者香港工作資格。";
+  if (language === "zh") return "这个问题不在我已审核的公开职业资料范围内。你可以问 John 的经历、项目、技能、工作方式或香港工作资格。";
+  return "That question is outside my approved public career information. You can ask about John's experience, projects, skills, working method or Hong Kong work eligibility.";
 }
 
 function memoryText(language) {
@@ -30,9 +30,37 @@ function memoryText(language) {
   return "Yes. I can keep the last four exchanges in this browser for up to three days so I can understand follow-up questions. You can clear them at any time. The server does not build a long-term personal memory, and prior chat is never treated as factual evidence about John.";
 }
 
+function introductionText(language) {
+  if (language === "zh-Hant-yue") return "你好，我係 Ask John，一個只根據 John 已審批公開職業資料回答的作品集助手。你可以問我佢嘅經歷、項目、技能、工作方式、Agent 協作或者香港工作資格。";
+  if (language === "zh") return "你好，我是 Ask John，一个只根据 John 已审核公开职业资料回答的作品集助手。你可以问我他的经历、项目、技能、工作方式、Agent 协作或香港工作资格。";
+  return "Hello, I'm Ask John, a portfolio assistant that answers only from John's approved public career information. Ask me about his experience, projects, skills, working method, Agent collaboration or Hong Kong work eligibility.";
+}
+
+function thanksText(language) {
+  if (language === "zh-Hant-yue") return "唔使客氣。你可以繼續問 John 的項目、經歷、技能或者工作方式。";
+  if (language === "zh") return "不客气。你可以继续问 John 的项目、经历、技能或工作方式。";
+  return "You're welcome. You can keep asking about John's projects, experience, skills or working method.";
+}
+
+function farewellText(language) {
+  if (language === "zh-Hant-yue") return "再見，多謝你了解 John。需要時可以隨時返嚟睇佢嘅作品集。";
+  if (language === "zh") return "再见，感谢你了解 John。需要时可以随时回来查看他的作品集。";
+  return "Goodbye, and thanks for learning about John. You can return to his portfolio whenever you need more detail.";
+}
+
 export function assistantCapabilityResponse(question, language = languageOf(question)) {
   if (/\b(do you|does this).*(remember|memory)|\bmemory\b|你.*记忆|你.*記憶|有记忆|有記憶|记得.*对话|記得.*對話/i.test(question)) {
     return { mode: "system", language, answer: memoryText(language), citation_ids: [] };
+  }
+  if (/^(?:who are you|what can you do|how can you help|help|你好|您好|嗨|哈喽|哈囉|早上好|早晨|你是谁|你是誰|你係邊個|你能做什么|你能做什麼|你可以做什么|你可以做什麼|可以问什么|可以問什麼)[?？!！.。\s]*$/i.test(question)) {
+    return { mode: "system", language, answer: introductionText(language), citation_ids: [] };
+  }
+  if (/^(?:hi|hello|hey|good (?:morning|afternoon|evening)|how are you|thanks|thank you|thx|谢谢|謝謝|多谢|多謝|唔该|唔該)[?？!！.。\s]*$/i.test(question)) {
+    const isThanks = /^(?:thanks|thank you|thx|谢谢|謝謝|多谢|多謝|唔该|唔該)/i.test(question);
+    return { mode: "system", language, answer: isThanks ? thanksText(language) : introductionText(language), citation_ids: [] };
+  }
+  if (/^(?:bye|goodbye|see you|再见|再見|拜拜)[?？!！.。\s]*$/i.test(question)) {
+    return { mode: "system", language, answer: farewellText(language), citation_ids: [] };
   }
   return null;
 }

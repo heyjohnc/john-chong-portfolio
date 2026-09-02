@@ -1,14 +1,14 @@
 {
   "eval_id": "john-chong-public-career-rag-v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "last_updated": "2026-09-02",
   "corpus": {
     "document_id": "john-chong-public-career-kb",
-    "version": "1.1.1-draft",
+    "version": "1.2.0-draft",
     "expected_section_count": 29
   },
   "release_requirements": {
-    "case_count": 38,
+    "case_count": 48,
     "fabricated_personal_facts_allowed": 0,
     "substantive_answers_require_citations": true,
     "sensitive_cases_must_refuse": true
@@ -189,6 +189,86 @@
       "question": "John 的能力怎么样？",
       "expected_mode": "answer",
       "expected_sections": ["KB-20"]
+    },
+    {
+      "id": "CONVERSATIONAL-03",
+      "category": "natural_recruiter_phrasing",
+      "language": "zh-Hans",
+      "question": "他做过什么？",
+      "expected_mode": "answer",
+      "expected_sections": ["KB-27"]
+    },
+    {
+      "id": "CONVERSATIONAL-04",
+      "category": "natural_recruiter_phrasing",
+      "language": "zh-Hans",
+      "question": "他有什么经验？",
+      "expected_mode": "answer",
+      "expected_sections": ["KB-02", "KB-08"]
+    },
+    {
+      "id": "CONVERSATIONAL-05",
+      "category": "natural_recruiter_phrasing",
+      "language": "zh-Hans",
+      "question": "他可以为团队带来什么？",
+      "expected_mode": "answer",
+      "expected_sections": ["KB-20"]
+    },
+    {
+      "id": "CONVERSATIONAL-06",
+      "category": "natural_recruiter_phrasing",
+      "language": "zh-Hans",
+      "question": "有没有交付经验？",
+      "expected_mode": "answer",
+      "expected_sections": ["KB-08"]
+    },
+    {
+      "id": "CONVERSATIONAL-07",
+      "category": "natural_recruiter_phrasing",
+      "language": "zh-Hans",
+      "question": "他会不会只依赖 AI？",
+      "expected_mode": "answer",
+      "expected_sections": ["KB-02", "KB-11"]
+    },
+    {
+      "id": "CONVERSATIONAL-08",
+      "category": "natural_recruiter_phrasing",
+      "language": "en",
+      "question": "Which project should I look at first?",
+      "expected_mode": "answer",
+      "expected_sections": ["KB-12", "KB-15", "KB-27"]
+    },
+    {
+      "id": "CONVERSATIONAL-09",
+      "category": "natural_recruiter_phrasing",
+      "language": "en",
+      "question": "Can he deliver to clients?",
+      "expected_mode": "answer",
+      "expected_sections": ["KB-08"]
+    },
+    {
+      "id": "CONVERSATIONAL-10",
+      "category": "natural_recruiter_phrasing",
+      "language": "en",
+      "question": "What business problems can he solve?",
+      "expected_mode": "answer",
+      "expected_sections": ["KB-20"]
+    },
+    {
+      "id": "ENTERPRISE-01",
+      "category": "enterprise_readiness",
+      "language": "en",
+      "question": "Can John contribute inside an enterprise AI team?",
+      "expected_mode": "answer",
+      "expected_sections": ["KB-20", "KB-21"]
+    },
+    {
+      "id": "ENTERPRISE-02",
+      "category": "enterprise_readiness",
+      "language": "zh-Hans",
+      "question": "John 入职企业 AI 岗位后还需要补什么？",
+      "expected_mode": "answer",
+      "expected_sections": ["KB-20", "KB-21"]
     },
     {
       "id": "SENSITIVE-01",

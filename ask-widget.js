@@ -12,7 +12,16 @@
       suggestions: [
         "What did John personally own in FightGame?",
         "How does John manage multiple AI Agents?",
-        "Why is John a fit for an AI product role?"
+        "Why is John a fit for an AI product role?",
+        "Can John contribute inside an enterprise AI team?",
+        "What client-delivery experience does John have?",
+        "What is John's practical RAG experience?",
+        "How does John test Agent-built software?",
+        "What did John personally decide in Niulai Squad?",
+        "Why is John moving from his studio to a full-time role?",
+        "Does John need visa sponsorship in Hong Kong?",
+        "Which project should I look at first?",
+        "What are John's current technical gaps?"
       ],
       placeholder: "Ask a question…",
       send: "Send question",
@@ -58,7 +67,16 @@
       suggestions: [
         "John 在 FightGame 中親自負責了甚麼？",
         "John 如何管理多個 AI Agent？",
-        "John 為甚麼適合 AI 產品職位？"
+        "John 為甚麼適合 AI 產品職位？",
+        "John 能否在企業 AI 團隊中作出貢獻？",
+        "John 有甚麼客戶交付經驗？",
+        "John 有甚麼實際 RAG 經驗？",
+        "John 如何測試由 Agent 開發的軟件？",
+        "John 在牛來生米小隊中親自決定了甚麼？",
+        "John 為甚麼從工作室轉向全職工作？",
+        "John 在香港工作需要簽證擔保嗎？",
+        "應該先看 John 的哪一個項目？",
+        "John 目前有哪些技術缺口？"
       ],
       placeholder: "輸入你的問題…",
       send: "發送問題",
@@ -146,6 +164,10 @@
   const MEMORY_KEY = "john-chong-ask-memory-v1";
   const MEMORY_TTL_MS = 3 * 24 * 60 * 60 * 1000;
   const MEMORY_TURN_LIMIT = 4;
+  const SUGGESTION_COUNT = 3;
+  const ASK_ENDPOINT = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+    ? "/api/ask"
+    : "https://ask-john.37.187.136.100.sslip.io/api/ask";
 
   function loadConversation() {
     try {
@@ -161,6 +183,12 @@
   }
 
   let conversation = loadConversation();
+  const suggestionIndexes = Array.from({ length: copy.en.suggestions.length }, (_, index) => index);
+  for (let index = suggestionIndexes.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [suggestionIndexes[index], suggestionIndexes[swapIndex]] = [suggestionIndexes[swapIndex], suggestionIndexes[index]];
+  }
+  suggestionIndexes.length = Math.min(SUGGESTION_COUNT, suggestionIndexes.length);
 
   function saveConversation() {
     try {
@@ -230,10 +258,12 @@
     question.placeholder = current.placeholder;
     submit.setAttribute("aria-label", current.send);
     suggestions.replaceChildren();
-    current.suggestions.forEach((text) => {
+    suggestionIndexes.forEach((index) => {
+      const text = current.suggestions[index];
       const button = document.createElement("button");
       button.type = "button";
       button.textContent = text;
+      button.dataset.suggestionIndex = String(index);
       button.addEventListener("click", () => void ask(text));
       suggestions.appendChild(button);
     });
@@ -411,7 +441,7 @@
     setLoading(true);
     const loading = appendLoading(text);
     try {
-      const response = await fetch("/api/ask", {
+      const response = await fetch(ASK_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: text, history })

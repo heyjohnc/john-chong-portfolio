@@ -42,10 +42,15 @@ function normaliseHistory(value) {
   return history;
 }
 
+function isContextDependent(question) {
+  const shortFollowUp = /^(?:what does (?:that|this) mean|why|how so|tell me more|can you explain|and (?:what|how|why) about (?:it|that|this)|什么意思|甚麼意思|什麼意思|即係咩|为什么|為甚麼|點解|具体点|具體啲|继续|繼續|那呢|咁呢)[?？.!。\s]*$/i;
+  const referencedFollowUp = /\b(?:it|that|this|they|them|those|these|the former|the latter|that project|this project|the project)\b|(?:这个|這個|那个|那個|这些|這些|那些|它|它们|它們|上述|前面|刚才|剛才|呢個|嗰個|佢|佢哋)(?:项目|項目|系统|系統|工具|技术|技術|做法|流程|又|还|還|呢|有什么|有什麼|用了|使用|如何|怎么|怎麼|點樣)?/i;
+  return shortFollowUp.test(question) || referencedFollowUp.test(question);
+}
+
 function contextualQuestion(question, history) {
   if (!history.length) return question;
-  const followUp = /^(?:what does (?:that|this) mean|why|how so|tell me more|can you explain|什么意思|甚麼意思|什麼意思|即係咩|为什么|為甚麼|點解|具体点|具體啲|继续|繼續)[?？.!。\s]*$/i.test(question);
-  if (!followUp && queryConcepts(question).length) return question;
+  if (!isContextDependent(question)) return question;
   const previousUser = [...history].reverse().find((item) => item.role === "user");
   return previousUser ? `${previousUser.content}\nFollow-up: ${question}` : question;
 }
@@ -137,4 +142,4 @@ export async function handleRequest(request, env = process.env) {
 }
 
 export default { fetch: handleRequest };
-export { HISTORY_LIMIT, MINIMUM_SCORE, QUESTION_LIMIT, contextualQuestion, normaliseHistory, validProviderAnswer };
+export { HISTORY_LIMIT, MINIMUM_SCORE, QUESTION_LIMIT, contextualQuestion, isContextDependent, normaliseHistory, validProviderAnswer };
