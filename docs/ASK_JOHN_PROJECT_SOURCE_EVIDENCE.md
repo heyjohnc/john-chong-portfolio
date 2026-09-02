@@ -1,6 +1,6 @@
 # Ask John — Approved Project Sources
 
-Status: Level 2 feature batch; local verification passed, production pending  
+Status: Level 2 feature batch; production validated, scoped owner review pending
 Date: 2026-09-03
 
 ## Objective and scope
@@ -91,9 +91,26 @@ instruction and evidence wording were tightened to keep **John** (the person)
 separate from **Ask John** (the bounded portfolio assistant). No data or
 permission boundary changed.
 
-Current claim state: `TESTED`. Production validation and scoped owner
-acceptance remain `PENDING` until the service revision is deployed and the two
-project question paths are checked live.
+Production validation on 2026-09-03:
+
+- service revision: `e1215bacb98702dca33219facd35bd283f245d47`;
+- the Niulai evidence question returned a grounded answer citing only `NL-*`
+  sections linked to commit
+  `9489e1ff4710351ce5eba11f33790e4241b293ff`;
+- the FightGame consistency question cited `FG-01` and the existing public
+  overview without exposing a repository or private path;
+- after the two grounding corrections described above, the question
+  `FightGame 的代码有没有公开？` answered that the source repository remains
+  private and cited only `FG-04`; it did not confuse John with the assistant;
+- the HTTPS health endpoint and systemd service were active after restart;
+- recent service journal output contained lifecycle messages only and no
+  visitor question text.
+
+Current claim state: `PRODUCTION_VALIDATED`. The owner approved adding these two
+source types and previously authorized direct Ask John production deployment.
+Acceptance of the feature's final rendered wording remains `PENDING` until the
+owner reviews the live answers; this does not block the verified permission
+boundary.
 
 ## Known limitations and refresh path
 
