@@ -1,6 +1,6 @@
 # Ask John — owner-operated VPS deployment
 
-Status: Level 2 feature batch; VPS endpoint validated, production website integration pending
+Status: Production website and VPS endpoint validated
 Date: 2026-09-02
 
 ## Objective and scope
@@ -60,8 +60,8 @@ The owner chose the product behavior, public evidence boundary, hosting directio
 - Corpus `1.2.0-draft` rollout: `PRODUCTION_VALIDATED` — after the VPS service restart, live English and Chinese enterprise-readiness questions returned the new corpus version and cited `KB-20`/`KB-21` evidence on 2026-09-02.
 - Measured sample: three live grounded answers completed in 11.2–17.2 seconds and reported approximately USD 0.000093–0.000113 each. This is a three-request acceptance sample, not a latency or cost SLA.
 - Retrieval-improvement spot check: the revised code returned grounded answers for a broad project question, an Agent-dependence question and a contextual FightGame technology follow-up. After zero-score evidence was removed, the broad project question was rechecked directly against DeepSeek V4 Flash and cited only `KB-27`.
-- Production website integration: `NOT_VALIDATED` until the portfolio release containing the endpoint selection is deployed. The protected Vercel preview artifact contains the intended endpoint, and its exact origin completed a live CORS request.
-- Owner acceptance: `PENDING` until the owner reviews the live behavior.
+- Production website integration: `PRODUCTION_VALIDATED` — the release was deployed directly to `https://johnchong.info` on 2026-09-02 with the owner's approval. Post-deployment desktop and mobile browser checks passed for the compact launcher, three unique randomly selected starter questions, stable English/Chinese topic mapping, grounded answers, citations, keyboard behavior and 320px layouts.
+- Owner deployment decision: `APPROVED` — the owner explicitly requested direct production deployment without an intermediate Preview. Further visual or wording refinements can still be handled as normal follow-up changes.
 
 Rollback is independent: the website can return to its same-origin disabled endpoint while the VPS service and HTTPS route are stopped separately.
 
