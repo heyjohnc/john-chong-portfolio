@@ -4,7 +4,7 @@
   "last_updated": "2026-09-02",
   "corpus": {
     "document_id": "john-chong-public-career-kb",
-    "version": "1.1.0-draft",
+    "version": "1.1.1-draft",
     "expected_section_count": 29
   },
   "release_requirements": {
@@ -90,7 +90,7 @@
       "id": "FACT-10",
       "category": "supported_fact",
       "language": "en",
-      "question": "What did John personally decide and validate in Niulai Shengmi Squad?",
+      "question": "What did John personally decide and validate in Niulai Squad?",
       "expected_mode": "answer",
       "expected_sections": ["KB-15"]
     },
@@ -98,7 +98,7 @@
       "id": "CROSS-01",
       "category": "cross_project",
       "language": "en",
-      "question": "How did the multi-Agent structures differ between FightGame and Niulai Shengmi Squad?",
+      "question": "How did the multi-Agent structures differ between FightGame and Niulai Squad?",
       "expected_mode": "answer",
       "expected_sections": ["KB-14", "KB-15"]
     },

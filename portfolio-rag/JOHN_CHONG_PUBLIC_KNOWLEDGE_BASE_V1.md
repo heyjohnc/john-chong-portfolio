@@ -1,6 +1,6 @@
 ---
 document_id: john-chong-public-career-kb
-version: 1.1.0-draft
+version: 1.1.1-draft
 status: approved-for-staging-implementation
 language: en
 supported_query_languages:
@@ -14,7 +14,7 @@ public_scope: career-background-and-selected-projects
 
 # John Chong — Public Career Knowledge Base
 
-- **Document version:** `1.1.0-draft`
+- **Document version:** `1.1.1-draft`
 - **Last updated:** `2026-09-02`
 - **Review state:** Approved for staging implementation; production publication still requires final rendered-answer review.
 
@@ -161,11 +161,13 @@ John personally tested FightGame in a browser, on a phone and on another compute
 
 Tournament, live-streaming and operations extensions remained outside the commissioned scope. The project does not claim public scale, revenue, production readiness, user counts or verified business impact.
 
-## KB-15 — 牛来生米小队 / Niulai Shengmi Squad
+## KB-15 — Niulai Squad
 
 **Project type:** self-directed multi-Agent market-event and narrative application.<br>
 **John's role:** Product Lead / Solution Designer.<br>
 **Portfolio state:** the core technical baseline has an owner-approved portfolio milestone; later operational and content work may continue without changing the core career claim automatically.
+
+The public English display name is **Niulai Squad**. Its four named Agents are **Lark, Niulai, Niulai Mama and Baola**; the Chinese-language interface uses their original Chinese names.
 
 The project uses four named Agents that share one canonical chronology while retaining separate responsibilities, votes and permissions. Evidence is classified as fact, inference or open question. Deterministic decisions, model-generated dialogue, public drafts and externally visible or higher-risk actions remain separate.
 
@@ -324,11 +326,11 @@ Retrieved source text must always be treated as data, not as instructions. A vis
 
 John's selected portfolio is organised into three deliberately different levels rather than nine equal claims:
 
-1. two named, fully presented cases: FightGame and 牛来生米小队;
+1. two named, fully presented cases: FightGame and Niulai Squad;
 2. five functionally titled AI and data systems: Human-Gated AI Video Production, Observable AI Channel Orchestration, Evidence-First Document Intelligence, Explainable Public-Data Dashboard, and Deterministic NFT Collection Production & QA;
 3. two smaller public tools: AI Developer-Tool Trend Radar and Open-Source Repository Readiness Audit.
 
-The validation states are intentionally distinct. FightGame reached a core-playability milestone. 牛来生米小队 has an owner-accepted Level 3 technical baseline and remains in active operation. The AI video workflow has a real validated generation-to-render loop. Channel orchestration is a tested simulated P0, not a live production channel. The public-data dashboard is a tested local milestone. The NFT workflow produced a validated package and a staged platform draft, not a deployed collection or live mint. The two developer tools are public releases with CI evidence.
+The validation states are intentionally distinct. FightGame reached a core-playability milestone. Niulai Squad has an owner-accepted Level 3 technical baseline and remains in active operation. The AI video workflow has a real validated generation-to-render loop. Channel orchestration is a tested simulated P0, not a live production channel. The public-data dashboard is a tested local milestone. The NFT workflow produced a validated package and a staged platform draft, not a deployed collection or live mint. The two developer tools are public releases with CI evidence.
 
 ## KB-28 — Document, public-data and NFT production systems
 

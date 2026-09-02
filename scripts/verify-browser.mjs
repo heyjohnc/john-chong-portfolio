@@ -104,6 +104,26 @@ const removedPage = await navigationPage.request.get(`${baseUrl}/ask.html`);
 checks.push({ name: "standalone Ask page is removed", passed: removedPage.status() === 404 });
 await navigationPage.close();
 
+const niulaiPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+monitor(niulaiPage, "niulai-language");
+await niulaiPage.goto(`${baseUrl}/niulai.html`, { waitUntil: "networkidle" });
+const englishNiulai = await niulaiPage.locator("body").innerText();
+checks.push({
+  name: "Niulai case defaults to English public names",
+  passed: ["Niulai Squad", "Lark", "Niulai Mama", "Baola"].every((name) => englishNiulai.includes(name)) && !/牛来生米小队|云雀|牛来妈妈|豹拉/.test(englishNiulai)
+});
+checks.push({
+  name: "Niulai case links to the public repository",
+  passed: await niulaiPage.locator('a[href="https://github.com/heyjohnc/niulai-shengmi-squad"]').count() === 1
+});
+await niulaiPage.locator("[data-language-toggle]").click();
+const chineseNiulai = await niulaiPage.locator("body").innerText();
+checks.push({
+  name: "Niulai case restores original names in Chinese",
+  passed: ["牛来生米小队", "云雀", "牛来", "牛来妈妈", "豹拉"].every((name) => chineseNiulai.includes(name))
+});
+await niulaiPage.close();
+
 await browser.close();
 
 for (const check of checks) console.log(`${check.passed ? "PASS" : "FAIL"} ${check.name}${check.details ? ` ${JSON.stringify(check.details)}` : ""}`);

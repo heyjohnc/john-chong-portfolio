@@ -11,7 +11,7 @@ const evalSet = JSON.parse(await readFile(new URL("../portfolio-rag/evals/RAG_EV
 
 test("built index is pinned to the approved corpus contract", () => {
   assert.equal(index.document_id, "john-chong-public-career-kb");
-  assert.equal(index.document_version, "1.1.0-draft");
+  assert.equal(index.document_version, "1.1.1-draft");
   assert.equal(index.last_updated, "2026-09-02");
   assert.equal(index.chunk_count, 29);
   assert.equal(new Set(index.chunks.map((chunk) => chunk.section_id)).size, 29);
@@ -29,6 +29,20 @@ test("dedicated projects page exposes the approved nine-item hierarchy without h
   assert.equal((projects.match(/class="system-project-card"/g) || []).length, 5);
   assert.equal((projects.match(/class="tool-project-card"/g) || []).length, 2);
   assert.doesNotMatch(projects, /AI Video Factory|MiniMax H3|Build Clock|Pumpnuts|prepare-nft-collection/i);
+});
+
+test("Niulai uses English public names while preserving Chinese language mappings", async () => {
+  const homepage = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const projects = await readFile(new URL("../projects.html", import.meta.url), "utf8");
+  const caseStudy = await readFile(new URL("../niulai.html", import.meta.url), "utf8");
+  const translations = await readFile(new URL("../site.js", import.meta.url), "utf8");
+  const englishSource = `${homepage}\n${projects}\n${caseStudy}`;
+
+  assert.match(englishSource, /Niulai Squad/);
+  for (const name of ["Lark", "Niulai", "Niulai Mama", "Baola"]) assert.match(englishSource, new RegExp(`>${name}<`));
+  assert.doesNotMatch(englishSource, /牛来生米小队|云雀|牛来妈妈|豹拉/);
+  assert.match(caseStudy, /https:\/\/github\.com\/heyjohnc\/niulai-shengmi-squad/);
+  for (const mapping of ['"Niulai Squad": "牛来生米小队"', '"Lark": "云雀"', '"Niulai Mama": "牛来妈妈"', '"Baola": "豹拉"']) assert.ok(translations.includes(mapping));
 });
 
 test("all supported eval questions retrieve every expected section in top six", () => {
@@ -251,5 +265,5 @@ test("Web-standard API returns bounded answer, refusal and no-evidence modes", a
   assert.ok(supported.citations.length > 0);
   assert.equal(sensitive.mode, "refuse");
   assert.equal(unknown.mode, "no_evidence");
-  assert.equal(supported.corpus.version, "1.1.0-draft");
+  assert.equal(supported.corpus.version, "1.1.1-draft");
 });

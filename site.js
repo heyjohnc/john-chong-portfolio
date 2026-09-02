@@ -261,7 +261,7 @@
     "Permitted action": "獲准行動",
     "Addressable · auditable · bounded": "可定位 · 可審計 · 有邊界",
     "Product rules that keep collaboration useful, traceable and under control.": "以產品規則，讓協作保持有效、可追蹤及受控。",
-    "Real project example · 牛来生米小队": "真實項目例子 · 牛來生米小隊",
+    "Real project example · Niulai Squad": "真實項目例子 · 牛来生米小队",
     "From a broad brief to a product decision": "從概括要求到產品決策",
     "One moving object shows the layer I add between an unclear idea and something a team can actually build and test.": "一個持續變形的物件，展示我如何在模糊想法與團隊可以真正構建、測試的成果之間加入產品判斷。",
     "How I translate a broad brief into a product decision": "我如何把概括要求轉化為產品決策",
@@ -424,13 +424,18 @@
     "The project is an unofficial fan-parody work and does not claim an official relationship, cooperation, sponsorship or endorsement. Public visuals and deeper transaction evidence remain subject to separate IP and privacy review.": "本項目屬非官方同人二創，不聲稱與相關方存在官方關係、合作、贊助或認可。公開視覺素材及更深入的交易證據，仍須另行進行知識產權及私隱審查。",
     "See the completed core-playability case.": "查看已完成基本可玩性階段的案例。",
     "View FightGame": "查看 FightGame",
-    "牛来生米小队 case study": "牛来生米小队案例研究",
+    "Niulai Squad": "牛来生米小队",
+    "Lark": "云雀",
+    "Niulai": "牛来",
+    "Niulai Mama": "牛来妈妈",
+    "Baola": "豹拉",
+    "Niulai Squad case study": "牛来生米小队案例研究",
 
     "FightGame shared pixel world with player characters and NPCs": "FightGame 共享像素世界、玩家角色及 NPC",
     "FightGame personalized player profile and equipped skill-card loadout": "FightGame 個人化玩家資料及已裝備技能卡組",
     "FightGame synchronized turn battle with two player states": "FightGame 顯示兩名玩家狀態的同步回合戰鬥",
     "Read the FightGame case study": "閱讀 FightGame 案例研究",
-    "Read the 牛来生米小队 case study": "閱讀牛来生米小队案例研究",
+    "Read the Niulai Squad case study": "閱讀牛来生米小队案例研究",
     "FightGame synchronized online battle showing two player states and a Guard Break action": "FightGame 同步線上戰鬥，顯示兩名玩家狀態及 Guard Break 操作",
     "FightGame shared world with a player and named NPCs": "FightGame 共享世界，包含玩家及具名稱的 NPC",
     "FightGame profile with avatar and equipped cards": "FightGame 玩家資料、角色形象及已裝備技能卡",
@@ -545,8 +550,8 @@
     "Bounded lifecycle result": "具邊界的生命週期結果",
     "Dialogue and channel record": "對話與渠道記錄",
     "Product rules that keep evidence, models, funds and external channels independently controllable.": "以產品規則，讓證據、模型、資金及外部渠道保持獨立可控。",
-    "FightGame demonstrates a completed core-playability milestone. 牛来生米小队 demonstrates a Level 3 multi-Agent technical baseline that remains in active operation.": "FightGame 展示已完成的基本可玩性里程碑；牛来生米小队則展示已凍結 Level 3 技術基線、並持續運作的多 Agent 系統。",
-    "Continue with the Level 3 牛来生米小队 multi-Agent system and its active operating model.": "繼續了解已達 Level 3 技術基線、並持續運作的牛来生米小队多 Agent 系統。",
+    "FightGame demonstrates a completed core-playability milestone. Niulai Squad demonstrates a Level 3 multi-Agent technical baseline that remains in active operation.": "FightGame 展示已完成的基本可玩性里程碑；牛来生米小队則展示已凍結 Level 3 技術基線、並持續運作的多 Agent 系統。",
+    "Continue with the Level 3 Niulai Squad multi-Agent system and its active operating model.": "繼續了解已達 Level 3 技術基線、並持續運作的牛来生米小队多 Agent 系統。",
 
     "A four-Agent BSC market-event product that turns sourced signals, frozen random votes, controlled single-position lifecycles and channel publishing into one traceable story timeline.": "一個四 Agent 的 BSC 市場事件產品，把有來源的訊號、已凍結的隨機投票、受控單倉生命週期及渠道發佈，組織成一條可追溯的故事時間線。",
     "Level 3 baseline · active operations": "Level 3 基線 · 持續運作",
@@ -555,6 +560,7 @@
     "Frozen evidence": "凍結證據",
     "779 / 779 baseline tests + funded UAT": "779 / 779 項基線測試 + 小額實測驗收",
     "Open live read-only demo ↗": "開啟線上只讀 Demo ↗",
+    "View public repository ↗": "查看公開程式庫 ↗",
     "Market monitoring can surface metrics, but it does not naturally create an entertaining, replayable story—and adding models can easily blur facts, opinions, decisions and external permissions. I designed the product so every sourced candidate, vote, lifecycle result, role reaction and channel record remains addressable from one event history.": "市場監控可以呈現指標，卻不會自然形成有娛樂性、可回看的故事；加入模型後，更容易混淆事實、意見、決策及外部權限。我把產品設計成每個有來源的候選、投票、生命週期結果、角色反應及渠道記錄，都能從同一事件歷史中定位。",
     "The central product decision was to separate random choice from model expression, and public presentation from money and publishing authority. I remain responsible for the product direction, architecture boundaries, strategy revisions, failure review, release decisions and full-flow acceptance.": "核心產品決策，是把隨機選擇與模型表達分開，也把公開展示與資金及發佈權限分開。我仍負責產品方向、架構邊界、策略修訂、失敗審查、發佈決策及完整流程驗收。",
     "Read-only discovery": "只讀發現",
@@ -602,12 +608,12 @@
     "Projects — John Chong": "項目 — John Chong",
     "About — John Chong": "關於 — John Chong",
     "FightGame Case Study — John Chong": "FightGame 案例研究 — John Chong",
-    "牛来生米小队 Case Study — John Chong": "牛来生米小队案例研究 — John Chong",
+    "Niulai Squad Case Study — John Chong": "牛来生米小队案例研究 — John Chong",
     "John Chong (Shing Yip Chong) turns unclear business needs into testable AI products through product judgment, Agent-assisted delivery and hands-on validation.": "John Chong（Shing Yip Chong）透過產品判斷、Agent 輔助交付及親自驗收，把模糊業務需求轉化為可測試的 AI 產品。",
     "Nine selected projects by John Chong: two flagship case studies, five focused AI systems and two public developer tools.": "John Chong 的九個精選項目：兩個旗艦案例、五個聚焦 AI 系統及兩個公開開發者工具。",
     "Background, experience and working approach of John Chong (Shing Yip Chong), an AI Product and Solutions Builder.": "AI 產品與解決方案建構者 John Chong（Shing Yip Chong）的背景、經驗及工作方法。",
     "FightGame case study: a personalized-avatar multiplayer pixel RPG with synchronized online skill-card battles.": "FightGame 案例研究：一款支援個人化角色及同步線上技能卡對戰的多人像素 RPG。",
-    "牛来生米小队 case study: a Level 3 four-Agent BSC market-event product with frozen random votes, controlled execution, channel publishing and one canonical timeline.": "牛来生米小队案例研究：一個已凍結 Level 3 技術基線的四 Agent BSC 市場事件產品，具已凍結的隨機投票、受控執行、渠道發佈及單一標準時間線。"
+    "Niulai Squad case study: a Level 3 four-Agent BSC market-event product with frozen random votes, controlled execution, channel publishing and one canonical timeline.": "牛来生米小队案例研究：一個已凍結 Level 3 技術基線的四 Agent BSC 市場事件產品，具已凍結的隨機投票、受控執行、渠道發佈及單一標準時間線。"
   };
 
   const textRecords = [];
