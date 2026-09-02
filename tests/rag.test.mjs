@@ -251,6 +251,7 @@ test("OpenRouter adapter uses DeepSeek V4 Flash with strict private routing", as
     assert.equal(request.body.stream, false);
     assert.deepEqual(request.body.reasoning, { enabled: false, exclude: true });
     assert.deepEqual(request.body.tools, []);
+    assert.match(request.body.messages[0].content, /Distinguish the person John from the portfolio assistant named Ask John/);
     assert.equal(request.body.response_format.type, "json_schema");
     assert.equal(request.body.response_format.json_schema.strict, true);
     assert.deepEqual(request.body.provider, {
