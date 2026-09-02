@@ -196,6 +196,8 @@ export async function handleRequest(request, env = process.env) {
       ? semanticBoundaryResponse(semanticRoute.boundary, policy.language)
       : noEvidenceResponse(policy.language);
     const payload = { ...basePayload(requestId), mode: empty.mode, answer: empty.answer, citations: citationObjects(empty.citation_ids), retrieval_path: retrievalPath, timing_ms: Date.now() - startedAt };
+    const routeCost = semanticRoute ? estimateProviderCostUsd(semanticRoute.usage, semanticRoute.model) : null;
+    if (routeCost !== null) payload.approximate_cost_usd = routeCost;
     void recordAggregateTelemetry({ mode: payload.mode, language: policy.language, corpusVersion: payload.corpus.version, env });
     return json(200, payload);
   }
