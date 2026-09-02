@@ -33,7 +33,7 @@ Open `http://127.0.0.1:4174/`. Local development uses a deterministic fixture pr
 npm run verify:rag
 ```
 
-The checked-in suite covers the 29-section public corpus, retrieval expectations, sensitive-question refusal, citation validation, bounded browser memory, provider adapters and fail-closed operating controls.
+The checked-in suite covers the 29-section public corpus, natural recruiter phrasing, context-dependent follow-ups, retrieval expectations, sensitive-question refusal, citation validation, bounded browser memory, provider adapters and fail-closed operating controls.
 
 ## Deployment
 

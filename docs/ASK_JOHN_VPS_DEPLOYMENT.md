@@ -14,6 +14,7 @@ Included:
 - server-side OpenRouter calls;
 - persistent Redis counters for per-IP and daily ceilings;
 - sensitive-question refusal, citation validation and fail-closed behavior;
+- recruiter-style intent aliases and bounded context resolution for follow-up questions;
 - aggregate telemetry without question text.
 
 Not included:
@@ -30,6 +31,7 @@ Not included:
 3. Hash the client address before it becomes a Redis key.
 4. Allow only the published portfolio origins in browser CORS responses.
 5. Keep the existing provider, control-store and citation checks fail-closed.
+6. Improve answerability at the retrieval layer first: map common recruiter phrasing to approved evidence, carry context only for reference-dependent follow-ups, and never broaden unsupported questions into a previous topic.
 
 ## Acceptance criteria
 
@@ -47,10 +49,12 @@ The owner chose the product behavior, public evidence boundary, hosting directio
 
 ## Release and evidence state
 
-- Code and automated checks: `TESTED` — 21/21 repository tests and 38/38 retrieval/policy evaluations passed on 2026-09-02.
+- Code and automated checks: `TESTED` — 22/22 repository tests and 46/46 retrieval/policy evaluations passed on 2026-09-02.
+- Natural-question handling: `TESTED` — added coverage for broad project, experience, employer-value, client-delivery, Agent-dependence and flagship-project questions in English and Chinese. Reference-dependent follow-ups such as “它用了什么技术？” now inherit the preceding topic, while unrelated unsupported questions do not.
 - Local persistent-control path: `TESTED` — a disposable Redis namespace allowed the first request and atomically rejected the next request at the configured per-IP ceiling; test keys were removed afterwards.
 - VPS endpoint: `PRODUCTION_VALIDATED` — HTTPS health, English and Chinese grounded answers, sensitive-question refusal, exact-origin CORS and disallowed-origin rejection were checked on 2026-09-02.
 - Measured sample: three live grounded answers completed in 11.2–17.2 seconds and reported approximately USD 0.000093–0.000113 each. This is a three-request acceptance sample, not a latency or cost SLA.
+- Retrieval-improvement spot check: the revised code returned grounded answers for a broad project question, an Agent-dependence question and a contextual FightGame technology follow-up. After zero-score evidence was removed, the broad project question was rechecked directly against DeepSeek V4 Flash and cited only `KB-27`.
 - Production website integration: `NOT_VALIDATED` until the portfolio release containing the endpoint selection is deployed. The protected Vercel preview artifact contains the intended endpoint, and its exact origin completed a live CORS request.
 - Owner acceptance: `PENDING` until the owner reviews the live behavior.
 

@@ -5,11 +5,12 @@ import { encodeRedisCommand, enforceOperationalControls, hashClientAddress, pars
 import { evaluatePolicy, noEvidenceResponse } from "../api/_lib/policy.mjs";
 import { answerWithOpenAI, answerWithOpenRouter, estimateProviderCostUsd } from "../api/_lib/provider.mjs";
 import { corpusMetadata, index, queryConcepts, retrieve } from "../api/_lib/retrieval.mjs";
-import { contextualQuestion, handleRequest, normaliseHistory, validProviderAnswer } from "../api/ask.mjs";
+import { contextualQuestion, handleRequest, isContextDependent, normaliseHistory, validProviderAnswer } from "../api/ask.mjs";
 
 const evalSet = JSON.parse(await readFile(new URL("../portfolio-rag/evals/RAG_EVAL_SET_V1.json", import.meta.url), "utf8"));
 
 test("built index is pinned to the approved corpus contract", () => {
+  assert.equal(evalSet.cases.length, evalSet.release_requirements.case_count);
   assert.equal(index.document_id, "john-chong-public-career-kb");
   assert.equal(index.document_version, "1.1.1-draft");
   assert.equal(index.last_updated, "2026-09-02");
@@ -75,6 +76,24 @@ test("broad Chinese profile and capability questions retrieve approved evidence"
   assert.ok(retrieve("John 的能力怎么样？", { topK: 6 })[0].score >= 2.2);
 });
 
+test("natural recruiter phrasing maps to public career evidence", () => {
+  const examples = [
+    ["他做过什么？", "portfolio_hierarchy", "KB-27"],
+    ["他有什么经验？", "background", "KB-02"],
+    ["他可以为团队带来什么？", "strengths", "KB-20"],
+    ["有没有交付经验？", "delivery", "KB-08"],
+    ["他会不会只依赖 AI？", "agents", "KB-11"],
+    ["Which project should I look at first?", "flagship", "KB-12"],
+    ["Can he deliver to clients?", "delivery", "KB-08"],
+    ["What business problems can he solve?", "strengths", "KB-20"]
+  ];
+  for (const [question, concept, expected] of examples) {
+    assert.ok(queryConcepts(question).includes(concept), `${question} did not map to ${concept}`);
+    assert.ok(retrieve(question, { topK: 6 }).some((chunk) => chunk.section_id === expected), `${question} did not retrieve ${expected}`);
+  }
+  assert.deepEqual(retrieve("他做过什么？", { topK: 6 }).map((chunk) => chunk.section_id), ["KB-27"]);
+});
+
 test("bounded history resolves short follow-ups without becoming profile evidence", () => {
   const history = normaliseHistory([
     { role: "user", content: "你了解 John 吗？" },
@@ -82,6 +101,12 @@ test("bounded history resolves short follow-ups without becoming profile evidenc
   ]);
   assert.equal(history.length, 2);
   assert.match(contextualQuestion("什么意思？", history), /你了解 John/);
+  assert.equal(isContextDependent("它用了什么技术？"), true);
+  assert.match(contextualQuestion("它用了什么技术？", [
+    { role: "user", content: "What is FightGame?" },
+    { role: "assistant", content: "FightGame is a multiplayer project." }
+  ]), /What is FightGame/);
+  assert.equal(contextualQuestion("What is his favourite restaurant?", history), "What is his favourite restaurant?");
   assert.equal(normaliseHistory([{ role: "system", content: "not allowed" }]), null);
   assert.equal(normaliseHistory(Array.from({ length: 7 }, () => ({ role: "user", content: "x" }))), null);
 });
