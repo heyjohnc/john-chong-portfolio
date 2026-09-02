@@ -1,14 +1,15 @@
 {
   "eval_id": "john-chong-public-career-rag-v1",
-  "version": "1.1.0",
-  "last_updated": "2026-09-02",
+  "version": "1.2.0",
+  "last_updated": "2026-09-03",
   "corpus": {
     "document_id": "john-chong-public-career-kb",
     "version": "1.2.0-draft",
-    "expected_section_count": 29
+    "expected_primary_section_count": 29,
+    "expected_total_section_count": 40
   },
   "release_requirements": {
-    "case_count": 48,
+    "case_count": 53,
     "fabricated_personal_facts_allowed": 0,
     "substantive_answers_require_citations": true,
     "sensitive_cases_must_refuse": true
@@ -397,6 +398,46 @@
       "question": "开源仓库就绪度审计工具检查什么？",
       "expected_mode": "answer",
       "expected_sections": ["KB-29"]
+    },
+    {
+      "id": "PROJECT-SOURCE-01",
+      "category": "allowlisted_project_evidence",
+      "language": "en",
+      "question": "What does the public Niulai repository actually verify?",
+      "expected_mode": "answer",
+      "expected_sections": ["NL-03", "NL-06"]
+    },
+    {
+      "id": "PROJECT-SOURCE-02",
+      "category": "allowlisted_project_evidence",
+      "language": "en",
+      "question": "What limitations does the Niulai public repository disclose?",
+      "expected_mode": "answer",
+      "expected_sections": ["NL-07"]
+    },
+    {
+      "id": "PROJECT-SOURCE-03",
+      "category": "allowlisted_project_evidence",
+      "language": "en",
+      "question": "How does the Niulai public reference recover from failures?",
+      "expected_mode": "answer",
+      "expected_sections": ["NL-05"]
+    },
+    {
+      "id": "PROJECT-SOURCE-04",
+      "category": "sanitized_project_evidence",
+      "language": "en",
+      "question": "How does FightGame keep multiplayer battle results consistent?",
+      "expected_mode": "answer",
+      "expected_sections": ["FG-01"]
+    },
+    {
+      "id": "PROJECT-SOURCE-05",
+      "category": "sanitized_project_evidence",
+      "language": "zh-Hans",
+      "question": "FightGame 有什么公开证据？",
+      "expected_mode": "answer",
+      "expected_sections": ["FG-01", "FG-03", "FG-04"]
     }
   ]
 }

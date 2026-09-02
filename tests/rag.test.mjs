@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { encodeRedisCommand, enforceOperationalControls, hashClientAddress, parseRedisReply, resetMemoryControlsForTest } from "../api/_lib/controls.mjs";
-import { evaluatePolicy, noEvidenceResponse } from "../api/_lib/policy.mjs";
+import { citationObjects, evaluatePolicy, noEvidenceResponse } from "../api/_lib/policy.mjs";
 import { answerWithOpenAI, answerWithOpenRouter, estimateProviderCostUsd } from "../api/_lib/provider.mjs";
 import { corpusMetadata, index, queryConcepts, retrieve } from "../api/_lib/retrieval.mjs";
 import { contextualQuestion, handleRequest, isContextDependent, normaliseHistory, routedChunks, semanticRouterCatalog, validProviderAnswer } from "../api/ask.mjs";
@@ -14,10 +14,30 @@ test("built index is pinned to the approved corpus contract", () => {
   assert.equal(index.document_id, "john-chong-public-career-kb");
   assert.equal(index.document_version, "1.2.0-draft");
   assert.equal(index.last_updated, "2026-09-02");
-  assert.equal(index.chunk_count, 29);
-  assert.equal(new Set(index.chunks.map((chunk) => chunk.section_id)).size, 29);
+  assert.equal(index.chunk_count, 40);
+  assert.equal(new Set(index.chunks.map((chunk) => chunk.section_id)).size, 40);
   assert.match(index.source_hash, /^[a-f0-9]{64}$/);
-  assert.ok(index.chunks.every((chunk) => chunk.source_hash === index.source_hash));
+  assert.equal(index.source_documents.length, 3);
+  const documentHashes = new Map(index.source_documents.map((document) => [document.document_id, document.source_hash]));
+  assert.ok(index.chunks.every((chunk) => chunk.source_hash === documentHashes.get(chunk.document_id)));
+});
+
+test("project evidence is limited to a public Niulai snapshot and a sanitized FightGame pack", async () => {
+  const niulai = index.source_documents.find((document) => document.document_id === "niulai-public-repository");
+  const fightgame = index.source_documents.find((document) => document.document_id === "fightgame-public-project-evidence");
+  assert.equal(niulai.section_count, 7);
+  assert.match(niulai.source_url, /^https:\/\/github\.com\/heyjohnc\/niulai-shengmi-squad\/tree\/[a-f0-9]{40}$/);
+  assert.match(niulai.source_revision, /^[a-f0-9]{40}$/);
+  assert.equal(fightgame.section_count, 4);
+  assert.equal(fightgame.source_url, "/fightgame.html");
+  for (const sectionId of ["FG-01", "FG-02", "FG-03", "FG-04", "NL-01", "NL-03", "NL-05", "NL-07"]) {
+    assert.ok(index.chunks.some((chunk) => chunk.section_id === sectionId), `missing project evidence ${sectionId}`);
+  }
+  const allowlist = await readFile(new URL("../portfolio-rag/project-source-allowlist.json", import.meta.url), "utf8");
+  assert.match(allowlist, /"repository": "niulai-shengmi-squad"/);
+  assert.doesNotMatch(allowlist, /token|credential|private[_ -]?key/i);
+  const fightgameEvidence = await readFile(new URL("../portfolio-rag/project-sources/FIGHTGAME_PUBLIC_EVIDENCE.md", import.meta.url), "utf8");
+  assert.doesNotMatch(fightgameEvidence, /ghp_[A-Za-z0-9]+|-----BEGIN [A-Z ]*PRIVATE KEY-----|0x[a-f0-9]{40}/i);
 });
 
 test("dedicated projects page exposes the approved nine-item hierarchy without hidden source names", async () => {
@@ -118,9 +138,17 @@ test("provider citations must stay inside retrieved evidence", () => {
   assert.equal(validProviderAnswer({ answer: "No citation", citations: [] }, retrieved), false);
 });
 
+test("project-source citations retain an auditable public revision", () => {
+  const citations = citationObjects(["NL-06", "FG-03"]);
+  assert.match(citations[0].source_url, /^https:\/\/github\.com\/heyjohnc\/niulai-shengmi-squad\/tree\//);
+  assert.match(citations[0].source_revision, /^[a-f0-9]{40}$/);
+  assert.equal(citations[1].source_url, "/fightgame.html");
+});
+
 test("semantic routing catalog exposes career topics but excludes policy-only sections", () => {
   const catalogIds = semanticRouterCatalog().map((item) => item.section_id);
   for (const sectionId of ["KB-22", "KB-24", "KB-26"]) assert.ok(!catalogIds.includes(sectionId));
+  for (const sectionId of ["FG-01", "NL-01", "NL-07"]) assert.ok(catalogIds.includes(sectionId));
   assert.deepEqual(
     routedChunks({ supported: true, boundary: "career_supported", section_ids: ["KB-20", "KB-24", "KB-99"] }).map((chunk) => chunk.section_id),
     ["KB-20"]

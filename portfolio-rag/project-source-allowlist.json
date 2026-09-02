@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0.0",
+  "sources": [
+    {
+      "source_id": "niulai-public-repository",
+      "type": "github_public_markdown",
+      "owner": "heyjohnc",
+      "repository": "niulai-shengmi-squad",
+      "ref": "main",
+      "output_path": "portfolio-rag/project-sources/NIULAI_PUBLIC_REPOSITORY.generated.md",
+      "sections": [
+        {
+          "section_id": "NL-01",
+          "title": "Niulai public repository overview",
+          "path": "README.md",
+          "start_heading": "# 牛来生米小队 / Niulai Shengmi Squad",
+          "end_heading": "## 如果这个架构对你有用"
+        },
+        {
+          "section_id": "NL-02",
+          "title": "Niulai public architecture summary",
+          "path": "README.md",
+          "start_heading": "## 架构",
+          "end_heading": "## 粉丝贡献奖励治理设计"
+        },
+        {
+          "section_id": "NL-03",
+          "title": "Niulai public claim states",
+          "path": "README.md",
+          "start_heading": "## Claim states",
+          "end_heading": "## 安全与声明"
+        },
+        {
+          "section_id": "NL-04",
+          "title": "Niulai owner and Agent contribution boundary",
+          "path": "README.md",
+          "start_heading": "## 贡献边界",
+          "end_heading": "## 喜欢这套架构？"
+        },
+        {
+          "section_id": "NL-05",
+          "title": "Niulai failure and recovery evidence",
+          "path": "docs/CASE_STUDY.md",
+          "start_heading": "## 5. Failure and recovery evidence",
+          "end_heading": "## 6. Verification and measured result"
+        },
+        {
+          "section_id": "NL-06",
+          "title": "Niulai reproducible verification",
+          "path": "docs/VERIFICATION.md",
+          "start_heading": "## What is verified",
+          "end_heading": "## What is not verified for fan rewards"
+        },
+        {
+          "section_id": "NL-07",
+          "title": "Niulai public limitations",
+          "path": "docs/LIMITATIONS.md",
+          "start_heading": "# Limitations"
+        }
+      ]
+    }
+  ]
+}

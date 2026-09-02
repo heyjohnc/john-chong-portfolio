@@ -13,7 +13,8 @@ const conceptRules = [
   ["niulai", /\b(niulai|shengmi|market-event|canonical timeline|four-agent|four agent)\b|牛来|牛來|生米|四个 agent|四個 agent|时间线|時間線/i],
   ["rag", /\b(rag|retrieval|grounded|grounding|vector|embedding|knowledge base)\b|检索|檢索|知识库|知識庫|有根据|有根據/i],
   ["agents", /\b(agent|agents|multi-agent|development agents|human contribution|rely on ai|depend on ai|manually coded?|write all the code)\b|智能体|代理|多 agent|多个 agent|多個 agent|本人|亲自|親自|依赖 ai|依賴 ai|全靠 ai|手写代码|手寫代碼/i],
-  ["uat", /\b(uat|test|testing|accept|acceptance|validate|validation|failure|regression)\b|测试|測試|验收|驗收|验证|驗證|失败|失敗|修复|修復/i],
+  ["uat", /\b(uat|test|testing|accept|acceptance|validate|validation|verify|verification|failure|recover|recovery|regression)\b|测试|測試|验收|驗收|验证|驗證|核验|核驗|失败|失敗|恢复|恢復|修复|修復/i],
+  ["project_evidence", /\b(public repository|public repo|project evidence|evidence pack|proof|what.*(?:verify|prove))\b|公开仓库|公開倉庫|公开证据|公開證據|项目证据|項目證據|证明|證明/i],
   ["video", /\b(video|seedance|ffmpeg|storyboard|render|channel|playout)\b|视频|影片|影像|分镜|分鏡|渲染/i],
   ["document_intelligence", /\b(document intelligence|evidence.first|ocr|provenance|diary|source.linked)\b|文件智能|文件智慧|证据优先|證據優先|来源脉络|來源脈絡/i],
   ["public_data", /\b(public.data|data dashboard|explainable metrics|official sources)\b|公共数据|公共資料|数据仪表板|資料儀表板|可解释指标|可解釋指標/i],
@@ -28,7 +29,7 @@ const conceptRules = [
   ["delivery", /\b(deliver(?:y|ed|ing)?|client-facing|ship(?:ped|ping)?|end-to-end|from requirement to acceptance)\b|交付|落地|从需求到验收|從需求到驗收|端到端|完整流程/i],
   ["technical", /\b(technology|technologies|technical|tech stack|architecture|frontend|front-end|backend|back-end|built with|what does (?:it|this|that).*(?:use|run on)|javascript|typescript|react|node|postgres|redis|playwright|vercel)\b|技术|技術|技能|技术栈|技術棧|架构|架構|前端|后端|後端|用了什么|用了什麼|使用什么技术|使用咩技術/i],
   ["strengths", /\b(strengths?|capabilit(?:y|ies)|competenc(?:e|ies)|what can (?:john|he) do|value|valuable|positioned|why hire|contribution|fit for|suitable for|qualified for|help (?:our|the) team|bring to (?:our|the) team|problems? can (?:john|he) solve)\b|能力|本领|本領|优势|優勢|强项|強項|价值|價值|贡献|貢獻|为什么适合|為什麼適合|适合我们|適合我們|能否胜任|能否勝任|可以胜任|可以勝任|团队带来|團隊帶來|解决什么问题|解決什麼問題|能做什么|能做什麼|会做什么|會做什麼/i],
-  ["gaps", /\b(gap|gaps|weakness|development area|lack|limitation|need to learn|need to improve|onboarding|not yet)\b|短板|差距|不足|缺口|弱点|弱點|还需要学|還需要學|需要补|需要補|入职后要补|入職後要補/i],
+  ["gaps", /\b(gap|gaps|weakness|development area|lack|limitations?|need to learn|need to improve|onboarding|not yet)\b|短板|差距|不足|缺口|弱点|弱點|限制|局限|还需要学|還需要學|需要补|需要補|入职后要补|入職後要補/i],
   ["salary", /\b(salary|income|pay|compensation)\b|薪资|薪資|工资|工資|收入/i],
   ["private", /\b(age|birth|birthday|phone|address|commute|wallet|transaction|private|secret|credential|client identity|payment)\b|年龄|年齡|出生|电话|電話|地址|通勤|钱包|錢包|交易|隐私|隱私|秘密|凭据|憑據|客户身份|客戶身份|付款/i],
   ["action", /\b(send|submit|apply|promise|negotiate|change|update|browse|search private|act on behalf)\b|发送|發送|申请|申請|承诺|承諾|代替|代表|更改|更新资料|更新資料|浏览|瀏覽/i]
@@ -47,7 +48,13 @@ const sectionConcepts = new Map([
   ["KB-25", ["identity"]], ["KB-26", ["private", "action", "rag"]],
   ["KB-27", ["portfolio_hierarchy", "flagship", "video", "nft_workflow", "developer_tools"]],
   ["KB-28", ["document_intelligence", "public_data", "nft_workflow", "uat"]],
-  ["KB-29", ["developer_tools", "technical"]]
+  ["KB-29", ["developer_tools", "technical"]],
+  ["FG-01", ["fightgame", "technical", "delivery", "project_evidence"]], ["FG-02", ["fightgame", "rag", "technical", "project_evidence"]],
+  ["FG-03", ["fightgame", "agents", "uat", "delivery", "project_evidence"]], ["FG-04", ["fightgame", "agents", "project_classification", "delivery", "project_evidence"]],
+  ["NL-01", ["niulai", "project_classification", "technical", "project_evidence"]], ["NL-02", ["niulai", "agents", "technical"]],
+  ["NL-03", ["niulai", "uat", "technical", "project_evidence"]], ["NL-04", ["niulai", "agents", "delivery", "project_evidence"]],
+  ["NL-05", ["niulai", "uat", "delivery", "project_evidence"]], ["NL-06", ["niulai", "uat", "technical", "project_evidence"]],
+  ["NL-07", ["niulai", "gaps", "technical", "project_evidence"]]
 ]);
 
 function normalise(value) {
@@ -87,14 +94,36 @@ export function retrieve(question, { topK = 6 } = {}) {
   const results = index.chunks.map((chunk) => {
     const tags = sectionConcepts.get(chunk.section_id) || [];
     const matchedConcepts = concepts.filter((concept) => tags.includes(concept));
-    const conceptScore = matchedConcepts.reduce((sum, concept) => sum + (concept === "portfolio_hierarchy" ? 12 : concept === "flagship" ? 10 : concept === "project_classification" ? 9 : concept === "ml_research" ? 9.5 : concept === "enterprise_readiness" ? 8 : 3.2), 0);
+    const conceptScore = matchedConcepts.reduce((sum, concept) => sum + (concept === "portfolio_hierarchy" ? 12 : concept === "flagship" ? 10 : concept === "project_classification" ? 9 : concept === "ml_research" ? 9.5 : concept === "enterprise_readiness" ? 8 : concept === "project_evidence" ? 6 : 3.2), 0);
     const headingMatch = cleanQuestion.includes(normalise(chunk.heading)) ? 2.5 : 0;
     const sectionMatch = cleanQuestion.includes(chunk.section_id.toLocaleLowerCase("en")) ? 5 : 0;
-    const sectionFactor = chunk.section_id === "KB-22" ? 0.24 : chunk.section_id === "KB-23" ? 0.78 : 1;
+    const policyFactor = chunk.section_id === "KB-22" ? 0.24 : chunk.section_id === "KB-23" ? 0.78 : 1;
+    const mentionsFightgame = concepts.includes("fightgame");
+    const mentionsNiulai = concepts.includes("niulai");
+    const projectFactor = mentionsFightgame && mentionsNiulai
+      ? 1
+      : mentionsFightgame
+        ? tags.includes("fightgame") ? 1.35 : tags.includes("niulai") ? 0.18 : 1
+        : mentionsNiulai
+        ? tags.includes("niulai") ? 1.35 : tags.includes("fightgame") ? 0.18 : 1
+        : 1;
+    const isProjectSource = /^(?:FG|NL)-/.test(chunk.section_id);
+    const sourceScopeFactor = !isProjectSource
+      ? 1
+      : mentionsFightgame && mentionsNiulai
+        ? 0.48
+        : mentionsFightgame || mentionsNiulai || concepts.includes("project_evidence")
+          ? 1
+          : 0.28;
+    const sectionFactor = policyFactor * projectFactor * sourceScopeFactor;
     const score = (bm25Score(chunk, queryTerms) + conceptScore + headingMatch + sectionMatch) * sectionFactor;
     return { ...chunk, score: Number(score.toFixed(6)), matched_concepts: matchedConcepts };
   });
-  return results.filter((result) => result.score > 0).sort((a, b) => b.score - a.score || a.section_id.localeCompare(b.section_id)).slice(0, topK);
+  const positive = results.filter((result) => result.score > 0);
+  const scoped = concepts.includes("portfolio_hierarchy") && !concepts.includes("fightgame") && !concepts.includes("niulai")
+    ? positive.filter((result) => (sectionConcepts.get(result.section_id) || []).includes("portfolio_hierarchy"))
+    : positive;
+  return scoped.sort((a, b) => b.score - a.score || a.section_id.localeCompare(b.section_id)).slice(0, topK);
 }
 
 export function getChunk(sectionId) {
@@ -108,7 +137,8 @@ export function corpusMetadata() {
     last_updated: index.last_updated,
     source_hash: index.source_hash,
     built_at: index.built_at,
-    retrieval_method: index.retrieval_method
+    retrieval_method: index.retrieval_method,
+    source_documents: index.source_documents || []
   };
 }
 
