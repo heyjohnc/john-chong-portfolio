@@ -48,3 +48,15 @@ deduplicated the retained evidence, selected the public-safe presentation,
 implemented the bilingual section and verified the resulting page. The
 underlying posts remain third-party opinions and are not rewritten as John's
 own claims.
+
+## Release evidence
+
+- Implementation PR: `https://github.com/heyjohnc/john-chong-portfolio/pull/11`
+- Merged commit: `84e53a63a3744ef581c82258eb961a2865598561`
+- Production deployment: `dpl_H8PYqLL1wcNiPfEew38fdQi1V8tX`
+- Public route: `https://johnchong.info/niulai.html`
+- Validation on 2026-09-03: 28/28 repository tests and 54/54 retrieval/policy
+  evaluations passed; the production route returned HTTP 200; Playwright found
+  three product-feedback cards, three canonical post links, no horizontal
+  overflow at 390 px, complete Traditional Chinese translation and zero browser
+  console errors.
