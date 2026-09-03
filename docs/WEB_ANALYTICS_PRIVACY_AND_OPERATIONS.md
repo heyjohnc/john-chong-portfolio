@@ -1,6 +1,6 @@
 # Privacy-friendly Web Analytics
 
-Status: implementation in review; production validation pending
+Status: production-validated; owner-authorized release
 
 Evidence level: Level 3 privacy and production change
 
@@ -88,17 +88,39 @@ localStorage.removeItem("johnchong-web-analytics-opt-out"); location.reload();
 
 ## Acceptance and production verification
 
-- all repository tests and the static build pass;
-- each of the five public page types loads the analytics script and produces a
-  successful Vercel Analytics `view` request in a normal browser;
-- the owner opt-out prevents both script loading and the `view` request;
-- `/presentation/` and an unauthenticated protected route load no analytics
-  script and produce no Analytics `view` request;
-- Ask John, Presentation access behavior and existing public interactions remain
-  unchanged;
-- the Vercel project reports Web Analytics enabled without enabling or buying
-  Plus;
-- the exact production commit and deployment are recorded after release.
+Release completed on 2026-09-03 UTC:
+
+- Git commit: `2507590d962281cd0e40d8f66e0b40a63bfb30e2`;
+- merged review: PR #22;
+- Vercel production deployment: `dpl_Gn32Qj6CVgDFJg8LeJLY9Af7JuMS`;
+- production alias: `https://johnchong.info`;
+- Vercel basic Web Analytics: enabled for
+  `chong-shing-yip-portfolio`; Web Analytics Plus remains disabled and no plan
+  purchase or upgrade was made.
+
+Verification results:
+
+- `npm test`: 45/45 passed;
+- deterministic retrieval and policy evaluation: 54/54 passed;
+- static build, diff, local-link and privacy scans: passed;
+- production Home, About, Projects, FightGame and Niulai: analytics script
+  returned HTTP 200 and exactly one controlled page-view request per page
+  returned HTTP 202;
+- owner setup URL: stored the opt-out, removed the fragment and sent neither an
+  Analytics script request nor a page-view request on the first or subsequent
+  public-page visit;
+- Presentation login shell: HTTP 200 with no analytics request; its session
+  check remained available and an unauthenticated manifest request remained
+  HTTP 401, also with no analytics request;
+- Ask John: launcher opened normally and the independent service health check
+  returned HTTP 200; no question was submitted during this acceptance check;
+- production browser console: no Analytics integration error was observed.
+
+The five production page views above are controlled release-validation traffic.
+Vercel Web Analytics deliberately suppresses automated-browser views, so the
+isolated acceptance browser simulated an ordinary Chrome user agent only for
+these five requests. No identity or custom data was added to them. Subsequent
+owner and QA browsing should use the local opt-out.
 
 ## Operations and rollback
 
@@ -107,8 +129,14 @@ the static build. The platform rollback is to disable Web Analytics in the
 project dashboard after the removal is deployed. No Ask John or Presentation
 service restart is part of either path.
 
-Production status, deployment identity, browser results and scoped owner
-acceptance remain `PENDING` until the release is merged, deployed and checked.
+Rollback remains available through the previous Vercel deployment plus removal
+of the bootstrap and project-feature disablement. No rollback was required.
+
+The Owner explicitly approved the feature scope and authorized merge and
+production deployment after verification. Claim state is
+`PRODUCTION_VALIDATED` for this scoped analytics integration. This does not
+claim owner review of future dashboard data, identifiable visitors, user
+adoption or a business result.
 
 ## Contribution boundary
 
