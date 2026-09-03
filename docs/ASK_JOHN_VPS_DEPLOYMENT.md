@@ -81,6 +81,11 @@ the hourly/country totals with access logs or other identity data. Counts can
 support statements such as “three English requests were answered during the
 08:00 UTC bucket”; they cannot establish who asked them or what was asked.
 
+The combined page-view and Ask aggregate snapshot taken on 2026-09-03 is in
+[`ANONYMOUS_TRAFFIC_OBSERVATION_2026-09-03.md`](ANONYMOUS_TRAFFIC_OBSERVATION_2026-09-03.md).
+It records Owner-supplied self-traffic classification separately from platform
+data and does not treat the remaining aggregate as confirmed recruiter usage.
+
 ## Cost baseline
 
 As of 2026-09-03, Ask John uses
