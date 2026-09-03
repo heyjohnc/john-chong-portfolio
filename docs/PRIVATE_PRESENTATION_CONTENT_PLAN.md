@@ -50,6 +50,11 @@ The condensed main-screen treatment is drafted in
 It targets approximately 6 minutes 5 seconds of spoken content plus pauses and
 questions; it is a storyboard, not an implemented UI.
 
+Two role-relevant, five-screen quick routes are drafted in
+[`presentation-drafts/QUICK_MODE_STORYBOARDS_DRAFT.md`](presentation-drafts/QUICK_MODE_STORYBOARDS_DRAFT.md).
+Each targets two minutes before questions and reuses the same approved evidence
+without requiring the interviewer to accept a full presentation.
+
 | Order | Logical section ID | Time | Purpose | Required owner gate |
 | --- | --- | ---: | --- | --- |
 | 1 | `opening` | 20 sec | Name, target role and one sentence about turning unclear needs into testable AI products. | Target role and exact positioning `[JOHN TO APPROVE]` |
