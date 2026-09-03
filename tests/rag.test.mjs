@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { encodeRedisCommand, enforceOperationalControls, hashClientAddress, parseRedisReply, resetMemoryControlsForTest } from "../api/_lib/controls.mjs";
+import { aggregateCountryCode, encodeRedisCommand, enforceOperationalControls, hashClientAddress, hourKey, parseRedisReply, recordAggregateTelemetry, resetMemoryControlsForTest } from "../api/_lib/controls.mjs";
 import { citationObjects, evaluatePolicy, noEvidenceResponse } from "../api/_lib/policy.mjs";
 import { answerWithOpenAI, answerWithOpenRouter, estimateProviderCostUsd } from "../api/_lib/provider.mjs";
 import { corpusMetadata, index, queryConcepts, retrieve } from "../api/_lib/retrieval.mjs";
 import { contextualQuestion, handleRequest, isContextDependent, normaliseHistory, routedChunks, semanticRouterCatalog, validProviderAnswer } from "../api/ask.mjs";
+import { handleCountryRequest } from "../api/country.mjs";
 
 const evalSet = JSON.parse(await readFile(new URL("../portfolio-rag/evals/RAG_EVAL_SET_V1.json", import.meta.url), "utf8"));
 
@@ -59,6 +60,16 @@ test("Ask John launcher uses the approved Ask label on desktop and mobile", asyn
   assert.doesNotMatch(widget, /launcher: "(?:Ask me|問問我)"/);
   assert.match(styles, /\.ask-widget-launcher::after \{ content: "Ask";/);
   assert.doesNotMatch(styles, /\.ask-widget-launcher::after \{ content: "AI";/);
+});
+
+test("Ask John resolves only a coarse Vercel country code for aggregate telemetry", async () => {
+  const widget = await readFile(new URL("../ask-widget.js", import.meta.url), "utf8");
+  const countryEndpoint = await readFile(new URL("../api/country.mjs", import.meta.url), "utf8");
+  assert.match(widget, /const COUNTRY_ENDPOINT = "\/api\/country"/);
+  assert.match(widget, /country: await visitorCountry\(\)/);
+  assert.match(countryEndpoint, /x-vercel-ip-country/);
+  assert.doesNotMatch(widget, /ipify|ipinfo|ipapi|geolocation/i);
+  assert.doesNotMatch(countryEndpoint, /x-forwarded-for|x-real-ip|latitude|longitude|city/i);
 });
 
 test("Niulai uses English public names while preserving Chinese language mappings", async () => {
@@ -204,6 +215,53 @@ test("client address is irreversibly keyed before storage", () => {
   const hash = hashClientAddress("203.0.113.42", { ASK_JOHN_IP_HASH_SALT: "test-salt", NODE_ENV: "test" });
   assert.match(hash, /^[a-f0-9]{24}$/);
   assert.notEqual(hash, "203.0.113.42");
+});
+
+test("country endpoint exposes only a validated aggregate country code", async () => {
+  const known = await handleCountryRequest(new Request("https://portfolio.example/api/country", {
+    headers: { "x-vercel-ip-country": "jp", "x-forwarded-for": "203.0.113.42" }
+  })).json();
+  const invalid = await handleCountryRequest(new Request("https://portfolio.example/api/country", {
+    headers: { "x-vercel-ip-country": "Japan", "x-forwarded-for": "203.0.113.42" }
+  })).json();
+  assert.deepEqual(known, { country: "JP" });
+  assert.deepEqual(invalid, { country: "unknown" });
+  assert.doesNotMatch(JSON.stringify(known), /203\.0\.113\.42/);
+});
+
+test("aggregate telemetry stores bounded UTC-hour, language and country counters without raw IP", async () => {
+  const originalFetch = globalThis.fetch;
+  let command;
+  globalThis.fetch = async (_url, options) => {
+    command = JSON.parse(options.body);
+    return { ok: true, json: async () => ({ result: 1 }) };
+  };
+  try {
+    const now = new Date("2026-09-03T07:24:00.000Z");
+    await recordAggregateTelemetry({
+      mode: "answer",
+      language: "zh-Hant-yue",
+      country: "jp",
+      corpusVersion: "1.2.0-draft",
+      now,
+      env: {
+        ASK_JOHN_CONTROL_MODE: "upstash",
+        ASK_JOHN_REDIS_PREFIX: "ask-john-test",
+        UPSTASH_REDIS_REST_URL: "https://example.invalid",
+        UPSTASH_REDIS_REST_TOKEN: "not-a-real-token"
+      }
+    });
+    assert.equal(hourKey(now), "07");
+    assert.equal(aggregateCountryCode("jp"), "JP");
+    assert.equal(aggregateCountryCode("Japan"), "unknown");
+    assert.equal(command[0], "EVAL");
+    assert.equal(command[2], "1");
+    assert.deepEqual(command.slice(3), ["ask-john-test:metrics:2026-09-03", "answer", "zh-Hant-yue", "JP", "07", "1.2.0-draft"]);
+    assert.match(command[1], /hour:.*:country:/s);
+    assert.doesNotMatch(JSON.stringify(command), /203\.0\.113\.42|question|answer text/i);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
 
 test("production controls fail closed without a global store", async () => {
