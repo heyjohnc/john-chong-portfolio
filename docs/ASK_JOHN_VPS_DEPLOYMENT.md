@@ -1,7 +1,7 @@
 # Ask John — owner-operated VPS deployment
 
 Status: Production website and VPS endpoint validated
-Date: 2026-09-02
+Last updated: 2026-09-03
 
 ## Objective and scope
 
@@ -52,6 +52,35 @@ Not included:
 - stopping the service or control store does not affect the static portfolio;
 - no credential, raw IP address, prompt or answer is committed or logged.
 - only approved project-source IDs are retrievable, and their citations retain a public source URL and revision.
+
+## Cost baseline
+
+As of 2026-09-03, Ask John uses
+`deepseek/deepseek-v4-flash-0731` through OpenRouter. The current OpenRouter
+models API lists USD 0.065 per million prompt tokens, USD 0.18 per million
+completion tokens and USD 0.016 per million cached-input tokens. The local
+fallback estimator uses the same prompt and completion rates; when OpenRouter
+returns a request cost, that provider-reported value takes precedence.
+
+A controlled production sample on the current 40-section corpus reported:
+
+- focused lexical retrieval plus one answer call: approximately USD 0.000148;
+- colloquial semantic routing plus the answer call: approximately USD 0.000191;
+- a locally handled greeting: no provider call and therefore no model charge.
+
+Assuming 10 USDT is treated as USD 10 of usable OpenRouter credit, those two
+paid paths correspond to approximately 67,500 focused answers or 52,300
+semantic-routed answers. A mixed workload is reasonably budgeted at roughly
+50,000–65,000 paid answers. For operational planning, reserve 20% for longer
+questions, conversation history, provider/rate changes and rounding; a
+conservative commitment is therefore about 40,000–50,000 answers per USD 10.
+
+This is a planning estimate, not a billing guarantee. Response length, selected
+evidence, conversation history, routing path and OpenRouter provider price can
+change the cost. The OpenRouter activity/credits ledger remains the source of
+truth for actual spend. Pricing source:
+`https://openrouter.ai/api/v1/models` and the model page
+`https://openrouter.ai/deepseek/deepseek-v4-flash-0731`.
 
 ## Contribution boundary
 
