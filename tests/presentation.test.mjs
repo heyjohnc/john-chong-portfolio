@@ -47,6 +47,7 @@ test("public shell contains no protected manifest or asset", async () => {
   const html = await readFile(new URL("../presentation/public/index.html", import.meta.url), "utf8");
   const script = await readFile(new URL("../presentation/public/presentation.js", import.meta.url), "utf8");
   assert.match(html, /Authenticator code/);
+  assert.match(html, /rel="icon" href="\.\/favicon\.ico"/);
   assert.doesNotMatch(`${html}\n${script}`, /PRESENTATION_TOTP_SECRET|manifest\.json|private[_ -]?key/i);
 });
 
