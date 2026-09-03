@@ -14,6 +14,7 @@ const publicFiles = [
   "niulai.html",
   "styles.css",
   "site.js",
+  "analytics.js",
   "ask-widget.js"
 ];
 
