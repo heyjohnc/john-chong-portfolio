@@ -8,6 +8,9 @@
       title: "Ask about John",
       subtitle: "Verified portfolio assistant",
       notice: "Answers use John's approved public evidence. Recent chat stays in this browser for up to 3 days and can be cleared anytime.",
+      qaActive: "QA mode active",
+      qaDisable: "Turn off",
+      qaDisableTitle: "Revoke Ask John QA mode in this browser",
       greeting: "Hi — ask about my work, experience, projects or fit for an AI product role.",
       suggestions: [
         "What did John personally own in FightGame?",
@@ -71,6 +74,9 @@
       title: "問問 John",
       subtitle: "已審核作品集助手",
       notice: "回答以 John 已審核的公開證據為依據；最近對話可在這個瀏覽器保留最多 3 日，並可隨時清除。",
+      qaActive: "QA 模式已啟用",
+      qaDisable: "關閉",
+      qaDisableTitle: "撤銷此瀏覽器的 Ask John QA 模式",
       greeting: "你好——你可以詢問我的工作經歷、項目、工作方法，或我與 AI 產品職位的匹配度。",
       suggestions: [
         "John 在 FightGame 中親自負責了甚麼？",
@@ -145,6 +151,10 @@
         </div>
       </header>
       <p class="ask-widget-notice" data-ask-widget-notice></p>
+      <div class="ask-widget-qa-status" data-ask-widget-qa-status hidden>
+        <span><i aria-hidden="true"></i><strong data-ask-widget-qa-label></strong></span>
+        <button type="button" data-ask-widget-qa-disable></button>
+      </div>
       <div class="ask-widget-messages" data-ask-widget-messages aria-live="polite" aria-relevant="additions">
         <article class="ask-widget-message ask-widget-message--assistant" data-ask-widget-greeting></article>
         <div class="ask-widget-suggestions" data-ask-widget-suggestions></div>
@@ -169,6 +179,9 @@
   const title = widget.querySelector("#ask-widget-title");
   const subtitle = widget.querySelector("[data-ask-widget-subtitle]");
   const notice = widget.querySelector("[data-ask-widget-notice]");
+  const qaStatus = widget.querySelector("[data-ask-widget-qa-status]");
+  const qaLabel = widget.querySelector("[data-ask-widget-qa-label]");
+  const qaDisable = widget.querySelector("[data-ask-widget-qa-disable]");
   const greeting = widget.querySelector("[data-ask-widget-greeting]");
   const suggestions = widget.querySelector("[data-ask-widget-suggestions]");
   const messages = widget.querySelector("[data-ask-widget-messages]");
@@ -178,14 +191,80 @@
   let isOpen = false;
   let isLoading = false;
   const MEMORY_KEY = "john-chong-ask-memory-v1";
+  const OWNER_QA_KEY = "john-chong-owner-qa-v1";
   const MEMORY_TTL_MS = 3 * 24 * 60 * 60 * 1000;
   const MEMORY_TURN_LIMIT = 4;
   const SUGGESTION_COUNT = 3;
-  const ASK_ENDPOINT = ["localhost", "127.0.0.1"].includes(window.location.hostname)
-    ? "/api/ask"
-    : "https://ask-john.37.187.136.100.sslip.io/api/ask";
+  const ASK_SERVICE_ORIGIN = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+    ? ""
+    : "https://ask-john.37.187.136.100.sslip.io";
+  const ASK_ENDPOINT = `${ASK_SERVICE_ORIGIN}/api/ask`;
+  const OWNER_QA_STATUS_ENDPOINT = `${ASK_SERVICE_ORIGIN}/api/owner-qa/status`;
+  const OWNER_QA_REVOKE_ENDPOINT = `${ASK_SERVICE_ORIGIN}/api/owner-qa/revoke`;
   const COUNTRY_ENDPOINT = "/api/country";
   let countryPromise;
+  let ownerQaActive = false;
+
+  function loadOwnerQaMarker() {
+    try {
+      const marker = JSON.parse(window.localStorage.getItem(OWNER_QA_KEY) || "null");
+      const expiresAt = Date.parse(marker?.expires_at);
+      if (!marker || typeof marker.qa_token !== "string" || marker.qa_token.length > 1024 || !Number.isFinite(expiresAt) || expiresAt <= Date.now()) {
+        window.localStorage.removeItem(OWNER_QA_KEY);
+        return null;
+      }
+      return marker;
+    } catch (_) {
+      try { window.localStorage.removeItem(OWNER_QA_KEY); } catch (_) { /* Storage remains optional. */ }
+      return null;
+    }
+  }
+
+  function setOwnerQaActive(active) {
+    ownerQaActive = active;
+    qaStatus.hidden = !active;
+  }
+
+  async function refreshOwnerQaStatus() {
+    const marker = loadOwnerQaMarker();
+    if (!marker) return setOwnerQaActive(false);
+    try {
+      const response = await fetch(OWNER_QA_STATUS_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ qa_token: marker.qa_token })
+      });
+      const payload = await response.json();
+      if (!response.ok || payload.active !== true) {
+        window.localStorage.removeItem(OWNER_QA_KEY);
+        return setOwnerQaActive(false);
+      }
+      setOwnerQaActive(true);
+    } catch (_) {
+      setOwnerQaActive(false);
+    }
+  }
+
+  async function disableOwnerQaMode() {
+    const marker = loadOwnerQaMarker();
+    if (!marker) return setOwnerQaActive(false);
+    qaDisable.disabled = true;
+    try {
+      const response = await fetch(OWNER_QA_REVOKE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ qa_token: marker.qa_token })
+      });
+      const payload = await response.json();
+      if (!response.ok || payload.revoked !== true) throw new Error("revoke_failed");
+      window.localStorage.removeItem(OWNER_QA_KEY);
+      setOwnerQaActive(false);
+    } catch (_) {
+      setOwnerQaActive(true);
+    } finally {
+      qaDisable.disabled = false;
+    }
+  }
 
   function visitorCountry() {
     if (!countryPromise) {
@@ -277,6 +356,11 @@
     title.textContent = current.title;
     subtitle.textContent = current.subtitle;
     notice.textContent = current.notice;
+    qaLabel.textContent = current.qaActive;
+    qaDisable.textContent = current.qaDisable;
+    qaDisable.setAttribute("aria-label", current.qaDisableTitle);
+    qaDisable.title = current.qaDisableTitle;
+    qaStatus.hidden = !ownerQaActive;
     greeting.textContent = current.greeting;
     closeButton.setAttribute("aria-label", current.close);
     clearButton.textContent = current.clear;
@@ -494,12 +578,19 @@
     setLoading(true);
     const loading = appendLoading(text);
     try {
+      const qaMarker = loadOwnerQaMarker();
       const response = await fetch(ASK_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: text, history, country: await visitorCountry() })
+        body: JSON.stringify({ question: text, history, country: await visitorCountry(), ...(qaMarker ? { qa_token: qaMarker.qa_token } : {}) })
       });
       const payload = await response.json();
+      if (qaMarker && payload.request_scope !== "owner_qa") {
+        window.localStorage.removeItem(OWNER_QA_KEY);
+        setOwnerQaActive(false);
+      } else if (payload.request_scope === "owner_qa") {
+        setOwnerQaActive(true);
+      }
       loading.stop?.();
       loading.remove();
       appendAnswer(payload);
@@ -517,6 +608,7 @@
   launcher.addEventListener("click", () => setOpen(!isOpen));
   closeButton.addEventListener("click", () => setOpen(false));
   clearButton.addEventListener("click", clearConversation);
+  qaDisable.addEventListener("click", () => void disableOwnerQaMode());
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     void ask(question.value);
@@ -537,4 +629,5 @@
   new MutationObserver(syncCopy).observe(document.documentElement, { attributes: true, attributeFilter: ["data-language"] });
   syncCopy();
   restoreConversation();
+  void refreshOwnerQaStatus();
 })();

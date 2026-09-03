@@ -24,6 +24,14 @@ language and the two-letter country code supplied by Vercel. It stores neither
 the question and answer text nor a raw IP address; the country signal is
 approximate and reflects a VPN exit country when one is used.
 
+A Draft-only Owner QA capability can separate future accepted Ask requests into
+`external_requests` and `owner_qa_requests` after Presentation verification,
+without reusing Presentation access or adding visitor identity tracking. Its
+design, threat boundary and release gate are documented in
+[`docs/ASK_JOHN_OWNER_QA_MODE.md`](docs/ASK_JOHN_OWNER_QA_MODE.md). It is not
+active in production until that Draft is separately approved, merged and
+deployed.
+
 ## Run locally
 
 Requires Node.js 20 or later.
@@ -72,6 +80,7 @@ FightGame has no public repository. Its assistant evidence comes only from `port
 - `ASK_JOHN_REDIS_HOST`
 - `ASK_JOHN_REDIS_PORT`
 - `ASK_JOHN_ALLOWED_ORIGINS`
+- `ASK_JOHN_OWNER_QA_VERIFY_PUBLIC_KEY_B64` (Owner QA Mode only)
 
 The VPS entry point is `scripts/serve-bot14-ask-john.mjs`. Rate and budget ceilings are configurable through the `ASK_JOHN_*` control variables in `api/_lib/controls.mjs`. A serverless deployment can still use the existing Upstash REST mode. Never commit real environment values or provider credentials.
 

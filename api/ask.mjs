@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { enforceOperationalControls, recordAggregateTelemetry } from "./_lib/controls.mjs";
+import { ownerQaStatus } from "./_lib/owner-qa.mjs";
 import { estimateProviderCostUsd, generateAnswer, routeQuestion } from "./_lib/provider.mjs";
 import { assistantCapabilityResponse, citationObjects, evaluatePolicy, noEvidenceResponse } from "./_lib/policy.mjs";
 import { corpusMetadata, getChunk, index, queryConcepts, retrieve } from "./_lib/retrieval.mjs";
@@ -23,8 +24,8 @@ function clientAddress(request) {
   return (request.headers.get("x-forwarded-for") || "unknown").split(",")[0].trim();
 }
 
-function basePayload(requestId) {
-  return { request_id: requestId, corpus: corpusMetadata() };
+function basePayload(requestId, requestScope) {
+  return { request_id: requestId, corpus: corpusMetadata(), ...(requestScope ? { request_scope: requestScope } : {}) };
 }
 
 function normaliseHistory(value) {
@@ -157,24 +158,29 @@ export async function handleRequest(request, env = process.env) {
     return json(mode === "rate_limited" ? 429 : 503, { ...basePayload(requestId), mode, answer: operationalText(mode, policy.language), citations: [] });
   }
 
+  const qa = await ownerQaStatus(body.qa_token, env);
+  const requestScope = qa.scope;
+  const scopedPayload = () => basePayload(requestId, requestScope);
+
   const telemetryCountry = request.headers.get("x-vercel-ip-country") || body.country;
   const recordTelemetry = (payload) => void recordAggregateTelemetry({
     mode: payload.mode,
     language: policy.language,
     country: telemetryCountry,
+    scope: requestScope,
     corpusVersion: payload.corpus.version,
     env
   });
 
   if (policy.mode === "refuse") {
-    const payload = { ...basePayload(requestId), mode: "refuse", answer: policy.answer, citations: citationObjects(policy.citation_ids), timing_ms: Date.now() - startedAt };
+    const payload = { ...scopedPayload(), mode: "refuse", answer: policy.answer, citations: citationObjects(policy.citation_ids), timing_ms: Date.now() - startedAt };
     recordTelemetry(payload);
     return json(200, payload);
   }
 
   const capability = assistantCapabilityResponse(question, policy.language);
   if (capability) {
-    const payload = { ...basePayload(requestId), mode: capability.mode, answer: capability.answer, citations: [], timing_ms: Date.now() - startedAt };
+    const payload = { ...scopedPayload(), mode: capability.mode, answer: capability.answer, citations: [], timing_ms: Date.now() - startedAt };
     recordTelemetry(payload);
     return json(200, payload);
   }
@@ -194,7 +200,7 @@ export async function handleRequest(request, env = process.env) {
       retrieved = routedChunks(semanticRoute);
       retrievalPath = "semantic_router";
     } catch (_) {
-      const payload = { ...basePayload(requestId), mode: "error", answer: operationalText("error", policy.language), citations: [], timing_ms: Date.now() - startedAt };
+      const payload = { ...scopedPayload(), mode: "error", answer: operationalText("error", policy.language), citations: [], timing_ms: Date.now() - startedAt };
       recordTelemetry(payload);
       return json(503, payload);
     }
@@ -204,7 +210,7 @@ export async function handleRequest(request, env = process.env) {
     const empty = semanticRoute
       ? semanticBoundaryResponse(semanticRoute.boundary, policy.language)
       : noEvidenceResponse(policy.language);
-    const payload = { ...basePayload(requestId), mode: empty.mode, answer: empty.answer, citations: citationObjects(empty.citation_ids), retrieval_path: retrievalPath, timing_ms: Date.now() - startedAt };
+    const payload = { ...scopedPayload(), mode: empty.mode, answer: empty.answer, citations: citationObjects(empty.citation_ids), retrieval_path: retrievalPath, timing_ms: Date.now() - startedAt };
     const routeCost = semanticRoute ? estimateProviderCostUsd(semanticRoute.usage, semanticRoute.model) : null;
     if (routeCost !== null) payload.approximate_cost_usd = routeCost;
     recordTelemetry(payload);
@@ -214,7 +220,7 @@ export async function handleRequest(request, env = process.env) {
   try {
     const generated = await generateAnswer({ question, history, chunks: retrieved, language: policy.language }, env);
     if (!validProviderAnswer(generated, retrieved)) throw new Error("Provider answer failed citation validation.");
-    const payload = { ...basePayload(requestId), mode: "answer", answer: generated.answer, citations: citationObjects(generated.citations), retrieval_path: retrievalPath, timing_ms: Date.now() - startedAt };
+    const payload = { ...scopedPayload(), mode: "answer", answer: generated.answer, citations: citationObjects(generated.citations), retrieval_path: retrievalPath, timing_ms: Date.now() - startedAt };
     const answerCost = estimateProviderCostUsd(generated.usage, generated.model);
     const routeCost = semanticRoute ? estimateProviderCostUsd(semanticRoute.usage, semanticRoute.model) : 0;
     const cost = answerCost === null || (semanticRoute && routeCost === null) ? null : Number((answerCost + routeCost).toFixed(6));
@@ -222,7 +228,7 @@ export async function handleRequest(request, env = process.env) {
     recordTelemetry(payload);
     return json(200, payload);
   } catch (_) {
-    const payload = { ...basePayload(requestId), mode: "error", answer: operationalText("error", policy.language), citations: [], timing_ms: Date.now() - startedAt };
+    const payload = { ...scopedPayload(), mode: "error", answer: operationalText("error", policy.language), citations: [], timing_ms: Date.now() - startedAt };
     recordTelemetry(payload);
     return json(503, payload);
   }

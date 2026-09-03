@@ -571,6 +571,14 @@ html[data-language="zh"] .system-strip::before { content: "流程示意"; }
 .ask-widget-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
 .ask-widget-close:hover { background: var(--soft); color: var(--text); }
 .ask-widget-notice { margin: 0; padding: 10px 16px; border-bottom: 1px solid var(--line); color: var(--muted); background: color-mix(in srgb, var(--soft) 58%, transparent); font-size: 11px; line-height: 1.42; text-wrap: pretty; }
+.ask-widget-qa-status { min-height: 35px; padding: 7px 12px 7px 16px; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--status) 9%, var(--surface)); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ask-widget-qa-status[hidden] { display: none; }
+.ask-widget-qa-status > span { display: inline-flex; align-items: center; gap: 7px; color: var(--body-copy); font-size: 10px; }
+.ask-widget-qa-status i { width: 6px; height: 6px; border-radius: 50%; background: var(--status); box-shadow: 0 0 0 3px color-mix(in srgb, var(--status) 14%, transparent); }
+.ask-widget-qa-status strong { font-weight: 720; }
+.ask-widget-qa-status button { padding: 4px 7px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font: 680 10px/1 var(--sans); cursor: pointer; }
+.ask-widget-qa-status button:hover { background: var(--soft); color: var(--text); }
+.ask-widget-qa-status button:disabled { opacity: .5; cursor: wait; }
 .ask-widget-messages { min-height: 0; padding: 18px 16px 24px; flex: 1; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
 .ask-widget-message { width: fit-content; max-width: 91%; margin: 0 0 12px; font-size: 14px; line-height: 1.55; text-wrap: pretty; }
 .ask-widget-message--assistant { color: var(--body-copy); }

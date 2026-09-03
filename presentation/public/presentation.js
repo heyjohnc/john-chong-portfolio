@@ -6,6 +6,8 @@
   const codeInput = document.querySelector("#auth-code");
   const status = document.querySelector("#auth-status");
   const logout = document.querySelector("#logout-button");
+  const ownerQaStatus = document.querySelector("#owner-qa-status");
+  const OWNER_QA_KEY = "john-chong-owner-qa-v1";
 
   async function request(path, options = {}) {
     const response = await fetch(path, { credentials: "same-origin", ...options, headers: { "Content-Type": "application/json", ...(options.headers || {}) } });
@@ -41,6 +43,29 @@
     workspaceView.hidden = false;
   }
 
+  function canSharePortfolioStorage() {
+    return ["johnchong.info", "www.johnchong.info", "localhost", "127.0.0.1"].includes(window.location.hostname);
+  }
+
+  function showOwnerQaStatus(message) {
+    ownerQaStatus.textContent = message;
+    ownerQaStatus.hidden = !message;
+  }
+
+  async function activateOwnerQaMode() {
+    if (!canSharePortfolioStorage()) {
+      showOwnerQaStatus("Open this page through johnchong.info/presentation/ to activate Ask John QA mode.");
+      return;
+    }
+    try {
+      const payload = await request("./api/owner-qa/token", { method: "POST", body: "{}" });
+      window.localStorage.setItem(OWNER_QA_KEY, JSON.stringify({ qa_token: payload.qa_token, expires_at: payload.expires_at }));
+      showOwnerQaStatus("Ask John QA mode is active in this browser for up to 30 days.");
+    } catch (_) {
+      showOwnerQaStatus("Presentation opened. Ask John QA mode could not be activated yet.");
+    }
+  }
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const code = codeInput.value.replace(/\D/g, "").slice(0, 6);
@@ -50,6 +75,7 @@
     status.textContent = "Checking code…";
     try {
       await request("./api/auth/totp", { method: "POST", body: JSON.stringify({ code }) });
+      await activateOwnerQaMode();
       await showWorkspace();
     } catch (error) {
       showLogin(error.status === 429 ? "Too many attempts. Please wait before trying again." : error.status === 503 ? "The presentation is not available yet." : "That code is invalid or has expired.");
