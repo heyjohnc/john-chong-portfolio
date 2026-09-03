@@ -94,7 +94,7 @@ test("the private opt-out fragment excludes the first owner setup visit", () => 
 });
 
 test("non-public paths never load or report analytics", () => {
-  for (const pathname of ["/presentation/", "/presentation/api/manifest", "/asset/private-id", "/api/ask"]) {
+  for (const pathname of ["/presentation/", "/presentation/api/manifest", "/asset/private-id", "/api/ask", "/api/country"]) {
     const { appendedScripts, queuedCalls } = executeAnalytics({ pathname });
     assert.equal(appendedScripts.length, 0, pathname);
     assert.equal(queuedCalls.length, 0, pathname);

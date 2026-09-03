@@ -16,6 +16,20 @@ if daily == 1 then redis.call('EXPIRE', KEYS[2], tonumber(ARGV[4])) end
 return {1, ip, daily, 0}
 `;
 
+const aggregateTelemetryScript = `
+redis.call('HINCRBY', KEYS[1], 'requests', 1)
+redis.call('HINCRBY', KEYS[1], 'mode:' .. ARGV[1], 1)
+redis.call('HINCRBY', KEYS[1], 'language:' .. ARGV[2], 1)
+redis.call('HINCRBY', KEYS[1], 'country:' .. ARGV[3], 1)
+redis.call('HINCRBY', KEYS[1], 'hour:' .. ARGV[4] .. ':requests', 1)
+redis.call('HINCRBY', KEYS[1], 'hour:' .. ARGV[4] .. ':mode:' .. ARGV[1], 1)
+redis.call('HINCRBY', KEYS[1], 'hour:' .. ARGV[4] .. ':language:' .. ARGV[2], 1)
+redis.call('HINCRBY', KEYS[1], 'hour:' .. ARGV[4] .. ':country:' .. ARGV[3], 1)
+redis.call('HSET', KEYS[1], 'corpus_version', ARGV[5])
+redis.call('EXPIRE', KEYS[1], 2592000)
+return 1
+`;
+
 function integerEnv(env, name, fallback, min, max) {
   const parsed = Number.parseInt(env[name] || "", 10);
   if (!Number.isFinite(parsed)) return fallback;
@@ -35,6 +49,20 @@ function secondsUntilUtcMidnight(now = new Date()) {
 
 function dayKey(now = new Date()) {
   return now.toISOString().slice(0, 10);
+}
+
+function hourKey(now = new Date()) {
+  return now.toISOString().slice(11, 13);
+}
+
+function aggregateCountryCode(value) {
+  const country = String(value || "").trim().toUpperCase();
+  return /^[A-Z]{2}$/.test(country) ? country : "unknown";
+}
+
+function aggregateLabel(value, fallback) {
+  const label = String(value || "").trim();
+  return /^[a-zA-Z0-9_-]{1,40}$/.test(label) ? label : fallback;
 }
 
 export function controlConfig(env = process.env) {
@@ -215,19 +243,23 @@ export async function enforceOperationalControls({ clientAddress, env = process.
   }
 }
 
-export async function recordAggregateTelemetry({ mode, language, corpusVersion, env = process.env, now = new Date() }) {
+export async function recordAggregateTelemetry({ mode, language, country, corpusVersion, env = process.env, now = new Date() }) {
   const storeMode = env.ASK_JOHN_CONTROL_MODE || "upstash";
   if (!["upstash", "redis"].includes(storeMode)) return;
   const keyPrefix = controlConfig(env).keyPrefix;
   const key = `${keyPrefix}:metrics:${dayKey(now)}`;
   try {
     const command = storeMode === "redis" ? localRedisCommand : upstashCommand;
-    await command(["HINCRBY", key, `mode:${mode}`, "1"], env);
-    await command(["HINCRBY", key, `language:${language}`, "1"], env);
-    await command(["HSET", key, "corpus_version", corpusVersion], env);
-    await command(["EXPIRE", key, "2592000"], env);
+    await command([
+      "EVAL", aggregateTelemetryScript, "1", key,
+      aggregateLabel(mode, "unknown"),
+      aggregateLabel(language, "unknown"),
+      aggregateCountryCode(country),
+      hourKey(now),
+      String(corpusVersion || "unknown").slice(0, 80)
+    ], env);
   } catch (_) {
-    // Aggregate telemetry is deliberately best-effort and never exposes request text.
+    // Aggregate telemetry is deliberately best-effort and never exposes request text or IP addresses.
   }
 }
 
@@ -235,4 +267,4 @@ export function resetMemoryControlsForTest() {
   memoryCounters.clear();
 }
 
-export { encodeRedisCommand, localRedisCommand, parseRedisReply };
+export { aggregateCountryCode, encodeRedisCommand, hourKey, localRedisCommand, parseRedisReply };

@@ -19,6 +19,10 @@ page-view aggregates only. Ask John data and every `/presentation/` page or
 asset are excluded. The privacy boundary, John-only browser opt-out and
 operational limits are documented in
 [`docs/WEB_ANALYTICS_PRIVACY_AND_OPERATIONS.md`](docs/WEB_ANALYTICS_PRIVACY_AND_OPERATIONS.md).
+Ask John keeps separate 30-day, UTC-hour aggregate counters for request mode,
+language and the two-letter country code supplied by Vercel. It stores neither
+the question and answer text nor a raw IP address; the country signal is
+approximate and reflects a VPN exit country when one is used.
 
 ## Run locally
 

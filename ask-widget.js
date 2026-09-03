@@ -184,6 +184,18 @@
   const ASK_ENDPOINT = ["localhost", "127.0.0.1"].includes(window.location.hostname)
     ? "/api/ask"
     : "https://ask-john.37.187.136.100.sslip.io/api/ask";
+  const COUNTRY_ENDPOINT = "/api/country";
+  let countryPromise;
+
+  function visitorCountry() {
+    if (!countryPromise) {
+      countryPromise = fetch(COUNTRY_ENDPOINT, { headers: { Accept: "application/json" }, cache: "no-store" })
+        .then((response) => response.ok ? response.json() : null)
+        .then((payload) => /^[A-Z]{2}$/.test(payload?.country || "") ? payload.country : "unknown")
+        .catch(() => "unknown");
+    }
+    return countryPromise;
+  }
 
   function loadConversation() {
     try {
@@ -485,7 +497,7 @@
       const response = await fetch(ASK_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: text, history })
+        body: JSON.stringify({ question: text, history, country: await visitorCountry() })
       });
       const payload = await response.json();
       loading.stop?.();

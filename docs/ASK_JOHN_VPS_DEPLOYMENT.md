@@ -53,6 +53,34 @@ Not included:
 - no credential, raw IP address, prompt or answer is committed or logged.
 - only approved project-source IDs are retrievable, and their citations retain a public source URL and revision.
 
+## Anonymous hourly usage telemetry
+
+Ask John records best-effort aggregate counters in the existing daily Redis
+hash for 30 days. Each successful, accepted request increments daily totals and
+UTC-hour buckets for request count, answer mode, detected response language and
+a two-letter country code. It does not store a request timestamp more precise
+than the hour, a raw IP address, a question, an answer, an identity or a
+session. Existing IP-derived hashes remain limited to short-lived operational
+rate control and are not read for usage reporting.
+
+The public widget obtains the country code from the same-origin
+`/api/country` Vercel Function. That function reads Vercel's
+`x-vercel-ip-country` request header and returns only a validated ISO-style
+two-letter code or `unknown`; it does not return the underlying address. The
+widget passes that coarse code to the separately hosted Ask John service for
+analytics only. A missing or malformed code becomes `unknown` and never blocks
+an answer. The value is approximate, can reflect a VPN or proxy exit country,
+and must not be interpreted as residence, nationality or identity.
+
+The aggregate hash uses the existing exact key pattern
+`<prefix>:metrics:YYYY-MM-DD`. New bounded fields include `requests`,
+`country:<CC>` and `hour:HH:{requests|mode:<mode>|language:<language>|country:<CC>}`.
+Operators may read only these exact daily aggregate keys for a requested date
+range. They must not scan Redis, inspect per-client rate-limit hashes or join
+the hourly/country totals with access logs or other identity data. Counts can
+support statements such as “three English requests were answered during the
+08:00 UTC bucket”; they cannot establish who asked them or what was asked.
+
 ## Cost baseline
 
 As of 2026-09-03, Ask John uses

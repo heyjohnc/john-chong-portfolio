@@ -2,6 +2,7 @@ import http from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
 import askHandler from "../api/ask.mjs";
+import countryHandler from "../api/country.mjs";
 
 const root = new URL("../", import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/, (match) => match.slice(1));
 const port = Number(process.env.PORT || 4174);
@@ -31,6 +32,14 @@ const server = http.createServer(async (req, res) => {
       const body = req.method === "GET" || req.method === "HEAD" ? undefined : await readBody(req);
       const request = new Request(url, { method: req.method, headers: req.headers, body });
       const response = await askHandler.fetch(request);
+      res.statusCode = response.status;
+      response.headers.forEach((value, name) => res.setHeader(name, value));
+      res.end(Buffer.from(await response.arrayBuffer()));
+      return;
+    }
+    if (url.pathname === "/api/country") {
+      const request = new Request(url, { method: req.method, headers: req.headers });
+      const response = await countryHandler.fetch(request);
       res.statusCode = response.status;
       response.headers.forEach((value, name) => res.setHeader(name, value));
       res.end(Buffer.from(await response.arrayBuffer()));

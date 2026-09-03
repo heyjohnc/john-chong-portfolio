@@ -157,16 +157,25 @@ export async function handleRequest(request, env = process.env) {
     return json(mode === "rate_limited" ? 429 : 503, { ...basePayload(requestId), mode, answer: operationalText(mode, policy.language), citations: [] });
   }
 
+  const telemetryCountry = request.headers.get("x-vercel-ip-country") || body.country;
+  const recordTelemetry = (payload) => void recordAggregateTelemetry({
+    mode: payload.mode,
+    language: policy.language,
+    country: telemetryCountry,
+    corpusVersion: payload.corpus.version,
+    env
+  });
+
   if (policy.mode === "refuse") {
     const payload = { ...basePayload(requestId), mode: "refuse", answer: policy.answer, citations: citationObjects(policy.citation_ids), timing_ms: Date.now() - startedAt };
-    void recordAggregateTelemetry({ mode: payload.mode, language: policy.language, corpusVersion: payload.corpus.version, env });
+    recordTelemetry(payload);
     return json(200, payload);
   }
 
   const capability = assistantCapabilityResponse(question, policy.language);
   if (capability) {
     const payload = { ...basePayload(requestId), mode: capability.mode, answer: capability.answer, citations: [], timing_ms: Date.now() - startedAt };
-    void recordAggregateTelemetry({ mode: payload.mode, language: policy.language, corpusVersion: payload.corpus.version, env });
+    recordTelemetry(payload);
     return json(200, payload);
   }
 
@@ -186,7 +195,7 @@ export async function handleRequest(request, env = process.env) {
       retrievalPath = "semantic_router";
     } catch (_) {
       const payload = { ...basePayload(requestId), mode: "error", answer: operationalText("error", policy.language), citations: [], timing_ms: Date.now() - startedAt };
-      void recordAggregateTelemetry({ mode: payload.mode, language: policy.language, corpusVersion: payload.corpus.version, env });
+      recordTelemetry(payload);
       return json(503, payload);
     }
   }
@@ -198,7 +207,7 @@ export async function handleRequest(request, env = process.env) {
     const payload = { ...basePayload(requestId), mode: empty.mode, answer: empty.answer, citations: citationObjects(empty.citation_ids), retrieval_path: retrievalPath, timing_ms: Date.now() - startedAt };
     const routeCost = semanticRoute ? estimateProviderCostUsd(semanticRoute.usage, semanticRoute.model) : null;
     if (routeCost !== null) payload.approximate_cost_usd = routeCost;
-    void recordAggregateTelemetry({ mode: payload.mode, language: policy.language, corpusVersion: payload.corpus.version, env });
+    recordTelemetry(payload);
     return json(200, payload);
   }
 
@@ -210,11 +219,11 @@ export async function handleRequest(request, env = process.env) {
     const routeCost = semanticRoute ? estimateProviderCostUsd(semanticRoute.usage, semanticRoute.model) : 0;
     const cost = answerCost === null || (semanticRoute && routeCost === null) ? null : Number((answerCost + routeCost).toFixed(6));
     if (cost !== null) payload.approximate_cost_usd = cost;
-    void recordAggregateTelemetry({ mode: payload.mode, language: policy.language, corpusVersion: payload.corpus.version, env });
+    recordTelemetry(payload);
     return json(200, payload);
   } catch (_) {
     const payload = { ...basePayload(requestId), mode: "error", answer: operationalText("error", policy.language), citations: [], timing_ms: Date.now() - startedAt };
-    void recordAggregateTelemetry({ mode: payload.mode, language: policy.language, corpusVersion: payload.corpus.version, env });
+    recordTelemetry(payload);
     return json(503, payload);
   }
 }
