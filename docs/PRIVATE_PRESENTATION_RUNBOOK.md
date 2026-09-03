@@ -1,6 +1,6 @@
 # Private presentation service runbook
 
-Status: scaffold implemented; production enrollment pending
+Status: scaffold production-validated; protected content pending
 
 Last updated: 2026-09-03
 
@@ -15,7 +15,14 @@ Vercel output and browser bundle.
 This first milestone intentionally returns an authenticated placeholder. It
 proves the access path before any reviewed interview material is added.
 
-## Owner enrollment
+## Owner enrollment and rotation boundary
+
+Production enrollment was completed by John and validated on 2026-09-03. Do
+not rerun enrollment, inspect the protected environment, or request an
+Authenticator code during normal content and website work.
+
+The original bootstrap command is retained below for disaster recovery and a
+deliberate owner-operated rotation only:
 
 Run this yourself in an interactive SSH terminal after deploying the service
 source:
@@ -26,10 +33,10 @@ node scripts/setup-presentation-totp.mjs
 ```
 
 The command creates a protected environment file and shows the one-time manual
-setup key. Add it to Google Authenticator as a time-based entry. Never paste
-that key into chat, Git, a screenshot, a report or the public website. The
-script refuses to overwrite an existing enrollment; replacement requires a
-deliberate operator rotation procedure.
+setup key. During a deliberate new enrollment, add it to Google Authenticator
+as a time-based entry. Never paste that key into chat, Git, a screenshot, a
+report or the public website. The script refuses to overwrite the current
+enrollment; replacement requires an explicit owner rotation procedure.
 
 ## Runtime contract
 
