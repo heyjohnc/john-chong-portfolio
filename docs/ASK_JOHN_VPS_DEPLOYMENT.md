@@ -82,6 +82,23 @@ truth for actual spend. Pricing source:
 `https://openrouter.ai/api/v1/models` and the model page
 `https://openrouter.ai/deepseek/deepseek-v4-flash-0731`.
 
+## Portfolio interpretation
+
+The portfolio website and Ask John assistant are themselves a defensible
+portfolio-candidate system. Together they demonstrate bilingual product and
+interface design, a versioned public knowledge base, bounded retrieval,
+allowlisted project-source ingestion, visible citations, deterministic and LLM
+semantic routing, privacy and refusal rules, request/cost controls, regression
+evaluation, a split Vercel/VPS deployment and production browser validation.
+
+The safe public claim is a working, deployed personal portfolio evidence
+assistant designed and accepted by John with substantial Agent-accelerated
+implementation. It is not a client commission, enterprise-scale RAG platform,
+large-user deployment, formal security audit or proof of business impact. It
+does not need to become a tenth card in the selected-project archive merely to
+remain valid portfolio evidence; its live presence across the site already
+demonstrates the capability without making the project page self-referential.
+
 ## Contribution boundary
 
 The owner chose the product behavior, public evidence boundary, hosting direction and final acceptance. `bot14-agent` inspected the existing infrastructure and implemented the bounded service, local Redis adapter, tests, deployment configuration and verification under that direction.

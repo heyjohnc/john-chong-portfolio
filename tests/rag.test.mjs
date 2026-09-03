@@ -66,6 +66,23 @@ test("Niulai uses English public names while preserving Chinese language mapping
   for (const mapping of ['"Niulai Squad": "牛来生米小队"', '"Lark": "云雀"', '"Niulai Mama": "牛来妈妈"', '"Baola": "豹拉"']) assert.ok(translations.includes(mapping));
 });
 
+test("Niulai public feedback stays traceable, deduplicated and bounded", async () => {
+  const caseStudy = await readFile(new URL("../niulai.html", import.meta.url), "utf8");
+  const translations = await readFile(new URL("../site.js", import.meta.url), "utf8");
+  assert.equal((caseStudy.match(/class="public-feedback-card"/g) || []).length, 3);
+  for (const statusId of ["2094721262237131064", "2094719033992220858", "2094723001459851689", "2094719626714497353"]) {
+    assert.equal((caseStudy.match(new RegExp(statusId, "g")) || []).length, 1);
+  }
+  assert.match(caseStudy, /Same observer as 01/);
+  assert.match(caseStudy, /not customer testimonials, formal user research, or a code or security audit/i);
+  assert.doesNotMatch(caseStudy, /SiMaYi|Bakaaaa|Saitama|0x[a-f0-9]{40}/i);
+  for (const mapping of [
+    '"Early public reactions.": "早期公開反應。"',
+    '"Another independently restated the four roles, 3-of-4 voting threshold and PAPER_ONLY boundary—evidence that the mechanism was understandable outside the project team.": "另一名觀察者獨立重述四個角色、四取三投票門檻及 PAPER_ONLY 邊界，顯示項目團隊以外的人也能理解其機制。"',
+    '"Evidence boundary": "證據邊界"'
+  ]) assert.ok(translations.includes(mapping));
+});
+
 test("all supported eval questions retrieve every expected section in top six", () => {
   for (const item of evalSet.cases.filter((entry) => entry.expected_mode === "answer")) {
     const retrieved = retrieve(item.question, { topK: 6 }).map((chunk) => chunk.section_id);
