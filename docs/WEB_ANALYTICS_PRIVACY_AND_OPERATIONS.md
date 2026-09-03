@@ -54,8 +54,16 @@ purchased for this change.
 ## John-only browser opt-out
 
 The opt-out is an origin-local browser setting. It does not create an account,
-cookie, server-side identity or exclusion list. Run this once in the browser
-profile John uses for owner review, before browsing the public pages:
+cookie, server-side identity or exclusion list. Open this private setup URL once
+in the browser profile John uses for owner review:
+
+```text
+https://johnchong.info/#analytics-opt-out
+```
+
+The fragment is not sent to the server. The bootstrap saves the local setting,
+removes the fragment from the address bar and suppresses Analytics on that
+first setup visit. The equivalent browser-console command is:
 
 ```js
 localStorage.setItem("johnchong-web-analytics-opt-out", "1"); location.reload();

@@ -7,15 +7,25 @@ const PUBLIC_PAGES = ["index.html", "about.html", "projects.html", "fightgame.ht
 const OPT_OUT_KEY = "johnchong-web-analytics-opt-out";
 const analyticsSource = await readFile(new URL("../analytics.js", import.meta.url), "utf8");
 
-function executeAnalytics({ pathname = "/about.html", optedOut = false } = {}) {
+function executeAnalytics({ pathname = "/about.html", optedOut = false, hash = "" } = {}) {
   const appendedScripts = [];
   const queuedCalls = [];
+  const storageWrites = [];
+  const historyWrites = [];
   const window = {
-    location: { origin: "https://johnchong.info", pathname },
+    location: { origin: "https://johnchong.info", pathname, search: "", hash },
+    history: {
+      replaceState(...args) {
+        historyWrites.push(args);
+      }
+    },
     localStorage: {
       getItem(key) {
         assert.equal(key, OPT_OUT_KEY);
         return optedOut ? "1" : null;
+      },
+      setItem(key, value) {
+        storageWrites.push([key, value]);
       }
     },
     va(...args) {
@@ -35,7 +45,7 @@ function executeAnalytics({ pathname = "/about.html", optedOut = false } = {}) {
   };
 
   vm.runInNewContext(analyticsSource, { URL, document, window });
-  return { appendedScripts, queuedCalls };
+  return { appendedScripts, queuedCalls, storageWrites, historyWrites };
 }
 
 test("all and only public portfolio pages load the analytics bootstrap", async () => {
@@ -69,6 +79,17 @@ test("the browser-local owner opt-out prevents script and page-view reporting", 
   const { appendedScripts, queuedCalls } = executeAnalytics({ optedOut: true });
   assert.equal(appendedScripts.length, 0);
   assert.equal(queuedCalls.length, 1);
+  assert.equal(queuedCalls[0][1]({ type: "pageview", url: "https://johnchong.info/" }), null);
+});
+
+test("the private opt-out fragment excludes the first owner setup visit", () => {
+  const { appendedScripts, queuedCalls, storageWrites, historyWrites } = executeAnalytics({
+    pathname: "/",
+    hash: "#analytics-opt-out"
+  });
+  assert.equal(appendedScripts.length, 0);
+  assert.deepEqual(storageWrites, [[OPT_OUT_KEY, "1"]]);
+  assert.deepEqual(historyWrites, [[null, "", "/"]]);
   assert.equal(queuedCalls[0][1]({ type: "pageview", url: "https://johnchong.info/" }), null);
 });
 

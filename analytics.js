@@ -15,7 +15,18 @@
     "/niulai.html"
   ]);
 
+  let requestedOptOut = window.location.hash === "#analytics-opt-out";
+  if (requestedOptOut) {
+    try {
+      window.localStorage.setItem(OPT_OUT_KEY, "1");
+      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+    } catch {
+      // The current page still remains opted out when browser storage is unavailable.
+    }
+  }
+
   const isOptedOut = () => {
+    if (requestedOptOut) return true;
     try {
       return window.localStorage.getItem(OPT_OUT_KEY) === "1";
     } catch {
