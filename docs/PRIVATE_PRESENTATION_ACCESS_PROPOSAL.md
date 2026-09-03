@@ -1,6 +1,6 @@
 # Private presentation access proposal
 
-Status: proposed, not implemented
+Status: access scaffold implemented; production enrollment and content pending
 
 Evidence level: Level 2 design proposal
 
@@ -228,8 +228,12 @@ venue Wi-Fi, DNS, Vercel or the VPS is unavailable.
   milestone; the UI must not mislabel it as full 2FA.
 - Preferred guest authentication: expiring per-recipient access, not John's
   TOTP.
-- Storage and service implementation: not yet selected or built.
-- Presentation link and content inventory: pending owner approval.
+- Storage and service implementation: separate Node service with Redis-backed
+  rate, replay and session controls is implemented and locally testable.
+- Presentation entry point: implemented in the portfolio footer with an
+  external Vercel rewrite; production activation remains gated on owner TOTP
+  enrollment and deployment verification.
+- Content inventory: structure approved; reviewed content remains pending.
 - Protected material: not yet uploaded.
 
 ## Primary references
@@ -253,7 +257,6 @@ John proposed using a backend-authenticated portfolio presentation area,
 specified Google Authenticator-style access and chose a TOTP-only owner flow
 without a presentation password as the preferred first milestone.
 `bot14-agent` assessed the current architecture, separated owner and guest
-access needs, documented the server-side and disclosure boundaries, and
-designed the guided presentation and evidence-room content structure. No
-protected presentation system or private-content upload has been implemented
-by this proposal.
+access needs, documented the server-side and disclosure boundaries, designed
+the guided presentation and evidence-room content structure, and implemented
+the first access scaffold. Protected interview content has not been uploaded.
