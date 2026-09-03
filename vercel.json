@@ -1,4 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": "public"
+  "outputDirectory": "public",
+  "rewrites": [
+    {
+      "source": "/presentation/:path*",
+      "destination": "https://present-john.37.187.136.100.sslip.io/:path*"
+    }
+  ]
 }

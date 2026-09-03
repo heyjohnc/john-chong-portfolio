@@ -12,6 +12,7 @@
     "Work": "作品",
     "About": "關於",
     "Contact": "聯絡",
+    "Presentation": "演示",
     "Project archive": "項目檔案",
     "Selected product work": "精選產品項目",
     "← Home": "← 首頁",

@@ -382,6 +382,8 @@ html[data-language="zh"] .system-strip::before { content: "流程示意"; }
 .site-footer { border-top: 1px solid var(--glass-line); }
 .site-footer .wrap { min-height: 100px; display: flex; align-items: center; justify-content: space-between; gap: 24px; font-size: 13px; }
 .site-footer span { color: var(--muted); }
+.site-footer .footer-links { display: flex; gap: 22px; }
+.site-footer .footer-links a:hover { color: var(--text); }
 
 .page-hero { padding-block: 92px 74px; border-bottom: 1px solid var(--card-line); }
 .page-hero .back-link { display: inline-block; margin-bottom: 38px; color: var(--muted); font-size: 14px; }
