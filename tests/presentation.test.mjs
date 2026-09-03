@@ -27,7 +27,12 @@ async function withServer(options, run) {
   const server = http.createServer(createPresentationHandler(options));
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
-  try { await run(origin); } finally { await new Promise((resolve) => server.close(resolve)); }
+  try {
+    await run(origin);
+  } finally {
+    server.closeAllConnections?.();
+    await new Promise((resolve) => server.close(resolve));
+  }
 }
 
 async function auth(origin, code, cookie = "") {

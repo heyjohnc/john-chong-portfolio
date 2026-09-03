@@ -8,7 +8,7 @@
     "sync:project-sources": "node scripts/sync-project-sources.mjs",
     "dev": "node scripts/dev-server.mjs",
     "dev:presentation": "PRESENTATION_ENABLED=true PRESENTATION_STORE_MODE=memory node scripts/serve-bot14-presentation.mjs",
-    "test": "node --test tests/*.test.mjs",
+    "test": "node --test tests",
     "eval:rag": "node scripts/run-rag-evals.mjs",
     "verify:rag": "npm run build:rag && npm test && npm run eval:rag"
   },
