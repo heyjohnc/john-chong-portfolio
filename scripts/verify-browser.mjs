@@ -172,12 +172,25 @@ checks.push({
   name: "Niulai case links to the public repository",
   passed: await niulaiPage.locator('a[href="https://github.com/heyjohnc/niulai-shengmi-squad"]').count() === 1
 });
+checks.push({
+  name: "Niulai case shows three bounded product-feedback cards",
+  passed: await niulaiPage.locator(".public-feedback-card").count() === 3 && await niulaiPage.locator('.public-feedback-card a[href^="https://x.com/i/status/"]').count() === 3
+});
+checks.push({
+  name: "Niulai repository observation is visibly separated from independent feedback",
+  passed: /same observer as 01/i.test(await niulaiPage.locator(".repository-observation").innerText()) && /not customer testimonials/i.test(await niulaiPage.locator(".feedback-boundary").innerText())
+});
 await niulaiPage.locator("[data-language-toggle]").click();
 const chineseNiulai = await niulaiPage.locator("body").innerText();
 checks.push({
   name: "Niulai case restores original names in Chinese",
   passed: ["牛来生米小队", "云雀", "牛来", "牛来妈妈", "豹拉"].every((name) => chineseNiulai.includes(name))
 });
+checks.push({
+  name: "Niulai public-feedback boundary follows Chinese language switch",
+  passed: chineseNiulai.includes("早期公開反應") && chineseNiulai.includes("另一名觀察者獨立重述四個角色") && chineseNiulai.includes("證據邊界")
+});
+await niulaiPage.screenshot({ path: path.join(outputDir, "niulai-public-feedback-desktop.png"), fullPage: true });
 await niulaiPage.close();
 
 await browser.close();
