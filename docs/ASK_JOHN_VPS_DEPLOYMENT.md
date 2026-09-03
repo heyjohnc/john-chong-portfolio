@@ -133,6 +133,20 @@ The owner chose the product behavior, public evidence boundary, hosting directio
 
 ## Release and evidence state
 
+- Anonymous hourly usage telemetry: `PRODUCTION_VALIDATED` — PR #25 merged as
+  `6898b11255c097b6ebf3525d2df8985d9eac6d0d`. Vercel production deployment
+  `dpl_D28LC7EaPzmqatbUBA4nQ8Vt3TRg` served the validated `/api/country`
+  endpoint and released the widget country field; the VPS Ask John service was
+  fast-forwarded to the same commit and restarted successfully. All 48
+  repository tests and all 54 deterministic retrieval/policy evaluations
+  passed before release. A production
+  browser with the owner page-view opt-out received the coarse `FR` edge
+  country code and attached it to an intercepted Ask request. The final Ask
+  POST was deliberately mocked in the browser, so the five pre-existing daily
+  requests were unchanged and no production question, answer or QA telemetry
+  was created. The public page had no console error, the Ask health endpoint
+  returned HTTP 200, the Presentation shell/session remained available, and
+  its unauthenticated manifest remained HTTP 401.
 - Code and automated checks: `TESTED` — 27/27 repository tests and 54/54 deterministic retrieval/policy evaluations passed after the approved project-source feature on 2026-09-03.
 - Natural-question handling: `TESTED` — added coverage for broad project, experience, employer-value, client-delivery, Agent-dependence and flagship-project questions in English and Chinese. Reference-dependent follow-ups such as “它用了什么技术？” now inherit the preceding topic, while unrelated unsupported questions do not.
 - Enterprise-readiness answers: `TESTED` — the public corpus can explain both the applied-AI work John can reasonably contribute to and the enterprise onboarding or evidence gaps that remain, without converting that assessment into a claim of prior formal enterprise-AI employment.
