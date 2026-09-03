@@ -706,7 +706,7 @@ html.motion-enabled.motion-started .name-accent { background-size: 100% 100%; }
   .ask-widget { right: 12px; bottom: 12px; }
   .ask-widget-launcher { width: 48px; min-width: 48px; min-height: 48px; padding: 0; gap: 0; border-radius: 50%; }
   .ask-widget-launcher [data-ask-widget-launcher] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .ask-widget-launcher::after { content: "AI"; font: 800 12px/1 var(--display); letter-spacing: -.02em; }
+  .ask-widget-launcher::after { content: "Ask"; font: 800 12px/1 var(--display); letter-spacing: -.02em; }
   .ask-widget-signal { display: none; }
   .ask-widget.is-open .ask-widget-launcher { width: 48px; min-width: 48px; }
   .ask-widget.is-open .ask-widget-launcher::after { content: "×"; font-size: 22px; font-weight: 500; }

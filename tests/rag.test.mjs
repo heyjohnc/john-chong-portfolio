@@ -52,6 +52,15 @@ test("dedicated projects page exposes the approved nine-item hierarchy without h
   assert.doesNotMatch(projects, /AI Video Factory|MiniMax H3|Build Clock|Pumpnuts|prepare-nft-collection/i);
 });
 
+test("Ask John launcher uses the approved Ask label on desktop and mobile", async () => {
+  const widget = await readFile(new URL("../ask-widget.js", import.meta.url), "utf8");
+  const styles = await readFile(new URL("../styles.css", import.meta.url), "utf8");
+  assert.equal((widget.match(/launcher: "Ask"/g) || []).length, 2);
+  assert.doesNotMatch(widget, /launcher: "(?:Ask me|問問我)"/);
+  assert.match(styles, /\.ask-widget-launcher::after \{ content: "Ask";/);
+  assert.doesNotMatch(styles, /\.ask-widget-launcher::after \{ content: "AI";/);
+});
+
 test("Niulai uses English public names while preserving Chinese language mappings", async () => {
   const homepage = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const projects = await readFile(new URL("../projects.html", import.meta.url), "utf8");
