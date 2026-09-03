@@ -98,19 +98,19 @@ fields being present does not prove that the current UI supports them.
 
 | Logical asset | First-release role | Preparation state | Required gate |
 | --- | --- | --- | --- |
-| Niulai simplified architecture diagram | Guided section and evidence follow-up | `[AGENT MAY PREPARE]` from the pinned public repository evidence | Final diagram and wording `[JOHN TO APPROVE]` |
-| Niulai failure/recovery card | One bounded, credible correction example | Source example not selected | Example `[JOHN TO APPROVE]`; private evidence `[JOHN TO SUPPLY]` `[JOHN TO REDACT]` |
+| Niulai simplified architecture diagram | Guided section and evidence follow-up | Public-evidence draft in [`presentation-drafts/NIULAI_ONE_PAGE_DRAFT.md`](presentation-drafts/NIULAI_ONE_PAGE_DRAFT.md) | Final diagram and wording `[JOHN TO APPROVE]` |
+| Niulai failure/recovery card | One bounded, credible correction example | Public-safe asset-unit projection example drafted in [`presentation-drafts/NIULAI_ONE_PAGE_DRAFT.md`](presentation-drafts/NIULAI_ONE_PAGE_DRAFT.md) | Example `[JOHN TO APPROVE]`; private evidence `[JOHN TO SUPPLY]` `[JOHN TO REDACT]` |
 | Niulai 60–90 second recorded fallback | Demonstrate the controlled lifecycle if a live route is unavailable | Not supplied | Capture authority `[JOHN TO SUPPLY]`; final recording `[JOHN TO REDACT]` `[JOHN TO APPROVE]` |
-| FightGame simplified architecture diagram | Explain authoritative multiplayer and bounded AI responsibilities | `[AGENT MAY PREPARE]` from approved public evidence | Final diagram and wording `[JOHN TO APPROVE]` |
-| FightGame cross-device defect card | Show symptom, reproduction, correction and regression result | Public case evidence exists; presentation selection pending | Selected evidence `[JOHN TO APPROVE]`; any non-public capture `[JOHN TO SUPPLY]` `[JOHN TO REDACT]` |
+| FightGame simplified architecture diagram | Explain authoritative multiplayer and bounded AI responsibilities | Public-evidence draft in [`presentation-drafts/FIGHTGAME_ONE_PAGE_DRAFT.md`](presentation-drafts/FIGHTGAME_ONE_PAGE_DRAFT.md) | Final diagram and wording `[JOHN TO APPROVE]` |
+| FightGame cross-device defect card | Show symptom, reproduction, correction and regression result | Public-safe correction card drafted in [`presentation-drafts/FIGHTGAME_ONE_PAGE_DRAFT.md`](presentation-drafts/FIGHTGAME_ONE_PAGE_DRAFT.md) | Selected evidence `[JOHN TO APPROVE]`; any non-public capture `[JOHN TO SUPPLY]` `[JOHN TO REDACT]` |
 | FightGame 60–90 second recorded fallback | Cover avatar, map identity, challenge, battle and consistent result | Not supplied | Recording `[JOHN TO SUPPLY]` `[JOHN TO REDACT]` `[JOHN TO APPROVE]` |
 | Breadth project strip | Show adjacent workflows without expanding the talk | `[AGENT MAY PREPARE]` from approved public portfolio content | Included items `[JOHN TO APPROVE]` |
-| Owner/Agent contribution table | Answer authorship and responsibility questions truthfully | `[AGENT MAY PREPARE]` from existing evidence boundaries | Exact responsibility wording `[JOHN TO APPROVE]` |
+| Owner/Agent contribution table | Answer authorship and responsibility questions truthfully | Public-evidence draft in [`presentation-drafts/OWNER_AGENT_RESPONSIBILITY_DRAFT.md`](presentation-drafts/OWNER_AGENT_RESPONSIBILITY_DRAFT.md) | Exact responsibility wording `[JOHN TO APPROVE]` |
 | Selected UAT and release evidence | Evidence-room follow-up | No presentation-safe selection yet | `[JOHN TO SUPPLY]` `[JOHN TO REDACT]` `[JOHN TO APPROVE]` |
 | Public feedback captures | Evidence-room follow-up with evidence-strength label | Redacted private captures reportedly exist; not inspected in this task | `[JOHN TO SUPPLY]` `[JOHN TO REDACT]` `[JOHN TO APPROVE]` |
 | English two-page CV | Download or evidence-room document | Current approved file not supplied to this task | `[JOHN TO SUPPLY]` `[JOHN TO APPROVE]` |
 | Chinese CV | Recruiter communication | `[OPTIONAL]` | `[JOHN TO SUPPLY]` `[JOHN TO APPROVE]` |
-| One-page Niulai and FightGame summaries | Interview handout/follow-up | `[AGENT MAY PREPARE]` from approved evidence | Final claims `[JOHN TO APPROVE]` |
+| One-page Niulai and FightGame summaries | Interview handout/follow-up | English-first public-evidence drafts prepared; bilingual treatment pending | Final claims and language `[JOHN TO APPROVE]` |
 | Contact card | Close and follow-up | `[AGENT MAY PREPARE]` from public portfolio details | Contact details and wording `[JOHN TO APPROVE]` |
 | Offline presentation and video package | Interview fallback when network services fail | Not assembled | Contents `[JOHN TO SUPPLY]` `[JOHN TO REDACT]` `[JOHN TO APPROVE]` |
 
