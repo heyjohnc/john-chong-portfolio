@@ -1,8 +1,8 @@
 # Private presentation access proposal
 
-Status: access scaffold implemented; production enrollment and content pending
+Status: access scaffold production-validated; reviewed content pending
 
-Evidence level: Level 2 design proposal
+Evidence level: Level 2 implemented access scaffold and content proposal
 
 Last updated: 2026-09-03
 
@@ -231,9 +231,14 @@ venue Wi-Fi, DNS, Vercel or the VPS is unavailable.
 - Storage and service implementation: separate Node service with Redis-backed
   rate, replay and session controls is implemented and locally testable.
 - Presentation entry point: implemented in the portfolio footer with an
-  external Vercel rewrite; production activation remains gated on owner TOTP
-  enrollment and deployment verification.
-- Content inventory: structure approved; reviewed content remains pending.
+  external Vercel rewrite and production-validated on 2026-09-03.
+- Owner authentication: enrolled by John and production-validated without
+  placing the TOTP secret in the repository, Vercel output or protected-content
+  directory.
+- Content inventory: structure approved; the manifest and approval baseline is
+  recorded in
+  [`PRIVATE_PRESENTATION_CONTENT_PLAN.md`](PRIVATE_PRESENTATION_CONTENT_PLAN.md),
+  while reviewed content remains pending.
 - Protected material: not yet uploaded.
 
 ## Primary references

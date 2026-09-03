@@ -75,10 +75,14 @@ Before enabling the public assistant:
 
 The website is deployed independently of the assistant service. When the global control store or provider configuration is incomplete, the endpoint fails closed while every portfolio page remains available.
 
-A future backend-authenticated presentation area is assessed in
+A backend-authenticated presentation area is documented in
 [`docs/PRIVATE_PRESENTATION_ACCESS_PROPOSAL.md`](docs/PRIVATE_PRESENTATION_ACCESS_PROPOSAL.md).
-It remains a design proposal: no protected presentation content, TOTP secret or
-private-content route is present in the public site.
+Its access scaffold and public login shell are production-validated, while the
+authenticated workspace intentionally remains an empty placeholder pending
+reviewed interview content. No protected presentation content or TOTP secret is
+stored in this public repository or the Vercel output. The proposed guided route
+and approval inventory are in
+[`docs/PRIVATE_PRESENTATION_CONTENT_PLAN.md`](docs/PRIVATE_PRESENTATION_CONTENT_PLAN.md).
 
 ## Public-content boundary
 
