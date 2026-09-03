@@ -84,14 +84,16 @@ shown only after server verification. `Turn off` calls
 `POST /api/owner-qa/revoke`. A successful revoke writes only:
 
 ```text
-<ask-prefix>:owner-qa-revoked:<sha256-of-capability> = 1
+<ask-prefix>:owner-qa-revoked:<sha256-of-canonical-signed-payload> = 1
 ```
 
 Its Redis TTL is the capability's remaining lifetime and can never exceed 30
 days. Active capabilities have no server-side registry. The local marker is
 removed only after the revoke succeeds, or when Ask reports that it is invalid,
-expired or already revoked. Rotating the Ed25519 key pair invalidates every
-outstanding marker and is the emergency global-revoke path.
+expired or already revoked. The digest is derived from the canonical signed
+payload rather than signature text, so alternate signature representations
+cannot select another revocation record. Rotating the Ed25519 key pair
+invalidates every outstanding marker and is the emergency global-revoke path.
 
 Presentation `Exit & lock` continues to revoke only the 30-minute Presentation
 session. It intentionally does not revoke the independently scoped Owner QA
@@ -126,6 +128,13 @@ application.
 
 - Editing local storage, sending `qa_token: true`, changing a payload or signing
   with another key does not produce `owner_qa`; it is classified as external.
+- The verifier accepts only canonical unpadded base64url. An Ed25519 signature
+  must be exactly 86 encoded characters, decode to exactly 64 bytes and encode
+  back to the identical text. The payload must also round-trip canonically and
+  match the issuer's fixed JSON serialization. This prevents equivalent text
+  encodings from being accepted. Revocation additionally hashes the canonical
+  signed payload rather than the complete token text, so equivalent signature
+  representations cannot select a second revocation record.
 - A stolen valid capability can misclassify requests until it expires or is
   revoked. It still cannot open Presentation, bypass rate/cost controls, reveal
   identity or access private material. TLS, local browser storage and the
@@ -143,11 +152,12 @@ application.
 Local verification on 2026-09-03 used generated test-only Ed25519 keys and no
 production endpoint or production Redis namespace:
 
-- repository tests: 56/56 passed;
+- repository tests: 59/59 passed after the canonical-encoding correction;
 - deterministic retrieval and policy evaluation: 54/54 passed;
 - static production build and Node syntax checks: passed;
 - valid signature and ordinary-visitor scope routing: passed;
-- payload/signature tampering, expiry and alternate-key forgery: rejected;
+- payload/signature tampering, expiry, alternate-key forgery, non-canonical
+  equivalent signatures and non-canonical signed JSON: rejected;
 - unauthenticated issuance and disallowed Presentation origin: rejected;
 - QA capability used as a Presentation session: rejected with HTTP 401;
 - exact-origin Ask CORS, preflight and disallowed origin: passed;
@@ -166,6 +176,29 @@ production endpoint or production Redis namespace:
 Secret-pattern, fingerprint/device-collection, built-output and diff checks
 passed. No production Ask request was part of branch verification, so
 production `external_requests` was not changed.
+
+### Independent-review correction
+
+An independent PR review reproduced a nondeterministic failure in the original
+forged-signature assertion and identified a material encoding edge case. An
+Ed25519 signature is 64 bytes, so its unpadded base64url representation has 86
+characters and unused bits in the last character. Node can decode multiple
+non-canonical final characters to the same signature bytes. The original
+verifier accepted that alias while revocation hashed the original token text,
+allowing equivalent encodings to select different revocation keys.
+
+The corrected verifier requires exact signature length, exact decoded length
+and canonical round-trip encoding before signature verification. It also
+canonicalizes the payload base64url and enforces the issuer's exact JSON field
+order and serialization while continuing to verify the signature over the
+original payload text. The revocation key now hashes that canonical signed
+payload, not signature text. The flaky mutation was replaced with a guaranteed
+different, byte-changing signature mutation. Dedicated tests now construct an
+equivalent non-canonical signature, reject it, prove it cannot bypass a
+canonical revocation, and reject a correctly signed but non-canonical payload
+serialization. The focused Owner QA suite passed once with full output and 50
+additional consecutive randomized-key runs before the complete 59-test suite
+passed.
 
 ## Owner and Agent boundary
 

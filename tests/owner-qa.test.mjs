@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { generateKeyPairSync } from "node:crypto";
+import { generateKeyPairSync, sign } from "node:crypto";
 import http from "node:http";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
@@ -7,6 +7,7 @@ import { handleRequest } from "../api/ask.mjs";
 import { recordAggregateTelemetry } from "../api/_lib/controls.mjs";
 import { handleOwnerQaRevokeRequest, handleOwnerQaStatusRequest, ownerQaStatus, resetOwnerQaRevocationsForTest } from "../api/_lib/owner-qa.mjs";
 import { issueOwnerQaToken } from "../presentation/_lib/owner-qa-token.mjs";
+import { ownerQaTokenDigest, verifyOwnerQaToken } from "../api/_lib/owner-qa-token.mjs";
 import { createAskVpsHandler } from "../scripts/serve-bot14-ask-john.mjs";
 
 const NOW = Date.UTC(2026, 8, 3, 14, 0, 0);
@@ -34,6 +35,28 @@ function qaEnv(overrides = {}) {
 
 function token(ttlSeconds = 3600) {
   return issueOwnerQaToken({ privateKeyB64, nowMs: NOW, ttlSeconds, nonceFactory: () => "0123456789abcdefghijkl" }).token;
+}
+
+function tamperSignatureBytes(signed) {
+  const [payload, signature] = signed.split(".");
+  const index = signature.length - 2;
+  const replacement = signature[index] === "A" ? "B" : "A";
+  const changed = `${signature.slice(0, index)}${replacement}${signature.slice(index + 1)}`;
+  assert.notEqual(changed, signature);
+  assert.notDeepEqual(Buffer.from(changed, "base64url"), Buffer.from(signature, "base64url"));
+  return `${payload}.${changed}`;
+}
+
+function equivalentNonCanonicalSignature(signed) {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+  const [payload, signature] = signed.split(".");
+  assert.equal(signature.length, 86);
+  const lastIndex = alphabet.indexOf(signature.at(-1));
+  assert.equal(lastIndex % 16, 0);
+  const nonCanonical = `${signature.slice(0, -1)}${alphabet[lastIndex + 1]}`;
+  assert.notEqual(nonCanonical, signature);
+  assert.deepEqual(Buffer.from(nonCanonical, "base64url"), Buffer.from(signature, "base64url"));
+  return `${payload}.${nonCanonical}`;
 }
 
 async function withAskServer(options, run) {
@@ -65,7 +88,36 @@ test("Ask classifies a valid signed capability as owner_qa and ordinary or forge
   };
   assert.equal((await ask(signed)).request_scope, "owner_qa");
   assert.equal((await ask()).request_scope, "external");
-  assert.equal((await ask(`${signed.slice(0, -1)}x`)).request_scope, "external");
+  assert.equal((await ask(tamperSignatureBytes(signed))).request_scope, "external");
+});
+
+test("non-canonical signature text is rejected even when it decodes to the same Ed25519 bytes", () => {
+  const signed = token();
+  const equivalent = equivalentNonCanonicalSignature(signed);
+  assert.equal(verifyOwnerQaToken({ token: signed, publicKeyB64, nowMs: NOW }).valid, true);
+  assert.equal(verifyOwnerQaToken({ token: equivalent, publicKeyB64, nowMs: NOW }).valid, false);
+});
+
+test("a canonical revocation cannot be bypassed with equivalent non-canonical signature text", async () => {
+  resetOwnerQaRevocationsForTest();
+  const signed = token();
+  const equivalent = equivalentNonCanonicalSignature(signed);
+  assert.equal(ownerQaTokenDigest(equivalent), ownerQaTokenDigest(signed));
+  const revoke = new Request("https://ask.example/api/owner-qa/revoke", {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ qa_token: signed })
+  });
+  assert.equal((await handleOwnerQaRevokeRequest(revoke, qaEnv(), NOW)).status, 200);
+  assert.equal((await ownerQaStatus(signed, qaEnv(), NOW)).scope, "external");
+  assert.equal((await ownerQaStatus(equivalent, qaEnv(), NOW)).scope, "external");
+});
+
+test("a valid signature over a non-canonical JSON representation is rejected", () => {
+  const [payload] = token().split(".");
+  const claims = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
+  const reorderedJson = JSON.stringify({ aud: claims.aud, v: claims.v, iat: claims.iat, exp: claims.exp, nonce: claims.nonce });
+  const reorderedPayload = Buffer.from(reorderedJson).toString("base64url");
+  const signature = sign(null, Buffer.from(reorderedPayload), keys.privateKey).toString("base64url");
+  assert.equal(verifyOwnerQaToken({ token: `${reorderedPayload}.${signature}`, publicKeyB64, nowMs: NOW }).valid, false);
 });
 
 test("QA status and revoke use a server-side digest and make the token inactive", async () => {
