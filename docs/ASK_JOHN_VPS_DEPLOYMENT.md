@@ -82,6 +82,28 @@ truth for actual spend. Pricing source:
 `https://openrouter.ai/api/v1/models` and the model page
 `https://openrouter.ai/deepseek/deepseek-v4-flash-0731`.
 
+## On-demand usage checks
+
+Owner decision on 2026-09-03: an always-on analytics dashboard is not needed.
+When John occasionally wants to know whether Ask John has been used, the
+website coordinator may run a read-only check against the existing exact
+aggregate Redis keys and report:
+
+- today's accepted request count;
+- recent daily totals, normally for the last 7 or 30 days while retained; and
+- aggregate answer modes and languages when those best-effort metrics exist.
+
+The check must not read per-client hashed rate-limit keys, scan unrelated Redis
+data, expose a public or Presentation admin route, or retrieve question text,
+answers, raw IP addresses, identities, sessions or credentials. No scheduled
+report, local dashboard or production change is justified for occasional use.
+
+These values represent requests, not unique people. They may include John and
+QA traffic, and the best-effort mode/language totals can be lower than the
+rate-control request count if telemetry recording fails. The result therefore
+supports only a bounded statement such as “Ask John received requests during
+this period,” not a visitor, recruiter, adoption or business-impact claim.
+
 ## Portfolio interpretation
 
 The portfolio website and Ask John assistant are themselves a defensible
