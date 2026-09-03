@@ -74,6 +74,18 @@ test("protected routes require a valid server session", async () => {
   });
 });
 
+test("an enrolled service with an empty private content directory returns the protected placeholder", async () => {
+  const store = new MemoryPresentationStore();
+  const missingContentDir = `/tmp/john-presentation-missing-${process.pid}`;
+  await withServer({ env: env({ PRESENTATION_CONTENT_DIR: missingContentDir }), store, now: () => TEST_TIME, tokenFactory: () => "empty-content-token" }, async (origin) => {
+    const response = await auth(origin, totpAt(TEST_SECRET, TEST_TIME));
+    const cookie = response.headers.get("set-cookie").split(";")[0];
+    const manifest = await fetch(`${origin}/api/manifest`, { headers: { Cookie: cookie } });
+    assert.equal(manifest.status, 200);
+    assert.equal((await manifest.json()).status, "ready-for-content");
+  });
+});
+
 test("accepted TOTP steps cannot be replayed", async () => {
   const store = new MemoryPresentationStore();
   await withServer({ env: env(), store, now: () => TEST_TIME }, async (origin) => {

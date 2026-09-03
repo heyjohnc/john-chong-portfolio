@@ -86,8 +86,8 @@ function originAllowed(request, config) {
   return Boolean(origin && config.allowedOrigins.has(origin));
 }
 
-async function loadManifest(config) {
-  if (!config.contentDir) return {
+function emptyManifest() {
+  return {
     version: "0.1.0",
     title: "Private presentation workspace",
     status: "ready-for-content",
@@ -95,7 +95,21 @@ async function loadManifest(config) {
     sections: [],
     assets: []
   };
-  const raw = JSON.parse(await readFile(path.join(config.contentDir, "manifest.json"), "utf8"));
+}
+
+async function readManifestFile(config) {
+  if (!config.contentDir) return null;
+  try {
+    return JSON.parse(await readFile(path.join(config.contentDir, "manifest.json"), "utf8"));
+  } catch (error) {
+    if (error?.code === "ENOENT") return null;
+    throw error;
+  }
+}
+
+async function loadManifest(config) {
+  const raw = await readManifestFile(config);
+  if (!raw) return emptyManifest();
   if (!raw || typeof raw !== "object" || !Array.isArray(raw.sections) || !Array.isArray(raw.assets)) throw new Error("Invalid presentation manifest.");
   const assetIds = new Set();
   for (const asset of raw.assets) {
@@ -107,7 +121,8 @@ async function loadManifest(config) {
 
 async function protectedAsset(config, id) {
   if (!config.contentDir || !/^[a-z0-9][a-z0-9_-]{0,79}$/.test(id)) return null;
-  const raw = JSON.parse(await readFile(path.join(config.contentDir, "manifest.json"), "utf8"));
+  const raw = await readManifestFile(config);
+  if (!raw) return null;
   const asset = raw.assets?.find((entry) => entry.id === id);
   if (!asset || typeof asset.file !== "string") return null;
   const root = await realpath(config.contentDir);
