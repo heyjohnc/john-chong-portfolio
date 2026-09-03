@@ -122,6 +122,11 @@ isolated acceptance browser simulated an ordinary Chrome user agent only for
 these five requests. No identity or custom data was added to them. Subsequent
 owner and QA browsing should use the local opt-out.
 
+A later read-only aggregate snapshot, including Owner-supplied classification
+of known Japan desktop and Singapore mobile traffic, is recorded in
+[`ANONYMOUS_TRAFFIC_OBSERVATION_2026-09-03.md`](ANONYMOUS_TRAFFIC_OBSERVATION_2026-09-03.md).
+That classification is not an identity inference by Vercel.
+
 ## Operations and rollback
 
 The code rollback is to remove `analytics.js` from the five public pages and
