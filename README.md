@@ -14,6 +14,12 @@ The site presents John’s product responsibility and selected AI work through f
 
 It is a dependency-light bilingual static site with dark/light themes, responsive layouts and an optional server-side “Ask John” assistant. The assistant retrieves only from approved, versioned material in `portfolio-rag/`: the public career profile, a sanitized FightGame evidence pack and an allowlisted snapshot of selected Markdown from the public Niulai repository. It keeps an auditable evidence trail visible—including source type and the short pinned Niulai commit—without exposing private reasoning, handles bounded greetings locally and redirects off-topic chat to its public-career scope. Its starter-question pool contains 12 aligned English/Chinese topics and randomly presents three per page load. Known intents use a fast deterministic retrieval path; unfamiliar colloquial wording falls back to an LLM semantic router that can select only approved public section headings or one of four bounded redirect categories.
 
+The five public pages use basic, cookie-free Vercel Web Analytics for anonymous
+page-view aggregates only. Ask John data and every `/presentation/` page or
+asset are excluded. The privacy boundary, John-only browser opt-out and
+operational limits are documented in
+[`docs/WEB_ANALYTICS_PRIVACY_AND_OPERATIONS.md`](docs/WEB_ANALYTICS_PRIVACY_AND_OPERATIONS.md).
+
 ## Run locally
 
 Requires Node.js 20 or later.
