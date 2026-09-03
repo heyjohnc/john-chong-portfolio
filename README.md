@@ -75,6 +75,11 @@ Before enabling the public assistant:
 
 The website is deployed independently of the assistant service. When the global control store or provider configuration is incomplete, the endpoint fails closed while every portfolio page remains available.
 
+A future backend-authenticated presentation area is assessed in
+[`docs/PRIVATE_PRESENTATION_ACCESS_PROPOSAL.md`](docs/PRIVATE_PRESENTATION_ACCESS_PROPOSAL.md).
+It remains a design proposal: no protected presentation content, TOTP secret or
+private-content route is present in the public site.
+
 ## Public-content boundary
 
 This repository intentionally contains only the public website, the approved public career knowledge base and deterministic test material. Private job-search notes, credentials, raw client material, internal infrastructure and sensitive transaction data are not part of this repository.

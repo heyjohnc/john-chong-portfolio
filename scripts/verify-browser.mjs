@@ -36,9 +36,12 @@ async function inspectViewport(name, viewport, screenshotName) {
     document: document.documentElement.scrollWidth,
     legacyLinks: document.querySelectorAll('a[href="ask.html"]').length,
     widget: Boolean(document.querySelector(".ask-widget-launcher")),
-    panelHidden: document.querySelector(".ask-widget-panel")?.hidden
+    panelHidden: document.querySelector(".ask-widget-panel")?.hidden,
+    launcherLabel: document.querySelector("[data-ask-widget-launcher]")?.textContent,
+    mobileVisualLabel: getComputedStyle(document.querySelector(".ask-widget-launcher"), "::after").content
   }));
-  checks.push({ name: `${name} clean responsive launcher`, passed: initial.viewport === initial.document && initial.legacyLinks === 0 && initial.widget && initial.panelHidden, details: initial });
+  const expectedVisualLabel = viewport.width <= 620 ? '"Ask"' : "none";
+  checks.push({ name: `${name} clean responsive launcher`, passed: initial.viewport === initial.document && initial.legacyLinks === 0 && initial.widget && initial.panelHidden && initial.launcherLabel === "Ask" && initial.mobileVisualLabel === expectedVisualLabel, details: initial });
   checks.push({ name: `${name} defaults dark`, passed: await page.locator("html").getAttribute("data-theme") === "dark" });
 
   await page.locator(".ask-widget-launcher").click();

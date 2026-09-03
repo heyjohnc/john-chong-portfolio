@@ -3,7 +3,7 @@
 
   const copy = {
     en: {
-      launcher: "Ask me",
+      launcher: "Ask",
       closeShort: "Close",
       title: "Ask about John",
       subtitle: "Verified portfolio assistant",
@@ -66,7 +66,7 @@
       retry: "The answer service could not be reached. Please try again later."
     },
     zh: {
-      launcher: "問問我",
+      launcher: "Ask",
       closeShort: "關閉",
       title: "問問 John",
       subtitle: "已審核作品集助手",
