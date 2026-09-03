@@ -45,6 +45,11 @@ No item moves into protected storage merely because it appears in this plan.
 
 Target running time: 7 minutes 20 seconds before optional evidence questions.
 
+The condensed main-screen treatment is drafted in
+[`presentation-drafts/EIGHT_SCREEN_STORYBOARD_DRAFT.md`](presentation-drafts/EIGHT_SCREEN_STORYBOARD_DRAFT.md).
+It targets approximately 6 minutes 5 seconds of spoken content plus pauses and
+questions; it is a storyboard, not an implemented UI.
+
 | Order | Logical section ID | Time | Purpose | Required owner gate |
 | --- | --- | ---: | --- | --- |
 | 1 | `opening` | 20 sec | Name, target role and one sentence about turning unclear needs into testable AI products. | Target role and exact positioning `[JOHN TO APPROVE]` |
