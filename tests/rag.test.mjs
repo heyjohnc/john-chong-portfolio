@@ -57,7 +57,8 @@ test("flagship visuals lead with architecture while retaining real product evide
   const projects = await readFile(new URL("../projects.html", import.meta.url), "utf8");
   const fightgame = await readFile(new URL("../fightgame.html", import.meta.url), "utf8");
   const niulai = await readFile(new URL("../niulai.html", import.meta.url), "utf8");
-  const niulaiWindow = await readFile(new URL("../assets/niulai/agent-window.png", import.meta.url));
+  const niulaiDecisionLayer = await readFile(new URL("../assets/niulai/in-game-decision-layer.png", import.meta.url));
+  const niulaiDialogueWindow = await readFile(new URL("../assets/niulai/agent-dialogue-window.png", import.meta.url));
 
   for (const page of [projects, fightgame]) {
     assert.match(page, /flagship-architecture--fight/);
@@ -67,13 +68,16 @@ test("flagship visuals lead with architecture while retaining real product evide
 
   for (const page of [projects, niulai]) {
     assert.match(page, /flagship-architecture--niulai/);
-    assert.match(page, /assets\/niulai\/agent-window\.png/);
-    assert.match(page, /Candidate facts stay sourced\./);
-    assert.match(page, /Four votes freeze before dialogue\./);
-    assert.match(page, /Every result returns to one timeline\./);
+    assert.match(page, /assets\/niulai\/in-game-decision-layer\.png/);
+    assert.match(page, /assets\/niulai\/agent-dialogue-window\.png/);
+    assert.match(page, /Four roles vote before the shared result\./);
+    assert.match(page, /Distinct voices react to one recorded state\./);
+    assert.doesNotMatch(page, /assets\/niulai\/agent-window\.png/);
   }
 
-  assert.deepEqual([...niulaiWindow.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+  for (const image of [niulaiDecisionLayer, niulaiDialogueWindow]) {
+    assert.deepEqual([...image.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+  }
 });
 
 test("Ask John launcher uses the approved Ask label on desktop and mobile", async () => {

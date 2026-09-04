@@ -185,20 +185,17 @@ html[data-language="zh"] .name-accent { font-family: var(--display); }
 .fight-authority-flow > strong small { margin-top: 5px; color: #b6c6fa; font: 620 9px/1.15 var(--sans); letter-spacing: .03em; text-transform: uppercase; }
 .architecture-stack { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; }
 .architecture-stack span { padding: 6px 9px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; background: rgba(255,255,255,.04); color: rgba(245,247,252,.66); font: 670 9px/1 var(--sans); letter-spacing: .04em; }
-.niulai-window-layout { min-height: 350px; flex: 1; display: grid; grid-template-rows: minmax(230px, 1fr) auto; gap: 10px; }
-.case-visual .niulai-window-layout { min-height: 0; grid-template-rows: auto auto; }
-.case-visual .niulai-window { height: auto; aspect-ratio: 1280 / 775; }
-.niulai-window { min-width: 0; min-height: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.16); border-radius: 13px; background: #081014; box-shadow: 0 20px 42px rgba(0,0,0,.22); position: relative; }
-.window-bar { height: 30px; padding: 0 10px; border-bottom: 1px solid rgba(255,255,255,.11); background: #11191d; position: absolute; inset: 0 0 auto; z-index: 2; display: flex; gap: 5px; align-items: center; }
-.window-bar i { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.22); }
-.window-bar i:first-child { background: #d8b45e; }
-.window-bar b { margin-left: auto; color: rgba(248,245,235,.55); font: 680 8px/1 var(--sans); letter-spacing: .07em; text-transform: uppercase; }
-.niulai-window img, .project-media .niulai-window img, .case-visual .niulai-window img { width: 100%; height: calc(100% - 30px); min-height: 0; object-fit: cover; object-position: center; filter: saturate(.84) brightness(.92); position: absolute; inset: 30px 0 0; transform: none; transition: filter .4s ease, transform .5s cubic-bezier(.16, 1, .3, 1); }
-.flagship-architecture--niulai:hover .niulai-window img { filter: saturate(.95) brightness(.96); transform: scale(1.012); transform-origin: top center; }
-.niulai-window-notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.niulai-window-notes > span { min-width: 0; padding: 11px 12px; border: 1px solid rgba(255,255,255,.13); border-radius: 11px; background: rgba(255,255,255,.035); display: flex; flex-direction: column; justify-content: center; }
-.niulai-window-notes small { margin-bottom: 5px; color: #d9b55f; font: 720 8px/1 var(--sans); letter-spacing: .07em; text-transform: uppercase; }
-.niulai-window-notes b { color: rgba(250,249,245,.86); font: 650 10px/1.25 var(--sans); }
+.niulai-demo-grid { min-height: 338px; flex: 1; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(150px, .6fr); gap: 12px; }
+.case-visual .niulai-demo-grid { min-height: 520px; grid-template-columns: minmax(0, 1.45fr) minmax(260px, .55fr); }
+.niulai-demo-panel { min-width: 0; padding: 11px; overflow: hidden; border: 1px solid rgba(255,255,255,.16); border-radius: 13px; background: rgba(7,15,14,.8); box-shadow: 0 20px 42px rgba(0,0,0,.2); display: grid; gap: 10px; }
+.niulai-demo-panel--decision { align-content: center; grid-template-rows: auto auto auto; }
+.niulai-demo-panel--dialogue { grid-template-rows: auto minmax(0, 1fr) auto; }
+.niulai-demo-panel > small { color: #d9b55f; font: 720 8px/1 var(--sans); letter-spacing: .07em; text-transform: uppercase; }
+.niulai-demo-panel > b { color: rgba(250,249,245,.86); font: 650 10px/1.3 var(--sans); }
+.niulai-capture-frame { min-width: 0; min-height: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.1); border-radius: 9px; background: #07110f; display: grid; place-items: center; }
+.niulai-demo-panel--decision .niulai-capture-frame { aspect-ratio: 710 / 168; }
+.niulai-capture-frame img, .project-media .niulai-capture-frame img, .case-visual .niulai-capture-frame img { width: 100%; height: 100%; min-height: 0; object-fit: contain; object-position: center; filter: saturate(.88) brightness(.94); transform: none; transition: filter .4s ease, transform .5s cubic-bezier(.16, 1, .3, 1); }
+.flagship-architecture--niulai:hover .niulai-capture-frame img { filter: saturate(1) brightness(1); transform: scale(1.012); }
 .niulai-control-flow { display: grid; grid-template-columns: max-content minmax(12px, 1fr) max-content minmax(12px, 1fr) max-content minmax(12px, 1fr) max-content; gap: 8px; align-items: center; }
 .niulai-control-flow > span, .niulai-control-flow > strong { padding: 7px 9px; border: 1px solid rgba(255,255,255,.13); border-radius: 999px; background: rgba(255,255,255,.04); color: rgba(250,248,240,.72); font: 700 9px/1 var(--sans); white-space: nowrap; }
 .niulai-control-flow > strong { border-color: rgba(227,182,80,.56); background: rgba(213,162,50,.16); color: #f7d993; }
@@ -801,12 +798,10 @@ html.motion-enabled.motion-started .name-accent { background-size: 100% 100%; }
   .fight-authority-flow > i::after { top: auto; right: -2px; bottom: 0; transform: rotate(135deg); }
   .fight-authority-flow > strong { width: min(220px, 100%); }
   .architecture-stack span { font-size: 8px; }
-  .niulai-window-layout, .case-visual .niulai-window-layout { min-height: 0; grid-template-columns: 1fr; gap: 8px; }
-  .niulai-window { height: 220px; }
-  .niulai-window-notes { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: 1fr; gap: 5px; }
-  .niulai-window-notes > span { min-height: 86px; padding: 8px; }
-  .niulai-window-notes small { font-size: 7px; }
-  .niulai-window-notes b { font-size: 9px; }
+  .niulai-demo-grid, .case-visual .niulai-demo-grid { min-height: 0; grid-template-columns: 1fr; gap: 8px; }
+  .niulai-demo-panel { padding: 9px; }
+  .niulai-demo-panel--dialogue .niulai-capture-frame { width: min(240px, 100%); margin-inline: auto; aspect-ratio: 388 / 664; }
+  .niulai-demo-panel > b { font-size: 9px; }
   .niulai-control-flow { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
   .niulai-control-flow > i { display: none; }
   .niulai-control-flow > span, .niulai-control-flow > strong { min-width: 0; padding: 7px 4px; font-size: 7px; text-align: center; white-space: normal; }
