@@ -14,7 +14,7 @@ test("built index is pinned to the approved corpus contract", () => {
   assert.equal(evalSet.cases.length, evalSet.release_requirements.case_count);
   assert.equal(index.document_id, "john-chong-public-career-kb");
   assert.equal(index.document_version, "1.2.0-draft");
-  assert.equal(index.last_updated, "2026-09-02");
+  assert.equal(index.last_updated, "2026-09-04");
   assert.equal(index.chunk_count, 40);
   assert.equal(new Set(index.chunks.map((chunk) => chunk.section_id)).size, 40);
   assert.match(index.source_hash, /^[a-f0-9]{64}$/);
@@ -50,7 +50,37 @@ test("dedicated projects page exposes the approved nine-item hierarchy without h
   assert.equal((projects.match(/class="project-card(?:\s|\")/g) || []).length, 2);
   assert.equal((projects.match(/class="system-project-card"/g) || []).length, 5);
   assert.equal((projects.match(/class="tool-project-card"/g) || []).length, 2);
+  for (const [label, count] of [["End-to-End Products", "02"], ["Applied AI Workflows", "05"], ["Open-Source Utilities", "02"]]) {
+    assert.match(projects, new RegExp(`<dt>${label}</dt><dd>${count}</dd>`));
+  }
+  for (const retiredLabel of ["Flagship cases", "Selected AI systems", "Open-source tools", "Flagship · playable milestone", "01 · Flagship case"]) {
+    assert.doesNotMatch(projects, new RegExp(retiredLabel, "i"));
+  }
   assert.doesNotMatch(projects, /AI Video Factory|MiniMax H3|Build Clock|Pumpnuts|prepare-nft-collection/i);
+});
+
+test("public repository links stay explicit and limited to verified targets", async () => {
+  const publicPages = await Promise.all(["index.html", "about.html", "projects.html", "fightgame.html", "niulai.html"]
+    .map((page) => readFile(new URL(`../${page}`, import.meta.url), "utf8")));
+  const projects = publicPages[2];
+  const knowledgeBase = await readFile(new URL("../portfolio-rag/JOHN_CHONG_PUBLIC_KNOWLEDGE_BASE_V1.md", import.meta.url), "utf8");
+  const siteSource = '<a href="https://github.com/heyjohnc/john-chong-portfolio" target="_blank" rel="noreferrer">Site source</a>';
+
+  for (const page of publicPages) assert.equal((page.match(new RegExp(siteSource, "g")) || []).length, 1);
+  assert.equal((projects.match(/href="https:\/\/github\.com\/heyjohnc\/niulai-shengmi-squad" target="_blank" rel="noreferrer"/g) || []).length, 1);
+  assert.match(knowledgeBase, /\*\*End-to-End Products · 02:\*\*/);
+  assert.match(knowledgeBase, /\*\*Applied AI Workflows · 05:\*\*/);
+  assert.match(knowledgeBase, /\*\*Open-Source Utilities · 02:\*\*/);
+  assert.match(knowledgeBase, /Site source: <https:\/\/github\.com\/heyjohnc\/john-chong-portfolio>/);
+
+  const projectGitHubTargets = [...projects.matchAll(/href="(https:\/\/github\.com\/heyjohnc\/[^"#?]+)"/g)].map((match) => match[1]).sort();
+  assert.deepEqual(projectGitHubTargets, [
+    "https://github.com/heyjohnc/codex-skill-radar",
+    "https://github.com/heyjohnc/diary-exe-framework",
+    "https://github.com/heyjohnc/john-chong-portfolio",
+    "https://github.com/heyjohnc/niulai-shengmi-squad",
+    "https://github.com/heyjohnc/oss-readiness-checker"
+  ].sort());
 });
 
 test("flagship visuals lead with architecture while retaining real product evidence", async () => {
