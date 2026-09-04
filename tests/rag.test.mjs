@@ -110,6 +110,33 @@ test("flagship visuals lead with architecture while retaining real product evide
   }
 });
 
+test("FightGame presents the custom-skin product flow and labels the skill-card wall as illustrative", async () => {
+  const fightgame = await readFile(new URL("../fightgame.html", import.meta.url), "utf8");
+  const flowAssets = [
+    "01-select-custom-skin.png",
+    "02-upload-reference.png",
+    "03-generation-status.png",
+    "04-generated-avatar.png",
+    "05-shared-world.png",
+    "06-battle-identity.png"
+  ];
+
+  for (const filename of flowAssets) {
+    assert.match(fightgame, new RegExp(`assets/fightgame/avatar-flow/${filename.replaceAll(".", "\\.")}`));
+    const image = await readFile(new URL(`../assets/fightgame/avatar-flow/${filename}`, import.meta.url));
+    assert.deepEqual([...image.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+  }
+
+  assert.match(fightgame, /One reference image becomes one identity across the game\./);
+  assert.match(fightgame, /One identity, three contexts\./);
+  assert.match(fightgame, /assets\/fightgame\/skill-card-library-illustration\.webp/);
+  assert.match(fightgame, /Illustrative collection view/);
+  assert.match(fightgame, /not a literal screenshot of all 79 production cards/);
+  const skillCards = await readFile(new URL("../assets/fightgame/skill-card-library-illustration.webp", import.meta.url));
+  assert.equal(skillCards.subarray(0, 4).toString("ascii"), "RIFF");
+  assert.equal(skillCards.subarray(8, 12).toString("ascii"), "WEBP");
+});
+
 test("Ask John launcher uses the approved Ask label on desktop and mobile", async () => {
   const widget = await readFile(new URL("../ask-widget.js", import.meta.url), "utf8");
   const styles = await readFile(new URL("../styles.css", import.meta.url), "utf8");
