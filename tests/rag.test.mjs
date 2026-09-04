@@ -53,6 +53,29 @@ test("dedicated projects page exposes the approved nine-item hierarchy without h
   assert.doesNotMatch(projects, /AI Video Factory|MiniMax H3|Build Clock|Pumpnuts|prepare-nft-collection/i);
 });
 
+test("flagship visuals lead with architecture while retaining real product evidence", async () => {
+  const projects = await readFile(new URL("../projects.html", import.meta.url), "utf8");
+  const fightgame = await readFile(new URL("../fightgame.html", import.meta.url), "utf8");
+  const niulai = await readFile(new URL("../niulai.html", import.meta.url), "utf8");
+  const niulaiWindow = await readFile(new URL("../assets/niulai/agent-window.png", import.meta.url));
+
+  for (const page of [projects, fightgame]) {
+    assert.match(page, /flagship-architecture--fight/);
+    for (const asset of ["profile-and-loadout.png", "world-and-npcs.png", "turn-battle.png"]) assert.match(page, new RegExp(asset));
+    assert.match(page, /Server authority/);
+  }
+
+  for (const page of [projects, niulai]) {
+    assert.match(page, /flagship-architecture--niulai/);
+    assert.match(page, /assets\/niulai\/agent-window\.png/);
+    assert.match(page, /Candidate facts stay sourced\./);
+    assert.match(page, /Four votes freeze before dialogue\./);
+    assert.match(page, /Every result returns to one timeline\./);
+  }
+
+  assert.deepEqual([...niulaiWindow.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+});
+
 test("Ask John launcher uses the approved Ask label on desktop and mobile", async () => {
   const widget = await readFile(new URL("../ask-widget.js", import.meta.url), "utf8");
   const styles = await readFile(new URL("../styles.css", import.meta.url), "utf8");
