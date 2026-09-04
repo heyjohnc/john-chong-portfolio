@@ -69,11 +69,13 @@ test("every public page exposes one restrained presentation entry and Vercel kee
     assert.equal((html.match(/href="\/presentation\/"/g) || []).length, 1, `${page} presentation entry`);
   }
   const vercel = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
-  assert.deepEqual(vercel.rewrites, [
+  const presentationRewrites = vercel.rewrites.filter(({ source }) => source.startsWith("/presentation"));
+  assert.deepEqual(presentationRewrites, [
     { source: "/presentation", destination: "https://present-john.37.187.136.100.sslip.io/" },
     { source: "/presentation/", destination: "https://present-john.37.187.136.100.sslip.io/" },
     { source: "/presentation/:path*", destination: "https://present-john.37.187.136.100.sslip.io/:path*" }
   ]);
+  assert.equal(vercel.rewrites.filter(({ destination }) => destination.includes("present-john")).length, 3);
 });
 
 test("protected routes require a valid server session", async () => {

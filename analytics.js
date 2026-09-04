@@ -2,6 +2,10 @@
   "use strict";
 
   const OPT_OUT_KEY = "johnchong-web-analytics-opt-out";
+  const CV_ENTRY_PATHS = [
+    "/cv-application-20260907",
+    "/cv-product-20260907"
+  ];
   const PUBLIC_PATHS = new Set([
     "/",
     "/index.html",
@@ -12,7 +16,8 @@
     "/fightgame",
     "/fightgame.html",
     "/niulai",
-    "/niulai.html"
+    "/niulai.html",
+    ...CV_ENTRY_PATHS
   ]);
 
   let requestedOptOut = window.location.hash === "#analytics-opt-out";
