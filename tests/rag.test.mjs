@@ -256,8 +256,9 @@ test("aggregate telemetry stores bounded UTC-hour, language and country counters
     assert.equal(aggregateCountryCode("Japan"), "unknown");
     assert.equal(command[0], "EVAL");
     assert.equal(command[2], "1");
-    assert.deepEqual(command.slice(3), ["ask-john-test:metrics:2026-09-03", "answer", "zh-Hant-yue", "JP", "07", "1.2.0-draft"]);
+    assert.deepEqual(command.slice(3), ["ask-john-test:metrics:2026-09-03", "answer", "zh-Hant-yue", "JP", "07", "external", "1.2.0-draft"]);
     assert.match(command[1], /hour:.*:country:/s);
+    assert.match(command[1], /owner_qa.*_requests|ARGV\[5\].*_requests/s);
     assert.doesNotMatch(JSON.stringify(command), /203\.0\.113\.42|question|answer text/i);
   } finally {
     globalThis.fetch = originalFetch;

@@ -81,6 +81,21 @@ the hourly/country totals with access logs or other identity data. Counts can
 support statements such as “three English requests were answered during the
 08:00 UTC bucket”; they cannot establish who asked them or what was asked.
 
+## Owner QA scope split — Draft only
+
+The independent Owner QA change adds daily and hourly
+`external_requests`/`owner_qa_requests` fields while retaining `requests` as the
+total. Ask accepts only a time-bounded Ed25519 capability signed after the
+existing Presentation Authenticator flow; a frontend boolean is never trusted.
+The Ask service holds the verification public key only and receives no TOTP
+secret or Presentation session permission. Historical metrics are not
+backfilled. Full data, expiry, revocation, threat and release boundaries are in
+[`ASK_JOHN_OWNER_QA_MODE.md`](ASK_JOHN_OWNER_QA_MODE.md).
+
+Status: `TESTED` on a Draft PR, not merged or deployed. This section does not
+change the production-validation claims below for the currently released
+service.
+
 ## Cost baseline
 
 As of 2026-09-03, Ask John uses

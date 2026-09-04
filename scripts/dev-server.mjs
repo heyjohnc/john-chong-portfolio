@@ -3,6 +3,7 @@ import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
 import askHandler from "../api/ask.mjs";
 import countryHandler from "../api/country.mjs";
+import { handleOwnerQaRevokeRequest, handleOwnerQaStatusRequest } from "../api/_lib/owner-qa.mjs";
 
 const root = new URL("../", import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/, (match) => match.slice(1));
 const port = Number(process.env.PORT || 4174);
@@ -28,10 +29,14 @@ async function readBody(req) {
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host}`);
-    if (url.pathname === "/api/ask") {
+    if (["/api/ask", "/api/owner-qa/status", "/api/owner-qa/revoke"].includes(url.pathname)) {
       const body = req.method === "GET" || req.method === "HEAD" ? undefined : await readBody(req);
       const request = new Request(url, { method: req.method, headers: req.headers, body });
-      const response = await askHandler.fetch(request);
+      const response = url.pathname === "/api/owner-qa/status"
+        ? await handleOwnerQaStatusRequest(request)
+        : url.pathname === "/api/owner-qa/revoke"
+          ? await handleOwnerQaRevokeRequest(request)
+          : await askHandler.fetch(request);
       res.statusCode = response.status;
       response.headers.forEach((value, name) => res.setHeader(name, value));
       res.end(Buffer.from(await response.arrayBuffer()));

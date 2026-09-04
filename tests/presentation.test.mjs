@@ -2,13 +2,19 @@ import assert from "node:assert/strict";
 import http from "node:http";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { generateKeyPairSync } from "node:crypto";
 import { createPresentationHandler } from "../presentation/app.mjs";
 import { MemoryPresentationStore } from "../presentation/_lib/store.mjs";
+import { issueOwnerQaToken } from "../presentation/_lib/owner-qa-token.mjs";
+import { verifyOwnerQaToken } from "../api/_lib/owner-qa-token.mjs";
 import { encodeBase32, totpAt, verifyTotp } from "../presentation/_lib/totp.mjs";
 
 const RFC_SECRET = "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ";
 const TEST_SECRET = encodeBase32(Buffer.from("presentation-test-key"));
 const TEST_TIME = Date.UTC(2026, 8, 3, 12, 0, 0);
+const TEST_QA_KEYS = generateKeyPairSync("ed25519");
+const TEST_QA_PRIVATE_KEY = TEST_QA_KEYS.privateKey.export({ format: "der", type: "pkcs8" }).toString("base64");
+const TEST_QA_PUBLIC_KEY = TEST_QA_KEYS.publicKey.export({ format: "der", type: "spki" }).toString("base64");
 
 function env(overrides = {}) {
   return {
@@ -19,6 +25,7 @@ function env(overrides = {}) {
     PRESENTATION_ALLOWED_ORIGINS: "https://johnchong.info",
     PRESENTATION_ATTEMPT_LIMIT: "5",
     PRESENTATION_GLOBAL_ATTEMPT_LIMIT: "30",
+    PRESENTATION_OWNER_QA_SIGNING_PRIVATE_KEY_B64: TEST_QA_PRIVATE_KEY,
     ...overrides
   };
 }
@@ -123,6 +130,80 @@ test("logout revokes the server-side session", async () => {
     const logout = await fetch(`${origin}/api/logout`, { method: "POST", headers: { Origin: "https://johnchong.info", Cookie: cookie } });
     assert.equal(logout.status, 200);
     assert.equal((await fetch(`${origin}/api/manifest`, { headers: { Cookie: cookie } })).status, 401);
+  });
+});
+
+test("an authenticated presentation session can mint only a bounded Ask owner-QA capability", async () => {
+  const store = new MemoryPresentationStore();
+  await withServer({
+    env: env(),
+    store,
+    now: () => TEST_TIME,
+    tokenFactory: () => "presentation-session-only",
+    qaNonceFactory: () => "0123456789abcdefghijkl"
+  }, async (origin) => {
+    const unauthenticated = await fetch(`${origin}/api/owner-qa/token`, {
+      method: "POST", headers: { Origin: "https://johnchong.info", "Content-Type": "application/json" }, body: "{}"
+    });
+    assert.equal(unauthenticated.status, 401);
+
+    const login = await auth(origin, totpAt(TEST_SECRET, TEST_TIME));
+    const sessionCookie = login.headers.get("set-cookie").split(";")[0];
+    const issued = await fetch(`${origin}/api/owner-qa/token`, {
+      method: "POST",
+      headers: { Origin: "https://johnchong.info", Cookie: sessionCookie, "Content-Type": "application/json" },
+      body: "{}"
+    });
+    assert.equal(issued.status, 200);
+    const payload = await issued.json();
+    assert.equal(payload.scope, "ask-john-owner-qa");
+    assert.equal(payload.expires_in, 30 * 24 * 60 * 60);
+    assert.equal(verifyOwnerQaToken({ token: payload.qa_token, publicKeyB64: TEST_QA_PUBLIC_KEY, nowMs: TEST_TIME }).valid, true);
+
+    const capabilityIsNotPresentationAccess = await fetch(`${origin}/api/manifest`, {
+      headers: { Cookie: `__Host-john_present=${payload.qa_token}` }
+    });
+    assert.equal(capabilityIsNotPresentationAccess.status, 401);
+    const wrongOrigin = await fetch(`${origin}/api/owner-qa/token`, {
+      method: "POST", headers: { Origin: "https://attacker.example", Cookie: sessionCookie }, body: "{}"
+    });
+    assert.equal(wrongOrigin.status, 403);
+  });
+});
+
+test("owner-QA tokens reject tampering, expiry and signatures from another key", () => {
+  const issued = issueOwnerQaToken({
+    privateKeyB64: TEST_QA_PRIVATE_KEY,
+    nowMs: TEST_TIME,
+    ttlSeconds: 300,
+    nonceFactory: () => "0123456789abcdefghijkl"
+  });
+  const [body, signature] = issued.token.split(".");
+  const tamperedBody = `${body.slice(0, -1)}${body.endsWith("A") ? "B" : "A"}`;
+  assert.equal(verifyOwnerQaToken({ token: `${tamperedBody}.${signature}`, publicKeyB64: TEST_QA_PUBLIC_KEY, nowMs: TEST_TIME }).valid, false);
+  assert.equal(verifyOwnerQaToken({ token: issued.token, publicKeyB64: TEST_QA_PUBLIC_KEY, nowMs: TEST_TIME + 300_000 }).reason, "expired");
+
+  const forgedKeys = generateKeyPairSync("ed25519");
+  const forged = issueOwnerQaToken({
+    privateKeyB64: forgedKeys.privateKey.export({ format: "der", type: "pkcs8" }).toString("base64"),
+    nowMs: TEST_TIME,
+    ttlSeconds: 300,
+    nonceFactory: () => "zyxwvutsrqponmlkjihgfe"
+  });
+  assert.equal(verifyOwnerQaToken({ token: forged.token, publicKeyB64: TEST_QA_PUBLIC_KEY, nowMs: TEST_TIME }).valid, false);
+});
+
+test("missing QA signing configuration does not break the existing Presentation session", async () => {
+  const store = new MemoryPresentationStore();
+  await withServer({ env: env({ PRESENTATION_OWNER_QA_SIGNING_PRIVATE_KEY_B64: "" }), store, now: () => TEST_TIME }, async (origin) => {
+    const login = await auth(origin, totpAt(TEST_SECRET, TEST_TIME));
+    assert.equal(login.status, 200);
+    const cookie = login.headers.get("set-cookie").split(";")[0];
+    assert.equal((await fetch(`${origin}/api/manifest`, { headers: { Cookie: cookie } })).status, 200);
+    const qa = await fetch(`${origin}/api/owner-qa/token`, {
+      method: "POST", headers: { Origin: "https://johnchong.info", Cookie: cookie, "Content-Type": "application/json" }, body: "{}"
+    });
+    assert.equal(qa.status, 503);
   });
 });
 

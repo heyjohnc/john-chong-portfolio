@@ -3,6 +3,7 @@ import { readFile, realpath } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { verifyTotp } from "./_lib/totp.mjs";
+import { issueOwnerQaToken, OWNER_QA_MAX_TTL_SECONDS } from "./_lib/owner-qa-token.mjs";
 
 const presentationDir = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.join(presentationDir, "public");
@@ -36,6 +37,8 @@ export function presentationConfig(env = process.env) {
     attemptWindowSeconds: integer(env.PRESENTATION_ATTEMPT_WINDOW_SECONDS, 600, 60, 3600),
     totpWindow: integer(env.PRESENTATION_TOTP_WINDOW, 1, 0, 1),
     contentDir: env.PRESENTATION_CONTENT_DIR || "",
+    ownerQaSigningPrivateKeyB64: env.PRESENTATION_OWNER_QA_SIGNING_PRIVATE_KEY_B64 || "",
+    ownerQaTtlSeconds: integer(env.PRESENTATION_OWNER_QA_TTL_SECONDS, OWNER_QA_MAX_TTL_SECONDS, 300, OWNER_QA_MAX_TTL_SECONDS),
     allowedOrigins: new Set((env.PRESENTATION_ALLOWED_ORIGINS || "https://johnchong.info,https://www.johnchong.info").split(",").map((item) => item.trim()).filter(Boolean)),
     nodeEnv
   };
@@ -135,7 +138,13 @@ function clearCookie() {
   return `${COOKIE_NAME}=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0`;
 }
 
-export function createPresentationHandler({ env = process.env, store, now = () => Date.now(), tokenFactory = () => randomBytes(32).toString("base64url") } = {}) {
+export function createPresentationHandler({
+  env = process.env,
+  store,
+  now = () => Date.now(),
+  tokenFactory = () => randomBytes(32).toString("base64url"),
+  qaNonceFactory = () => randomBytes(16).toString("base64url")
+} = {}) {
   if (!store) throw new Error("Presentation session store is required.");
   const config = presentationConfig(env);
 
@@ -181,6 +190,24 @@ export function createPresentationHandler({ env = process.env, store, now = () =
         const token = parseCookies(request.headers.cookie)[COOKIE_NAME];
         if (token) await store.revokeSession(sessionHash(token));
         return writeJson(response, 200, { authenticated: false }, { "Set-Cookie": clearCookie() });
+      }
+
+      if (request.method === "POST" && url.pathname === "/api/owner-qa/token") {
+        if (!originAllowed(request, config)) return writeJson(response, 403, { error: "request_not_allowed" });
+        if (!(await authenticated(request))) return writeJson(response, 401, { error: "authentication_required" });
+        if (!config.ownerQaSigningPrivateKeyB64) return writeJson(response, 503, { error: "owner_qa_unavailable" });
+        const issued = issueOwnerQaToken({
+          privateKeyB64: config.ownerQaSigningPrivateKeyB64,
+          nowMs: now(),
+          ttlSeconds: config.ownerQaTtlSeconds,
+          nonceFactory: qaNonceFactory
+        });
+        return writeJson(response, 200, {
+          qa_token: issued.token,
+          expires_at: new Date(issued.expiresAt).toISOString(),
+          expires_in: config.ownerQaTtlSeconds,
+          scope: "ask-john-owner-qa"
+        });
       }
 
       if (request.method === "GET" && url.pathname === "/api/manifest") {

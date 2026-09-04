@@ -18,14 +18,16 @@ return {1, ip, daily, 0}
 
 const aggregateTelemetryScript = `
 redis.call('HINCRBY', KEYS[1], 'requests', 1)
+redis.call('HINCRBY', KEYS[1], ARGV[5] .. '_requests', 1)
 redis.call('HINCRBY', KEYS[1], 'mode:' .. ARGV[1], 1)
 redis.call('HINCRBY', KEYS[1], 'language:' .. ARGV[2], 1)
 redis.call('HINCRBY', KEYS[1], 'country:' .. ARGV[3], 1)
 redis.call('HINCRBY', KEYS[1], 'hour:' .. ARGV[4] .. ':requests', 1)
+redis.call('HINCRBY', KEYS[1], 'hour:' .. ARGV[4] .. ':' .. ARGV[5] .. '_requests', 1)
 redis.call('HINCRBY', KEYS[1], 'hour:' .. ARGV[4] .. ':mode:' .. ARGV[1], 1)
 redis.call('HINCRBY', KEYS[1], 'hour:' .. ARGV[4] .. ':language:' .. ARGV[2], 1)
 redis.call('HINCRBY', KEYS[1], 'hour:' .. ARGV[4] .. ':country:' .. ARGV[3], 1)
-redis.call('HSET', KEYS[1], 'corpus_version', ARGV[5])
+redis.call('HSET', KEYS[1], 'corpus_version', ARGV[6])
 redis.call('EXPIRE', KEYS[1], 2592000)
 return 1
 `;
@@ -109,7 +111,7 @@ async function enforceMemory({ ipHash, config, now }) {
   return { allowed: ip <= config.perIpLimit && daily <= config.dailyLimit, reason: ip > config.perIpLimit ? "per_ip" : daily > config.dailyLimit ? "daily" : null, ipCount: ip, dailyCount: daily };
 }
 
-async function upstashCommand(command, env = process.env) {
+export async function upstashCommand(command, env = process.env) {
   const url = (env.UPSTASH_REDIS_REST_URL || "").replace(/\/$/, "");
   const token = env.UPSTASH_REDIS_REST_TOKEN || "";
   if (!url || !token) throw new Error("Missing global control-store configuration.");
@@ -243,7 +245,7 @@ export async function enforceOperationalControls({ clientAddress, env = process.
   }
 }
 
-export async function recordAggregateTelemetry({ mode, language, country, corpusVersion, env = process.env, now = new Date() }) {
+export async function recordAggregateTelemetry({ mode, language, country, scope = "external", corpusVersion, env = process.env, now = new Date() }) {
   const storeMode = env.ASK_JOHN_CONTROL_MODE || "upstash";
   if (!["upstash", "redis"].includes(storeMode)) return;
   const keyPrefix = controlConfig(env).keyPrefix;
@@ -256,6 +258,7 @@ export async function recordAggregateTelemetry({ mode, language, country, corpus
       aggregateLabel(language, "unknown"),
       aggregateCountryCode(country),
       hourKey(now),
+      scope === "owner_qa" ? "owner_qa" : "external",
       String(corpusVersion || "unknown").slice(0, 80)
     ], env);
   } catch (_) {

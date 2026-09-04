@@ -18,6 +18,7 @@ form button { width:100%; margin-top:14px; display:flex; align-items:center; jus
 button:focus-visible,a:focus-visible { outline:3px solid rgba(142,162,255,.38); outline-offset:3px; }
 button:disabled { opacity:.55; cursor:wait; }
 .status { min-height:24px; margin:14px 0 0; color:#ff9b9b; font-size:13px; }
+.owner-qa-status { width:fit-content; margin:-16px 0 26px; padding:8px 12px; border:1px solid rgba(142,162,255,.28); border-radius:999px; color:#cbd3ff; background:rgba(142,162,255,.08); font-size:12px; line-height:1.35; }
 .workspace-head { display:flex; justify-content:space-between; gap:24px; align-items:flex-start; }
 .workspace-head h1 { font-size:clamp(38px,6vw,62px); }
 .quiet { flex:0 0 auto; border-color:var(--line); background:transparent; color:var(--text); }

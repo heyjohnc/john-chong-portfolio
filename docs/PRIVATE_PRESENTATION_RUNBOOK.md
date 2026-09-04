@@ -55,6 +55,24 @@ exists only to obtain the first TLS certificate; replace it with the final
 virtual host after enrollment and certificate issuance. The presentation uses
 its own checkout and systemd process so stopping it cannot stop Ask John.
 
+## Ask John Owner QA capability — Draft only
+
+The proposed Owner QA endpoint is separately scoped from Presentation access.
+After a successful Authenticator submission through the canonical
+`https://johnchong.info/presentation/` route, an authenticated session may ask
+the Presentation service to sign a maximum-30-day Ask-only capability. The
+capability is not accepted by manifest or asset routes, contains no
+Presentation session value, and does not expose the TOTP secret. Ask receives
+only the corresponding Ed25519 public key.
+
+The private signing value must be added by John to the existing protected
+Presentation service environment only after explicit release approval. Do not
+inspect or rewrite the existing protected environment during review. See
+[`ASK_JOHN_OWNER_QA_MODE.md`](ASK_JOHN_OWNER_QA_MODE.md) for the exact data
+model, browser scope, revoke behavior, deployment order and verification gate.
+
+Status: `TESTED` on a Draft PR, not merged or deployed.
+
 ## Content contract
 
 When content is approved, place a `manifest.json` plus sanitized files in the
