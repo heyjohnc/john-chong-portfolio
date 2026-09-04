@@ -155,7 +155,7 @@
     "Express APIs": "Express API",
     "Controlled multi-Agent system": "受控多 Agent 系統",
     "Four roles · separated authority": "四個角色 · 權限分離",
-    "Public Agent window": "公開 Agent 視窗",
+    "Public Agent decision window": "公開 Agent 決策視窗",
     "01 · Evidence": "01 · 證據",
     "Candidate facts stay sourced.": "候選資料保留來源。",
     "02 · Decision": "02 · 決策",
