@@ -142,7 +142,7 @@ John's role is to define who the product is for, decide what result counts as co
 
 FightGame is a personalised-avatar multiplayer pixel RPG inspired by classic handheld RPGs. Players appear as their own configured identities in the shared world and battle through accessible online 1v1 skill-card combat.
 
-The project includes a Phaser client, Colyseus multiplayer rooms and Express APIs. Players submit turn commands and the server validates, resolves and persists the authoritative result so both clients receive the same outcome. A code-verified card catalogue supports deck limits, elements, counters, statuses and combo setup/payoff.
+The project includes a Phaser client, Colyseus multiplayer rooms and Express APIs. Players submit turn commands and the server validates, resolves and persists the authoritative result so both clients receive the same outcome. A code-verified 79-card catalogue supports deck limits, elements, counters, statuses and combo setup/payoff. Its complete collection board groups the cards into 40 Common, 30 Uncommon and 9 Premium cards, with the Premium set spanning Rare, Epic and Legendary tiers.
 
 ## KB-13 — FightGame AI, RAG and coaching
 

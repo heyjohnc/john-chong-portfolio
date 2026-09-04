@@ -452,6 +452,26 @@ html[data-language="zh"] .system-strip::before { content: "流程示意"; }
 .media-pair figure { margin: 0; overflow: hidden; border-radius: 18px; background: var(--dark); }
 .media-pair img { width: 100%; height: 300px; object-fit: cover; }
 .media-pair figcaption { padding: 12px 16px; color: #d7d7da; background: var(--dark); font-size: 13px; }
+.fight-avatar-flow { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.fight-avatar-flow li { min-width: 0; }
+.fight-avatar-flow figure { height: 100%; margin: 0; overflow: hidden; border: 1px solid var(--card-line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow-soft); display: grid; grid-template-rows: auto 1fr; }
+.fight-avatar-shot { aspect-ratio: 16 / 9; overflow: hidden; background: #171828; display: grid; place-items: center; }
+.fight-avatar-shot img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+.fight-avatar-flow figcaption { min-height: 88px; padding: 16px 18px 18px; display: flex; flex-direction: column; justify-content: center; }
+.fight-avatar-flow figcaption small { margin-bottom: 8px; color: var(--accent); font: 760 10px/1 var(--display); letter-spacing: .07em; text-transform: uppercase; }
+.fight-avatar-flow figcaption strong { font: 660 17px/1.25 var(--display); letter-spacing: -.02em; }
+.fight-flow-note { margin: 22px 0 0 auto; padding: 18px 0 0; border-top: 1px solid var(--line); color: var(--body-copy); font-size: 14px; }
+.fight-flow-note strong { margin-right: 7px; color: var(--text); }
+.skill-catalogue-figure { margin: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.1); border-radius: 22px; background: var(--dark); box-shadow: var(--shadow); color: #f5f4ef; }
+.skill-catalogue-media { overflow: hidden; background: #0c1117; display: block; }
+.skill-catalogue-media img { width: 100%; height: auto; display: block; transition: filter .25s ease; }
+.skill-catalogue-media:hover img { filter: brightness(1.04); }
+.skill-catalogue-figure figcaption { padding: 18px 22px 20px; border-top: 1px solid rgba(255,255,255,.1); display: grid; grid-template-columns: max-content 1fr auto; gap: 7px 24px; align-items: baseline; }
+.skill-catalogue-figure figcaption span { color: #f0c85f; font: 760 10px/1 var(--display); letter-spacing: .07em; text-transform: uppercase; }
+.skill-catalogue-figure figcaption strong { font: 670 18px/1.2 var(--display); letter-spacing: -.02em; }
+.skill-catalogue-figure figcaption small { grid-column: 1 / 3; color: #a9a9b2; font-size: 12px; }
+.skill-catalogue-figure figcaption a { grid-column: 3; grid-row: 1 / span 2; align-self: center; color: #f5f4ef; font-size: 12px; font-weight: 720; white-space: nowrap; }
+.skill-catalogue-figure figcaption a:hover { color: #f0c85f; }
 .decision-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
 .decision-list li { padding: 24px 14px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 46px 1fr; gap: 20px; transition: background .2s ease, padding-left .2s ease; }
 .decision-list li:hover { padding-left: 20px; background: var(--hover-fill); }
@@ -847,6 +867,15 @@ html.motion-enabled.motion-started .name-accent { background-size: 100% 100%; }
   .content-body > p { font-size: 17px; }
   .media-pair, .split-cards, .role-grid, .detail-grid { grid-template-columns: 1fr; }
   .media-pair img { height: auto; aspect-ratio: 1.65; }
+  .fight-avatar-flow { grid-template-columns: 1fr; gap: 10px; }
+  .fight-avatar-flow figure { grid-template-columns: minmax(0, 1.25fr) minmax(126px, .75fr); grid-template-rows: none; align-items: stretch; }
+  .fight-avatar-shot { aspect-ratio: 16 / 9; }
+  .fight-avatar-flow figcaption { min-height: 0; padding: 14px; }
+  .fight-avatar-flow figcaption strong { font-size: 15px; }
+  .skill-catalogue-figure { border-radius: 16px; }
+  .skill-catalogue-figure figcaption { padding: 16px; grid-template-columns: 1fr; gap: 7px; }
+  .skill-catalogue-figure figcaption small, .skill-catalogue-figure figcaption a { grid-column: auto; grid-row: auto; }
+  .skill-catalogue-figure figcaption a { margin-top: 6px; justify-self: start; }
   .decision-list li { grid-template-columns: 34px 1fr; }
   .case-map-heading { margin-bottom: 32px; gap: 20px; }
   .case-map-heading h2 { font-size: 37px; }

@@ -110,6 +110,38 @@ test("flagship visuals lead with architecture while retaining real product evide
   }
 });
 
+test("FightGame presents the custom-skin product flow and complete 79-card collection board", async () => {
+  const fightgame = await readFile(new URL("../fightgame.html", import.meta.url), "utf8");
+  const flowAssets = [
+    "01-select-custom-skin.png",
+    "02-upload-reference.png",
+    "03-generation-status.png",
+    "04-generated-avatar.png",
+    "05-shared-world.png",
+    "06-battle-identity.png"
+  ];
+
+  for (const filename of flowAssets) {
+    assert.match(fightgame, new RegExp(`assets/fightgame/avatar-flow/${filename.replaceAll(".", "\\.")}`));
+    const image = await readFile(new URL(`../assets/fightgame/avatar-flow/${filename}`, import.meta.url));
+    assert.deepEqual([...image.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+  }
+
+  assert.match(fightgame, /One reference image becomes one identity across the game\./);
+  assert.match(fightgame, /One identity, three contexts\./);
+  assert.match(fightgame, /assets\/fightgame\/skill-card-collection-board\.webp/);
+  assert.match(fightgame, /Complete collection board/);
+  assert.match(fightgame, /40 Common, 30 Uncommon and nine Premium/);
+  assert.doesNotMatch(fightgame, /Illustrative collection view|skill-card-library-illustration/);
+  const skillCards = await readFile(new URL("../assets/fightgame/skill-card-collection-board.webp", import.meta.url));
+  assert.equal(skillCards.subarray(0, 4).toString("ascii"), "RIFF");
+  assert.equal(skillCards.subarray(8, 12).toString("ascii"), "WEBP");
+
+  const cardEvidence = retrieve("How are the 79 FightGame skill cards divided by rarity?", { topK: 6 });
+  assert.ok(cardEvidence.some((chunk) => ["KB-12", "FG-01"].includes(chunk.section_id)
+    && /40 Common, 30 Uncommon and 9 Premium/.test(chunk.text)));
+});
+
 test("Ask John launcher uses the approved Ask label on desktop and mobile", async () => {
   const widget = await readFile(new URL("../ask-widget.js", import.meta.url), "utf8");
   const styles = await readFile(new URL("../styles.css", import.meta.url), "utf8");

@@ -2,9 +2,9 @@
 document_id: fightgame-public-project-evidence
 version: 1.0.0
 status: approved-public-evidence
-last_updated: 2026-09-03
+last_updated: 2026-09-04
 source_url: /fightgame.html
-source_revision: portfolio-case-2026-09-03
+source_revision: portfolio-case-2026-09-04
 ---
 
 # FightGame — Public Project Evidence
@@ -25,7 +25,9 @@ rooms and Express APIs. A player action is treated as an intention: the server
 waits for the required inputs, validates and stores them, resolves the rules,
 persists the round and sends the same authoritative outcome to both clients. A
 code-verified 79-card catalogue supports deck limits, elements, counters,
-statuses and combo setup/payoff.
+statuses and combo setup/payoff. Its complete collection board contains 40
+Common, 30 Uncommon and 9 Premium cards; the Premium set spans Rare, Epic and
+Legendary tiers.
 
 ## FG-02 — FightGame AI and guidance mechanisms
 
