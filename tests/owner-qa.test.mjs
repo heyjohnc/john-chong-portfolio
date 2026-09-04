@@ -33,8 +33,8 @@ function qaEnv(overrides = {}) {
   };
 }
 
-function token(ttlSeconds = 3600) {
-  return issueOwnerQaToken({ privateKeyB64, nowMs: NOW, ttlSeconds, nonceFactory: () => "0123456789abcdefghijkl" }).token;
+function token(ttlSeconds = 3600, nowMs = NOW) {
+  return issueOwnerQaToken({ privateKeyB64, nowMs, ttlSeconds, nonceFactory: () => "0123456789abcdefghijkl" }).token;
 }
 
 function tamperSignatureBytes(signed) {
@@ -73,8 +73,9 @@ async function withAskServer(options, run) {
 
 test("Ask classifies a valid signed capability as owner_qa and ordinary or forged requests as external", async () => {
   resetOwnerQaRevocationsForTest();
-  const signed = token();
-  const status = await ownerQaStatus(signed, qaEnv(), NOW);
+  const runtimeNow = Date.now();
+  const signed = token(3600, runtimeNow);
+  const status = await ownerQaStatus(signed, qaEnv(), runtimeNow);
   assert.equal(status.scope, "owner_qa");
 
   const ask = async (qaToken) => {
@@ -174,7 +175,7 @@ test("VPS QA endpoints enforce exact-origin CORS without credentials", async () 
     const allowed = await fetch(`${service}/api/owner-qa/status`, {
       method: "POST",
       headers: { Origin: "https://johnchong.info", "Content-Type": "application/json" },
-      body: JSON.stringify({ qa_token: token() })
+      body: JSON.stringify({ qa_token: token(3600, Date.now()) })
     });
     assert.equal(allowed.status, 200);
     assert.equal(allowed.headers.get("access-control-allow-origin"), "https://johnchong.info");
@@ -190,7 +191,7 @@ test("VPS QA endpoints enforce exact-origin CORS without credentials", async () 
     const denied = await fetch(`${service}/api/owner-qa/status`, {
       method: "POST",
       headers: { Origin: "https://attacker.example", "Content-Type": "application/json" },
-      body: JSON.stringify({ qa_token: token() })
+      body: JSON.stringify({ qa_token: token(3600, Date.now()) })
     });
     assert.equal(denied.status, 403);
     assert.equal(denied.headers.get("access-control-allow-origin"), null);

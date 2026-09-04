@@ -200,6 +200,15 @@ serialization. The focused Owner QA suite passed once with full output and 50
 additional consecutive randomized-key runs before the complete 59-test suite
 passed.
 
+A release-day preflight on 2026-09-04 exposed a test-clock boundary: two
+integration assertions issued a capability at the fixed 2026-09-03 unit-test
+time but exercised handlers that correctly validate against the real clock.
+The capability had therefore expired overnight. Those integration assertions
+now issue against a captured runtime clock, while deterministic expiry and
+canonical-encoding tests retain the fixed clock. This changes test setup only,
+not production token validation. The complete suite was rerun before the
+credential gate.
+
 ## Owner and Agent boundary
 
 John defined the desired owner exclusion, privacy boundary, 30-day preference
