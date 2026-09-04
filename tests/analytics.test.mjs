@@ -4,16 +4,17 @@ import test from "node:test";
 import vm from "node:vm";
 
 const PUBLIC_PAGES = ["index.html", "about.html", "projects.html", "fightgame.html", "niulai.html"];
+const CV_ENTRY_PATHS = ["/cv-application-20260907", "/cv-product-20260907"];
 const OPT_OUT_KEY = "johnchong-web-analytics-opt-out";
 const analyticsSource = await readFile(new URL("../analytics.js", import.meta.url), "utf8");
 
-function executeAnalytics({ pathname = "/about.html", optedOut = false, hash = "" } = {}) {
+function executeAnalytics({ pathname = "/about.html", optedOut = false, search = "", hash = "" } = {}) {
   const appendedScripts = [];
   const queuedCalls = [];
   const storageWrites = [];
   const historyWrites = [];
   const window = {
-    location: { origin: "https://johnchong.info", pathname, search: "", hash },
+    location: { origin: "https://johnchong.info", pathname, search, hash },
     history: {
       replaceState(...args) {
         historyWrites.push(args);
@@ -75,6 +76,35 @@ test("default public visits use Vercel page views with a privacy filter", () => 
   assert.equal(beforeSend({ type: "pageview", url: "https://johnchong.info/presentation/" }), null);
 });
 
+test("approved CV entry paths remain distinct while query and hash data are removed", async () => {
+  const vercelConfig = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
+  const homepage = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const devServer = await readFile(new URL("../scripts/dev-server.mjs", import.meta.url), "utf8");
+  const cvRewrites = vercelConfig.rewrites
+    .filter(({ destination }) => destination === "/index.html")
+    .map(({ source, destination }) => ({ source, destination }));
+
+  assert.deepEqual(cvRewrites, CV_ENTRY_PATHS.map((source) => ({ source, destination: "/index.html" })));
+  assert.match(homepage, /<link rel="canonical" href="https:\/\/johnchong\.info\/">/);
+  for (const pathname of CV_ENTRY_PATHS) {
+    const { appendedScripts, queuedCalls } = executeAnalytics({ pathname });
+    assert.equal(appendedScripts.length, 1, pathname);
+    const beforeSend = queuedCalls[0][1];
+    const filtered = beforeSend({
+      type: "pageview",
+      url: `https://johnchong.info${pathname}?company=must-not-leak#person-id`
+    });
+    assert.equal(filtered.url, `https://johnchong.info${pathname}`);
+    assert.match(devServer, new RegExp(`"${pathname}"`));
+  }
+
+  for (const pathname of ["/cv-application-20260908", "/cv-product-20260907/", "/cv-company-20260907"]) {
+    const { appendedScripts, queuedCalls } = executeAnalytics({ pathname });
+    assert.equal(appendedScripts.length, 0, pathname);
+    assert.equal(queuedCalls.length, 0, pathname);
+  }
+});
+
 test("the browser-local owner opt-out prevents script and page-view reporting", () => {
   const { appendedScripts, queuedCalls } = executeAnalytics({ optedOut: true });
   assert.equal(appendedScripts.length, 0);
@@ -91,6 +121,20 @@ test("the private opt-out fragment excludes the first owner setup visit", () => 
   assert.deepEqual(storageWrites, [[OPT_OUT_KEY, "1"]]);
   assert.deepEqual(historyWrites, [[null, "", "/"]]);
   assert.equal(queuedCalls[0][1]({ type: "pageview", url: "https://johnchong.info/" }), null);
+});
+
+test("the owner opt-out also suppresses CV entry-path reporting", () => {
+  for (const pathname of CV_ENTRY_PATHS) {
+    const { appendedScripts, queuedCalls, storageWrites, historyWrites } = executeAnalytics({
+      pathname,
+      search: "?ignored=value",
+      hash: "#analytics-opt-out"
+    });
+    assert.equal(appendedScripts.length, 0, pathname);
+    assert.deepEqual(storageWrites, [[OPT_OUT_KEY, "1"]]);
+    assert.deepEqual(historyWrites, [[null, "", `${pathname}?ignored=value`]]);
+    assert.equal(queuedCalls[0][1]({ type: "pageview", url: `https://johnchong.info${pathname}` }), null);
+  }
 });
 
 test("non-public paths never load or report analytics", () => {
