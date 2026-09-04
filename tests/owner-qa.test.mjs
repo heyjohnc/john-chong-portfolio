@@ -1,13 +1,17 @@
 import assert from "node:assert/strict";
 import { generateKeyPairSync, sign } from "node:crypto";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import http from "node:http";
 import { readFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import test from "node:test";
 import { handleRequest } from "../api/ask.mjs";
 import { recordAggregateTelemetry } from "../api/_lib/controls.mjs";
 import { handleOwnerQaRevokeRequest, handleOwnerQaStatusRequest, ownerQaStatus, resetOwnerQaRevocationsForTest } from "../api/_lib/owner-qa.mjs";
 import { issueOwnerQaToken } from "../presentation/_lib/owner-qa-token.mjs";
 import { ownerQaTokenDigest, verifyOwnerQaToken } from "../api/_lib/owner-qa-token.mjs";
+import { writeOwnerQaEnvFiles } from "../scripts/generate-owner-qa-keys.mjs";
 import { createAskVpsHandler } from "../scripts/serve-bot14-ask-john.mjs";
 
 const NOW = Date.UTC(2026, 8, 3, 14, 0, 0);
@@ -58,6 +62,42 @@ function equivalentNonCanonicalSignature(signed) {
   assert.deepEqual(Buffer.from(nonCanonical, "base64url"), Buffer.from(signature, "base64url"));
   return `${payload}.${nonCanonical}`;
 }
+
+test("owner-only setup writes a matched key pair to protected files and refuses any residue", () => {
+  const root = mkdtempSync(join(tmpdir(), "ask-owner-qa-keys-"));
+  try {
+    const directory = join(root, "fresh");
+    const result = writeOwnerQaEnvFiles({ directory });
+    assert.equal(statSync(directory).mode & 0o777, 0o700);
+    assert.equal(statSync(result.presentation.path).mode & 0o777, 0o600);
+    assert.equal(statSync(result.ask.path).mode & 0o777, 0o600);
+
+    const privateKeyValue = readFileSync(result.presentation.path, "utf8")
+      .match(/^PRESENTATION_OWNER_QA_SIGNING_PRIVATE_KEY_B64=([^\n]+)\n$/)?.[1];
+    const publicKeyValue = readFileSync(result.ask.path, "utf8")
+      .match(/^ASK_JOHN_OWNER_QA_VERIFY_PUBLIC_KEY_B64=([^\n]+)\n$/)?.[1];
+    assert.ok(privateKeyValue);
+    assert.ok(publicKeyValue);
+    const issued = issueOwnerQaToken({
+      privateKeyB64: privateKeyValue,
+      nowMs: NOW,
+      ttlSeconds: 300,
+      nonceFactory: () => "0123456789abcdefghijkl"
+    });
+    assert.equal(verifyOwnerQaToken({ token: issued.token, publicKeyB64: publicKeyValue, nowMs: NOW }).valid, true);
+    assert.throws(() => writeOwnerQaEnvFiles({ directory }), /file_exists_nothing_was_overwritten/);
+
+    const residueDirectory = join(root, "residue");
+    mkdirSync(residueDirectory, { mode: 0o700 });
+    const residue = join(residueDirectory, "presentation.env");
+    writeFileSync(residue, "residue-must-remain", { mode: 0o600 });
+    assert.throws(() => writeOwnerQaEnvFiles({ directory: residueDirectory }), /file_exists_nothing_was_overwritten/);
+    assert.equal(readFileSync(residue, "utf8"), "residue-must-remain");
+    assert.equal(existsSync(join(residueDirectory, "ask.env")), false);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
 
 async function withAskServer(options, run) {
   const server = http.createServer(createAskVpsHandler(options));

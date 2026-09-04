@@ -152,7 +152,8 @@ application.
 Local verification on 2026-09-03 used generated test-only Ed25519 keys and no
 production endpoint or production Redis namespace:
 
-- repository tests: 59/59 passed after the canonical-encoding correction;
+- repository tests: 60/60 passed, including canonical encoding and protected
+  credential-file writing;
 - deterministic retrieval and policy evaluation: 54/54 passed;
 - static production build and Node syntax checks: passed;
 - valid signature and ordinary-visitor scope routing: passed;
@@ -197,8 +198,8 @@ different, byte-changing signature mutation. Dedicated tests now construct an
 equivalent non-canonical signature, reject it, prove it cannot bypass a
 canonical revocation, and reject a correctly signed but non-canonical payload
 serialization. The focused Owner QA suite passed once with full output and 50
-additional consecutive randomized-key runs before the complete 59-test suite
-passed.
+additional consecutive randomized-key runs before the then-complete 59-test
+suite passed.
 
 A release-day preflight on 2026-09-04 exposed a test-clock boundary: two
 integration assertions issued a capability at the fixed 2026-09-03 unit-test
@@ -207,7 +208,9 @@ The capability had therefore expired overnight. Those integration assertions
 now issue against a captured runtime clock, while deterministic expiry and
 canonical-encoding tests retain the fixed clock. This changes test setup only,
 not production token validation. The complete suite was rerun before the
-credential gate.
+credential gate. A further protected-writer regression brought the suite to
+60/60 and verified a matched key pair, `0700` directory, `0600` files and
+refusal to overwrite a single-file residue.
 
 ## Owner and Agent boundary
 
@@ -224,16 +227,19 @@ Current evidence state is `TESTED`, not `APPROVED`, `DEPLOYED` or
 ## Release gate and owner actions
 
 After a future explicit merge/deploy approval, John must perform the credential
-step in a private interactive VPS terminal. The Agent must not view the output:
+step in a private interactive VPS terminal. The reviewed writer never prints a
+key value and refuses to overwrite either target if a prior attempt left one
+behind:
 
 ```bash
-cd /home/ubuntu/john-chong-presentation-service
-node scripts/generate-owner-qa-keys.mjs
+node /home/ubuntu/john-chong-portfolio-hksub/scripts/generate-owner-qa-keys.mjs --write-env-files
 ```
 
-Place the private output value only in the protected Presentation service
-environment and the public output value only in the protected Ask service
-environment. Do not paste either value into chat, Git or deployment logs.
+It writes the private value only to
+`/home/ubuntu/.config/john-owner-qa/presentation.env` and the public value only
+to `/home/ubuntu/.config/john-owner-qa/ask.env`, with file mode `0600` and
+directory mode `0700`. Do not read, paste, copy or record either value in chat,
+Git, terminal output or deployment logs.
 
 Release order must be Ask verifier and endpoints, then Presentation signer,
 then the public widget. After both services pass health checks, John should:
