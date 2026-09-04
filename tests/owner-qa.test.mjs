@@ -209,6 +209,37 @@ test("aggregate telemetry retains totals while splitting external and owner-QA d
   }
 });
 
+test("Ask completes the best-effort telemetry attempt before returning an answer", async () => {
+  let releaseTelemetry;
+  let telemetryStarted = false;
+  let responseSettled = false;
+  const telemetryGate = new Promise((resolve) => { releaseTelemetry = resolve; });
+  const request = () => new Request("https://ask.example/api/ask", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-forwarded-for": "203.0.113.40" },
+    body: JSON.stringify({ question: "Hello" })
+  });
+
+  const pending = handleRequest(request(), qaEnv(), {
+    telemetryRecorder: async ({ scope }) => {
+      telemetryStarted = true;
+      assert.equal(scope, "external");
+      await telemetryGate;
+    }
+  });
+  pending.then(() => { responseSettled = true; });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(telemetryStarted, true);
+  assert.equal(responseSettled, false);
+  releaseTelemetry();
+  assert.equal((await pending).status, 200);
+
+  const failedTelemetry = await handleRequest(request(), qaEnv(), {
+    telemetryRecorder: async () => { throw new Error("synthetic_telemetry_failure"); }
+  });
+  assert.equal(failedTelemetry.status, 200);
+});
+
 test("VPS QA endpoints enforce exact-origin CORS without credentials", async () => {
   resetOwnerQaRevocationsForTest();
   await withAskServer({ env: qaEnv() }, async (service) => {

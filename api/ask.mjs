@@ -132,7 +132,7 @@ function semanticBoundaryResponse(boundary, language) {
   };
 }
 
-export async function handleRequest(request, env = process.env) {
+export async function handleRequest(request, env = process.env, { telemetryRecorder = recordAggregateTelemetry } = {}) {
   const startedAt = Date.now();
   const requestId = randomUUID();
   if (request.method !== "POST") return json(405, { ...basePayload(requestId), mode: "error", answer: "This endpoint accepts POST requests only.", citations: [] }, { Allow: "POST" });
@@ -163,25 +163,31 @@ export async function handleRequest(request, env = process.env) {
   const scopedPayload = () => basePayload(requestId, requestScope);
 
   const telemetryCountry = request.headers.get("x-vercel-ip-country") || body.country;
-  const recordTelemetry = (payload) => void recordAggregateTelemetry({
-    mode: payload.mode,
-    language: policy.language,
-    country: telemetryCountry,
-    scope: requestScope,
-    corpusVersion: payload.corpus.version,
-    env
-  });
+  const recordTelemetry = async (payload) => {
+    try {
+      await telemetryRecorder({
+        mode: payload.mode,
+        language: policy.language,
+        country: telemetryCountry,
+        scope: requestScope,
+        corpusVersion: payload.corpus.version,
+        env
+      });
+    } catch (_) {
+      // Usage telemetry remains best-effort and must never break an answer.
+    }
+  };
 
   if (policy.mode === "refuse") {
     const payload = { ...scopedPayload(), mode: "refuse", answer: policy.answer, citations: citationObjects(policy.citation_ids), timing_ms: Date.now() - startedAt };
-    recordTelemetry(payload);
+    await recordTelemetry(payload);
     return json(200, payload);
   }
 
   const capability = assistantCapabilityResponse(question, policy.language);
   if (capability) {
     const payload = { ...scopedPayload(), mode: capability.mode, answer: capability.answer, citations: [], timing_ms: Date.now() - startedAt };
-    recordTelemetry(payload);
+    await recordTelemetry(payload);
     return json(200, payload);
   }
 
@@ -201,7 +207,7 @@ export async function handleRequest(request, env = process.env) {
       retrievalPath = "semantic_router";
     } catch (_) {
       const payload = { ...scopedPayload(), mode: "error", answer: operationalText("error", policy.language), citations: [], timing_ms: Date.now() - startedAt };
-      recordTelemetry(payload);
+      await recordTelemetry(payload);
       return json(503, payload);
     }
   }
@@ -213,7 +219,7 @@ export async function handleRequest(request, env = process.env) {
     const payload = { ...scopedPayload(), mode: empty.mode, answer: empty.answer, citations: citationObjects(empty.citation_ids), retrieval_path: retrievalPath, timing_ms: Date.now() - startedAt };
     const routeCost = semanticRoute ? estimateProviderCostUsd(semanticRoute.usage, semanticRoute.model) : null;
     if (routeCost !== null) payload.approximate_cost_usd = routeCost;
-    recordTelemetry(payload);
+    await recordTelemetry(payload);
     return json(200, payload);
   }
 
@@ -225,11 +231,11 @@ export async function handleRequest(request, env = process.env) {
     const routeCost = semanticRoute ? estimateProviderCostUsd(semanticRoute.usage, semanticRoute.model) : 0;
     const cost = answerCost === null || (semanticRoute && routeCost === null) ? null : Number((answerCost + routeCost).toFixed(6));
     if (cost !== null) payload.approximate_cost_usd = cost;
-    recordTelemetry(payload);
+    await recordTelemetry(payload);
     return json(200, payload);
   } catch (_) {
     const payload = { ...scopedPayload(), mode: "error", answer: operationalText("error", policy.language), citations: [], timing_ms: Date.now() - startedAt };
-    recordTelemetry(payload);
+    await recordTelemetry(payload);
     return json(503, payload);
   }
 }
