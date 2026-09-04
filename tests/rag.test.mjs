@@ -59,6 +59,20 @@ test("dedicated projects page exposes the approved nine-item hierarchy without h
   assert.doesNotMatch(projects, /AI Video Factory|MiniMax H3|Build Clock|Pumpnuts|prepare-nft-collection/i);
 });
 
+test("end-to-end cases lead with product type while retaining project names as labels", async () => {
+  const projects = await readFile(new URL("../projects.html", import.meta.url), "utf8");
+  const fightgame = await readFile(new URL("../fightgame.html", import.meta.url), "utf8");
+  const niulai = await readFile(new URL("../niulai.html", import.meta.url), "utf8");
+  const knowledgeBase = await readFile(new URL("../portfolio-rag/JOHN_CHONG_PUBLIC_KNOWLEDGE_BASE_V1.md", import.meta.url), "utf8");
+
+  assert.match(projects, /<p class="project-name">FightGame<\/p>\s*<h3>Personalized-Avatar Multiplayer Pixel RPG<\/h3>/);
+  assert.match(projects, /<p class="project-name">Niulai Squad<\/p>\s*<h3>Four-Agent Decision &amp; Publishing System<\/h3>/);
+  assert.match(fightgame, /<p class="eyebrow">FightGame · End-to-End Product<\/p>\s*<h1>Personalized-Avatar Multiplayer Pixel RPG<\/h1>/);
+  assert.match(niulai, /<p class="eyebrow">Niulai Squad · End-to-End Product<\/p>\s*<h1>Four-Agent Decision &amp; Publishing System<\/h1>/);
+  assert.match(knowledgeBase, /FightGame is a \*\*Personalized-Avatar Multiplayer Pixel RPG\*\*/);
+  assert.match(knowledgeBase, /Niulai Squad is a \*\*Four-Agent Decision & Publishing System\*\*/);
+});
+
 test("public repository links stay explicit and limited to verified targets", async () => {
   const publicPages = await Promise.all(["index.html", "about.html", "projects.html", "fightgame.html", "niulai.html"]
     .map((page) => readFile(new URL(`../${page}`, import.meta.url), "utf8")));

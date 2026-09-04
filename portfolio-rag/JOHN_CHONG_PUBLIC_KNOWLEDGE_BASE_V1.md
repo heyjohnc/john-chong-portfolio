@@ -344,6 +344,8 @@ John's selected portfolio is organised into three deliberately different categor
 2. **Applied AI Workflows · 05:** Human-Gated AI Video Production, Observable AI Channel Orchestration, Evidence-First Document Intelligence, Explainable Public-Data Dashboard, and Deterministic NFT Collection Production & QA;
 3. **Open-Source Utilities · 02:** AI Developer-Tool Trend Radar and Open-Source Repository Readiness Audit.
 
+The product-type headlines make the two end-to-end cases legible before their project names: FightGame is a **Personalized-Avatar Multiplayer Pixel RPG**, while Niulai Squad is a **Four-Agent Decision & Publishing System**.
+
 The validation states are intentionally distinct. FightGame is a playable product whose commissioned core-playability milestone was completed and accepted. Niulai Squad is an end-to-end multi-Agent product with an owner-accepted Level 3 technical baseline and active operations. The AI video workflow has a real validated generation-to-render loop. Channel orchestration is a tested simulated P0, not a live production channel. The public-data dashboard is a tested local milestone. The NFT workflow produced a validated package and a staged platform draft, not a deployed collection or live mint. The two open-source utilities are public releases with CI evidence.
 
 ## KB-28 — Document, public-data and NFT production systems
