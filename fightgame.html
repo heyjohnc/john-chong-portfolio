@@ -44,7 +44,16 @@
         <div><dt>Delivery</dt><dd>Persistent multi-Agent workflow</dd></div>
         <div><dt>Evidence</dt><dd>Code paths, checks &amp; browser captures</dd></div>
       </dl>
-      <figure class="case-visual"><img src="assets/fightgame/turn-battle.png" alt="FightGame synchronized online battle showing two player states and a Guard Break action" width="1178" height="560"></figure>
+      <div class="case-visual flagship-architecture flagship-architecture--fight" role="img" aria-label="FightGame architecture connecting persistent identity, shared-world presence and synchronized battle through an authoritative server">
+        <span class="architecture-kicker"><span>Client–server product</span><b>Three connected contexts</b></span>
+        <span class="fight-contexts">
+          <span class="architecture-shot"><img src="assets/fightgame/profile-and-loadout.png" alt="" width="1178" height="560"><span><small>01 · Identity</small><b>Profile &amp; loadout</b></span></span>
+          <span class="architecture-shot"><img src="assets/fightgame/world-and-npcs.png" alt="" width="1178" height="560"><span><small>02 · Presence</small><b>Shared world</b></span></span>
+          <span class="architecture-shot"><img src="assets/fightgame/turn-battle.png" alt="" width="1178" height="560"><span><small>03 · Resolution</small><b>Online battle</b></span></span>
+        </span>
+        <span class="fight-authority-flow" aria-hidden="true"><span>Player intentions</span><i></i><strong>Server authority<small>Validate · resolve · persist</small></strong><i></i><span>One shared outcome</span></span>
+        <span class="architecture-stack" aria-hidden="true"><span>Phaser client</span><span>Colyseus rooms</span><span>Express APIs</span></span>
+      </div>
     </section>
 
     <section class="case-section wrap">
