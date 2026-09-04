@@ -110,7 +110,7 @@ test("flagship visuals lead with architecture while retaining real product evide
   }
 });
 
-test("FightGame presents the custom-skin product flow and labels the skill-card wall as illustrative", async () => {
+test("FightGame presents the custom-skin product flow and complete 79-card collection board", async () => {
   const fightgame = await readFile(new URL("../fightgame.html", import.meta.url), "utf8");
   const flowAssets = [
     "01-select-custom-skin.png",
@@ -129,12 +129,17 @@ test("FightGame presents the custom-skin product flow and labels the skill-card 
 
   assert.match(fightgame, /One reference image becomes one identity across the game\./);
   assert.match(fightgame, /One identity, three contexts\./);
-  assert.match(fightgame, /assets\/fightgame\/skill-card-library-illustration\.webp/);
-  assert.match(fightgame, /Illustrative collection view/);
-  assert.match(fightgame, /not a literal screenshot of all 79 production cards/);
-  const skillCards = await readFile(new URL("../assets/fightgame/skill-card-library-illustration.webp", import.meta.url));
+  assert.match(fightgame, /assets\/fightgame\/skill-card-collection-board\.webp/);
+  assert.match(fightgame, /Complete collection board/);
+  assert.match(fightgame, /40 Common, 30 Uncommon and nine Premium/);
+  assert.doesNotMatch(fightgame, /Illustrative collection view|skill-card-library-illustration/);
+  const skillCards = await readFile(new URL("../assets/fightgame/skill-card-collection-board.webp", import.meta.url));
   assert.equal(skillCards.subarray(0, 4).toString("ascii"), "RIFF");
   assert.equal(skillCards.subarray(8, 12).toString("ascii"), "WEBP");
+
+  const cardEvidence = retrieve("How are the 79 FightGame skill cards divided by rarity?", { topK: 6 });
+  assert.ok(cardEvidence.some((chunk) => ["KB-12", "FG-01"].includes(chunk.section_id)
+    && /40 Common, 30 Uncommon and 9 Premium/.test(chunk.text)));
 });
 
 test("Ask John launcher uses the approved Ask label on desktop and mobile", async () => {
