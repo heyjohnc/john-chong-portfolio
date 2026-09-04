@@ -56,7 +56,9 @@ Not included:
 ## Anonymous hourly usage telemetry
 
 Ask John records best-effort aggregate counters in the existing daily Redis
-hash for 30 days. Each successful, accepted request increments daily totals and
+hash for 30 days. The accepted response awaits completion of the bounded
+aggregate-write attempt, while a telemetry failure still never breaks the Ask
+answer path. Each successful, accepted request increments daily totals and
 UTC-hour buckets for request count, answer mode, detected response language and
 a two-letter country code. It does not store a request timestamp more precise
 than the hour, a raw IP address, a question, an answer, an identity or a

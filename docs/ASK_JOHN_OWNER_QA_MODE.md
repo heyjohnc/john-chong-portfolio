@@ -149,11 +149,11 @@ application.
 
 ## Verification
 
-Local verification on 2026-09-03 used generated test-only Ed25519 keys and no
-production endpoint or production Redis namespace:
+Local verification through 2026-09-04 used generated test-only Ed25519 keys and
+no production endpoint or production Redis namespace:
 
-- repository tests: 60/60 passed, including canonical encoding and protected
-  credential-file writing;
+- repository tests: 61/61 passed, including canonical encoding, protected
+  credential-file writing and awaited best-effort telemetry completion;
 - deterministic retrieval and policy evaluation: 54/54 passed;
 - static production build and Node syntax checks: passed;
 - valid signature and ordinary-visitor scope routing: passed;
@@ -212,45 +212,61 @@ credential gate. A further protected-writer regression brought the suite to
 60/60 and verified a matched key pair, `0700` directory, `0600` files and
 refusal to overwrite a single-file residue.
 
+### Production aggregation completion correction
+
+During owner acceptance on 2026-09-04, the exact daily aggregate key was empty
+immediately after the desktop and mobile answers had rendered. A later read of
+that same exact key contained two total requests, two `owner_qa_requests`, zero
+`external_requests`, and matching UTC-hour, answer-mode, English-language and
+Japan-country totals. This proved that both browser requests were classified
+correctly, but also exposed a completion race: `api/ask.mjs` started the Redis
+aggregate write without awaiting it and returned the answer response first.
+
+The correction awaits completion of the best-effort aggregate-write attempt
+before returning an accepted Ask response. Telemetry errors remain isolated
+from the answer path, and the existing Redis timeout bounds the additional
+wait to 1,500 ms by default if the aggregate store is unavailable. Dependency-
+injected regression coverage proves both that the response stays pending until
+the write attempt settles and that a rejected telemetry attempt still permits
+the normal answer response. No production question was submitted to test this
+correction. Production validation therefore remains pending a separately
+approved deployment and controlled QA request.
+
 ## Owner and Agent boundary
 
 John defined the desired owner exclusion, privacy boundary, 30-day preference
 and Draft-only delivery gate. `hksub-agent` reviewed the split architecture,
 implemented separate signing and verification capabilities, aggregate routing,
-revocation, interface state, tests and evidence. The Agent did not access the
-Presentation credential file, request an Authenticator code, modify production,
-merge the branch or assert owner acceptance.
+revocation, interface state, tests and evidence. John performed the private
+credential step and both browser authentications without disclosing credentials
+or Authenticator codes. After explicit approval, the Agent merged and deployed
+the feature in the reviewed Ask → Presentation → widget order without reading
+credential values. John then confirmed two complete QA-mode answers, one from
+each browser. The Agent inspected only the exact anonymous daily aggregate key.
 
-Current evidence state is `TESTED`, not `APPROVED`, `DEPLOYED` or
-`PRODUCTION_VALIDATED`.
+The base feature is `PRODUCTION_VALIDATED` for activation, Presentation
+isolation and two-browser owner classification. The aggregation-completion
+correction above is `TESTED`, not yet `DEPLOYED` or `PRODUCTION_VALIDATED`.
+The base release is merge commit
+`ecf6847a49dc8f671c0690ef1811eb47cb0bdfd3`; Vercel production deployment
+`dpl_EZ5upvXze1DRyK8yDW3HSoTkSoMw` serves the public integration, and both VPS
+services were released from that merge commit. Post-release checks passed for
+Ask health, unauthenticated Presentation isolation, public-page regression and
+owner-QA status. Diagnosis and acceptance inspected no question, answer, raw
+IP, access log, session, capability value or per-client key.
 
-## Release gate and owner actions
+## Post-correction production validation
 
-After a future explicit merge/deploy approval, John must perform the credential
-step in a private interactive VPS terminal. The reviewed writer never prints a
-key value and refuses to overwrite either target if a prior attempt left one
-behind:
-
-```bash
-node /home/ubuntu/john-chong-portfolio-hksub/scripts/generate-owner-qa-keys.mjs --write-env-files
-```
-
-It writes the private value only to
-`/home/ubuntu/.config/john-owner-qa/presentation.env` and the public value only
-to `/home/ubuntu/.config/john-owner-qa/ask.env`, with file mode `0600` and
-directory mode `0700`. Do not read, paste, copy or record either value in chat,
-Git, terminal output or deployment logs.
-
-Release order must be Ask verifier and endpoints, then Presentation signer,
-then the public widget. After both services pass health checks, John should:
+After a separately approved correction deployment, John should:
 
 1. keep the existing Web Analytics opt-out enabled in each owner browser;
-2. open `https://johnchong.info/presentation/` in that browser profile;
-3. complete the existing Authenticator flow locally;
-4. return to a public page, open Ask and confirm `QA mode active`;
-5. make one approved QA request and verify only `owner_qa_requests` increases;
-6. test `Turn off`, then re-authenticate if that browser should remain in QA
-   mode.
+2. confirm `QA mode active` in one already activated browser; no repeated
+   authentication is needed;
+3. snapshot the exact daily aggregate counters;
+4. make one approved QA request and verify immediately after the answer that
+   only `owner_qa_requests` increases;
+5. only after separate owner instruction, test `Turn off`, then re-authenticate
+   if that browser should remain in QA mode.
 
 Production verification must snapshot aggregate counters before and after the
 controlled QA request. Ordinary-visitor regression is already automated and
