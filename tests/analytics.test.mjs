@@ -143,6 +143,7 @@ test("the owner opt-out also suppresses CV and GitHub entry-path reporting", () 
 test("GitHub entries preserve separate paths, destination canonicals and privacy filtering", async () => {
   const config = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
   assert.deepEqual(config.rewrites.filter(route => !route.source.startsWith("/presentation")), [
+    { source: "/from-stripe", destination: "/services.html" },
     ...GITHUB_ENTRY_ROUTES,
     ...CV_ENTRY_PATHS.map(source => ({ source, destination: "/index.html" }))
   ]);
@@ -170,6 +171,22 @@ test("unapproved GitHub entry variants never load or report analytics", () => {
     assert.equal(result.queuedCalls.length, 0, pathname);
     const allowed = executeAnalytics({ pathname: "/from-github" });
     assert.equal(allowed.queuedCalls[0][1]({ type: "pageview", url: pathname }), null, pathname);
+  }
+});
+
+test("Stripe service entry is exact, sanitized and owner-excludable", async () => {
+  const config = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
+  assert.deepEqual(config.rewrites.find(x => x.source === "/from-stripe"), { source: "/from-stripe", destination: "/services.html" });
+  const allowed = executeAnalytics({ pathname: "/from-stripe" });
+  assert.equal(allowed.appendedScripts.length, 1);
+  const filter = allowed.queuedCalls[0][1];
+  assert.equal(filter({ type: "pageview", url: "https://johnchong.info/from-stripe?private=value#private" }).url, "https://johnchong.info/from-stripe");
+  for (const pathname of ["/services.html", "/from-stripe/", "/from-stripe-other", "/from-stripe/presentation", "/FROM-STRIPE"]) {
+    assert.equal(executeAnalytics({ pathname }).appendedScripts.length, 0);
+    assert.equal(filter({ type: "pageview", url: pathname }), null);
+  }
+  for (const options of [{ optedOut: true }, { hash: "#analytics-opt-out" }]) {
+    assert.equal(executeAnalytics({ pathname: "/from-stripe", ...options }).appendedScripts.length, 0);
   }
 });
 

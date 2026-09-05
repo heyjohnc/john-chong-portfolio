@@ -312,3 +312,13 @@ documentation, Vercel setting, release and bounded production checks. Vercel
 provides the third-party anonymous aggregation service. Neither code presence
 nor Agent verification implies recruiter identity, user adoption or a business
 result.
+# Stripe-designated service entry (draft, 2026-09-05)
+
+Pending service-page/terms approval and release: exact `/from-stripe` rewrites
+to `/services.html` while keeping its pathname, and is separately allowlisted.
+It denotes use of the designated link, not proof of Stripe staff or referrer.
+Query/hash stripping, browser-local opt-out and no-custom-identifiers remain.
+Direct `/services.html` does not report analytics. No Ask widget or payment
+integration on the service page. CV/GitHub paths and Presentation exclusions
+remain unchanged. Existing visits cannot be attributed retroactively.
+See `docs/WEBSITE_SERVICES_DRAFT.md` for acceptance, policy gates and tests.

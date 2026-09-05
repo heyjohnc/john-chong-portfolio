@@ -3,6 +3,10 @@
   "outputDirectory": "public",
   "rewrites": [
     {
+      "source": "/from-stripe",
+      "destination": "/services.html"
+    },
+    {
       "source": "/from-github",
       "destination": "/index.html"
     },
