@@ -1053,7 +1053,37 @@ html.motion-enabled.motion-started .name-accent { background-size: 100% 100%; }
   .project-media .niulai-control-flow > span, .project-media .niulai-control-flow > strong { font-size: 11px; }
 }
 
+/* A stationary hit area isolates card tilt from page reveal motion. */
+.hero > .profile-card, :root[data-theme="dark"] .hero > .profile-card { padding: 0; border: 0; background: none; overflow: visible; perspective: 1100px; }
+.profile-surface { position: relative; isolation: isolate; padding: 30px; border: 1px solid #45465b; border-radius: 26px; background: radial-gradient(ellipse at 100% 0%, #373348 0%, transparent 58%), linear-gradient(145deg, #232630, #15171f 75%); color: #f5f5fa; box-shadow: 0 3px 0 #0b0c12, 0 6px 0 -2px #343645, 0 28px 50px -20px #0009, inset 0 1px 0 #ffffff20; transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)); transition: transform 550ms cubic-bezier(.2,.8,.2,1); display: grid; gap: 23px; }
+.profile-surface.is-tilting { transition-duration: 140ms; }
+.profile-surface::before { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: -1; pointer-events: none; background: repeating-radial-gradient(ellipse at 110% -15%, transparent 0 34px, #a7a9db0b 35px 36px, transparent 37px 60px); }
+.profile-surface::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: radial-gradient(circle at var(--glow-x, 75%) var(--glow-y, 15%), #c4c1ff20, transparent 55%); opacity: .4; transition: opacity .4s; }
+.profile-surface.is-tilting::after { opacity: 1; }
+.profile-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.profile-signature { font-size: 16px; font-weight: 700; letter-spacing: -.03em; }
+.profile-card-edition { font-size: 9px; letter-spacing: .12em; color: #a4a7bc; }
+.profile-surface .availability, :root[data-theme="dark"] .profile-surface .availability { color: #c2d5ca; font-size: 11px; font-weight: 500; }
+.profile-card-title { margin: -5px 0 0; max-width: 290px; font-size: clamp(27px, 2.6vw, 35px); line-height: 1.1; letter-spacing: -.04em; }
+.profile-surface .profile-eligibility h3 { margin: 0 0 6px; font-size: 15px; line-height: 1.4; letter-spacing: -.015em; }
+.profile-surface .profile-eligibility p { color: #b9bdcc; font-size: 12px; }
+.profile-surface .profile-details { gap: 10px; }
+.profile-surface .profile-details dt { color: #a4a7bc; font-size: 11px; }
+.profile-surface .profile-details dd { color: #e0e2ec; font-size: 13px; }
+.profile-surface .profile-background-link { position: relative; z-index: 1; color: #c6c4ff; border-color: #ffffff20; }
+@media (max-width: 600px) {
+  .profile-surface { padding: 24px; gap: 18px; border-radius: 22px; }
+  .profile-card-title { font-size: 29px; }
+}
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  .profile-surface { transform: none !important; transition: none; }
+  .profile-surface::after { display: none; }
+}
+
 @media print {
+  .profile-surface { transform: none !important; background: white !important; color: #111; border-color: #ccc; }
+  .profile-surface::before, .profile-surface::after { display: none; }
+  .profile-surface p, .profile-surface dt, .profile-surface dd, .profile-surface a, .profile-surface .availability, :root[data-theme="dark"] .profile-surface .availability { color: #333 !important; }
   @page { margin: 15mm; }
   :root, :root[data-theme="dark"] { --bg: #fff; --surface: #fff; --soft: #f3f3f3; --text: #111; --body-copy: #333; --muted: #555; --accent: #284ab5; --line: #ccc; --card-line: #ccc; --glass-bg: #fff; }
   html, body { background: white !important; color: #111 !important; }

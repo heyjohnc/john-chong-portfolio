@@ -104,3 +104,23 @@ Limits: screenshot text is still evidence to inspect on detail pages, not all
 readable at card scale. No production Ask questions or private data accessed.
 Release identifiers and live checks are recorded in the PR. Rollback is the
 preceding production commit efc166d through an Owner-approved release.
+
+### Comet-style card trial (2026-09-05, not deployed)
+
+Owner selected the Comet visual direction. Reference:
+https://ui.aceternity.com/components/comet-card . This is an original local
+HTML/CSS/JS implementation of that interaction pattern, not copied component
+code or a React dependency. Card identity/role leads, eligibility is secondary;
+all career facts unchanged. Surface tilt is bounded to +/-6 degrees, with a
+stationary hit area, soft pointer light, static etched arcs and edge depth.
+Mouse coordinates exist only in transient memory/CSS; no storage, telemetry,
+network or device sensors. Touch/coarse pointer and reduced-motion settings
+disable tilt; leave/cancel, focus, blur, resize and printing reset it. No idle loop.
+
+Verification: 73/73 tests, 54/54 RAG eval, static build, JS syntax and diff checks.
+Browser verified actual mouse tilt, leave reset, reduced-motion none, 390/320px
+no overflow, Chinese card, theme switch, About href and print white/#111/no tilt.
+Artifacts: ignored output/playwright/comet-desktop.png and comet-mobile.png.
+No production requests or release in this trial. Owner visual acceptance pending.
+Only homepage markup, shared scoped CSS, local card script, tests and this record
+change. Existing detail pages, routes, analytics and protected services unchanged.
