@@ -124,3 +124,24 @@ Artifacts: ignored output/playwright/comet-desktop.png and comet-mobile.png.
 No production requests or release in this trial. Owner visual acceptance pending.
 Only homepage markup, shared scoped CSS, local card script, tests and this record
 change. Existing detail pages, routes, analytics and protected services unchanged.
+
+### Dual-theme card and circular theme reveal (2026-09-05)
+
+Owner authorized implementation and deployment. Level 1 presentation-only delta:
+silver/lilac card in light mode, graphite in dark mode; both keep existing tilt.
+Native View Transitions reveal the new theme from the theme button center in
+550ms in either direction, with a viewport-covering radius. Reference pattern:
+https://developer.chrome.com/docs/web-platform/view-transitions . No vendor code
+or dependencies added. Existing preference storage is reused; no new collection.
+Reduced motion or missing API switches directly; capture failure also falls back.
+Concurrent clicks are ignored while transitioning; resize/motion changes skip
+the animation. Temporary listeners/CSS variables are removed on completion.
+
+Validation: 75/75 tests, 54/54 RAG eval, static build, syntax/diff checks. Browser
+observed theme-circle-reveal animation, both theme directions, silver card with
+dark text, reduced-motion direct switch and 390px layout without overflow.
+Artifacts: output/playwright/theme-circle-mid.png, card-light.png and
+card-light-mobile.png (ignored). Native animation availability varies by browser;
+direct theme switching remains supported. Owner visual acceptance pending.
+Release identity and production checks recorded in PR; rollback target 3c837fa.
+Ask content, auth, routes and analytics unchanged; no production questions.

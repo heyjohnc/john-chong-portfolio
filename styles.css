@@ -1080,6 +1080,28 @@ html.motion-enabled.motion-started .name-accent { background-size: 100% 100%; }
   .profile-surface::after { display: none; }
 }
 
+:root[data-theme="light"] .profile-surface { color: #242637; border-color: #c4c8da; background: radial-gradient(ellipse at 100% 0%, #e3def4, transparent 60%), linear-gradient(145deg, #fff, #eceef5 75%); box-shadow: 0 3px 0 #c5c8d6, 0 6px 0 -2px #e0e2ed, 0 28px 50px -20px #43466140, inset 0 1px 0 #fff; }
+:root[data-theme="light"] .profile-surface::before { background: repeating-radial-gradient(ellipse at 110% -15%, transparent 0 34px, #69658410 35px 36px, transparent 37px 60px); }
+:root[data-theme="light"] .profile-surface::after { background: radial-gradient(circle at var(--glow-x, 75%) var(--glow-y, 15%), #ffffffa0, transparent 55%); }
+:root[data-theme="light"] .profile-card-edition, :root[data-theme="light"] .profile-surface .profile-details dt { color: #606477; }
+:root[data-theme="light"] .profile-surface .availability { color: #38634b; }
+:root[data-theme="light"] .profile-surface .profile-eligibility p { color: #5b5f72; }
+:root[data-theme="light"] .profile-surface .profile-details dd { color: #383c50; }
+:root[data-theme="light"] .profile-surface .profile-background-link { color: #5143a2; border-color: #35394a25; }
+
+/* Snapshot reveal: both directions expand the new theme from the control. */
+html.theme-revealing::view-transition-old(root), html.theme-revealing::view-transition-new(root) { mix-blend-mode: normal; }
+html.theme-revealing::view-transition-old(root) { animation: none; z-index: 1; }
+html.theme-revealing::view-transition-new(root) { z-index: 2; animation: theme-circle-reveal 550ms cubic-bezier(.4, 0, .2, 1) both; }
+html.theme-revealing::view-transition-group(root) { animation-duration: 550ms; }
+@keyframes theme-circle-reveal {
+  from { clip-path: circle(0px at var(--theme-reveal-x) var(--theme-reveal-y)); }
+  to { clip-path: circle(var(--theme-reveal-radius) at var(--theme-reveal-x) var(--theme-reveal-y)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.theme-revealing::view-transition-new(root) { animation: none; }
+}
+
 @media print {
   .profile-surface { transform: none !important; background: white !important; color: #111; border-color: #ccc; }
   .profile-surface::before, .profile-surface::after { display: none; }
