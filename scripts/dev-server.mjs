@@ -8,6 +8,11 @@ import { handleOwnerQaRevokeRequest, handleOwnerQaStatusRequest } from "../api/_
 const root = new URL("../", import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/, (match) => match.slice(1));
 const port = Number(process.env.PORT || 4174);
 const publicEntryRoutes = new Map([
+  ["/from-stripe/home", "index.html"],
+  ["/from-stripe/projects", "projects.html"],
+  ["/from-stripe/about", "about.html"],
+  ["/from-stripe/fightgame", "fightgame.html"],
+  ["/from-stripe/niulai", "niulai.html"],
   ["/from-stripe", "services.html"],
   ["/cv-application-20260907", "index.html"],
   ["/cv-product-20260907", "index.html"],

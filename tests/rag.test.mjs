@@ -46,7 +46,7 @@ test("dedicated projects page exposes the approved nine-item hierarchy without h
   const projects = await readFile(new URL("../projects.html", import.meta.url), "utf8");
   assert.doesNotMatch(homepage, /class="(?:project-card|system-project-card|tool-project-card)/);
   assert.match(homepage, /id="responsibility"/);
-  assert.match(homepage, /href="projects\.html">View projects/);
+  assert.match(homepage, /href="\/projects\.html">View projects/);
   assert.equal((projects.match(/class="project-card(?:\s|\")/g) || []).length, 2);
   assert.equal((projects.match(/class="system-project-card"/g) || []).length, 5);
   assert.equal((projects.match(/class="tool-project-card"/g) || []).length, 2);
@@ -131,7 +131,7 @@ test("homepage recruitment card prioritizes eligibility without decorative ident
   const card = home.match(/<aside class="profile-card"[\s\S]*?<\/aside>/)[0];
   assert.match(card, /Hong Kong permanent resident/);
   assert.match(card, /No visa sponsorship required/);
-  assert.match(card, /href="about.html"/);
+  assert.match(card, /href="\/about.html"/);
   assert.doesNotMatch(card, /profile-visual|orbit-tag|Founder experience/);
   assert.match(home, /<span>Product definition<\/span>/);
   assert.match(home, /<span>System design<\/span>/);

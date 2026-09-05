@@ -24,22 +24,22 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Personalized-Avatar Multiplayer Pixel RPG","alternateName":"FightGame Case Study","url":"https://johnchong.info/fightgame.html","author":{"@type":"Person","@id":"https://johnchong.info/#person","name":"John Chong","alternateName":"Shing Yip Chong"}}</script>
   <script>try{document.documentElement.dataset.theme=localStorage.getItem("csy-portfolio-theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2317171a'/%3E%3Cpath d='M16 43V21h7v8h18v-8h7v22h-7v-8H23v8z' fill='%23ffffff'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css">
-  <script src="site.js" defer></script>
-  <script src="analytics.js" defer></script>
-  <script src="ask-widget.js" defer></script>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/site.js" defer></script>
+  <script src="/analytics.js" defer></script>
+  <script src="/ask-widget.js" defer></script>
 </head>
 <body id="top">
   <header class="site-header">
     <nav class="site-nav wrap" aria-label="Primary navigation">
-      <a class="brand" href="index.html">John Chong</a>
-      <div class="nav-links"><a href="index.html">Home</a><a class="active" href="projects.html">Projects</a><a href="about.html">About</a><a href="index.html#contact">Contact</a></div>
+      <a class="brand" href="/index.html">John Chong</a>
+      <div class="nav-links"><a href="/index.html">Home</a><a class="active" href="/projects.html">Projects</a><a href="/about.html">About</a><a href="/index.html#contact">Contact</a></div>
     </nav>
   </header>
 
   <main>
     <section class="page-hero page-hero--typed wrap">
-      <a class="back-link" href="projects.html">← Projects</a>
+      <a class="back-link" href="/projects.html">← Projects</a>
       <p class="eyebrow">FightGame · End-to-End Product</p>
       <h1>Personalized-Avatar Multiplayer Pixel RPG</h1>
       <p class="page-lead">A personalized-avatar multiplayer pixel RPG where player identity, online presence, skill-card state and turn resolution have to remain coherent across a branching client–server product.</p>
@@ -54,9 +54,9 @@
       <div class="case-visual flagship-architecture flagship-architecture--fight" role="img" aria-label="FightGame architecture connecting persistent identity, shared-world presence and synchronized battle through an authoritative server">
         <span class="architecture-kicker"><span>Client–server product</span><b>Three connected contexts</b></span>
         <span class="fight-contexts">
-          <span class="architecture-shot"><img src="assets/fightgame/profile-and-loadout.png" alt="" width="1178" height="560"><span><small>01 · Identity</small><b>Profile &amp; loadout</b></span></span>
-          <span class="architecture-shot"><img src="assets/fightgame/world-and-npcs.png" alt="" width="1178" height="560"><span><small>02 · Presence</small><b>Shared world</b></span></span>
-          <span class="architecture-shot"><img src="assets/fightgame/turn-battle.png" alt="" width="1178" height="560"><span><small>03 · Resolution</small><b>Online battle</b></span></span>
+          <span class="architecture-shot"><img src="/assets/fightgame/profile-and-loadout.png" alt="" width="1178" height="560"><span><small>01 · Identity</small><b>Profile &amp; loadout</b></span></span>
+          <span class="architecture-shot"><img src="/assets/fightgame/world-and-npcs.png" alt="" width="1178" height="560"><span><small>02 · Presence</small><b>Shared world</b></span></span>
+          <span class="architecture-shot"><img src="/assets/fightgame/turn-battle.png" alt="" width="1178" height="560"><span><small>03 · Resolution</small><b>Online battle</b></span></span>
         </span>
         <span class="fight-authority-flow" aria-hidden="true"><span>Player intentions</span><i></i><strong>Server authority<small>Validate · resolve · persist</small></strong><i></i><span>One shared outcome</span></span>
         <span class="architecture-stack" aria-hidden="true"><span>Phaser client</span><span>Colyseus rooms</span><span>Express APIs</span></span>
@@ -72,8 +72,8 @@
         </div>
       </div>
       <div class="media-pair">
-        <figure><a href="assets/fightgame/world-and-npcs.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/world-and-npcs.png" alt="FightGame shared world with a player and named NPCs" width="1178" height="560" loading="lazy" decoding="async"></a><figcaption>Shared world and NPC layer</figcaption></figure>
-        <figure><a href="assets/fightgame/profile-and-loadout.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/profile-and-loadout.png" alt="FightGame profile with avatar and equipped cards" width="1178" height="560" loading="lazy" decoding="async"></a><figcaption>Persistent identity and card loadout</figcaption></figure>
+        <figure><a href="/assets/fightgame/world-and-npcs.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/world-and-npcs.png" alt="FightGame shared world with a player and named NPCs" width="1178" height="560" loading="lazy" decoding="async"></a><figcaption>Shared world and NPC layer</figcaption></figure>
+        <figure><a href="/assets/fightgame/profile-and-loadout.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/profile-and-loadout.png" alt="FightGame profile with avatar and equipped cards" width="1178" height="560" loading="lazy" decoding="async"></a><figcaption>Persistent identity and card loadout</figcaption></figure>
       </div>
     </section>
 
@@ -83,12 +83,12 @@
         <p>Six product captures show the complete path: request a custom skin, let the asynchronous generation job finish, then carry the approved avatar into the shared world and battle.</p>
       </div>
       <ol class="fight-avatar-flow" aria-label="FightGame custom skin generation and use flow">
-        <li><figure><span class="fight-avatar-shot"><a href="assets/fightgame/avatar-flow/01-select-custom-skin.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/avatar-flow/01-select-custom-skin.png" alt="FightGame Custom Skin upload dialog" width="714" height="304" loading="lazy" decoding="async"></a></span><figcaption><small>01 · Select</small><strong>Open Custom Skin</strong></figcaption></figure></li>
-        <li><figure><span class="fight-avatar-shot"><a href="assets/fightgame/avatar-flow/02-upload-reference.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/avatar-flow/02-upload-reference.png" alt="FightGame skin reference upload in progress" width="615" height="82" loading="lazy" decoding="async"></a></span><figcaption><small>02 · Upload</small><strong>Submit a reference image</strong></figcaption></figure></li>
-        <li><figure><span class="fight-avatar-shot"><a href="assets/fightgame/avatar-flow/03-generation-status.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/avatar-flow/03-generation-status.png" alt="FightGame Custom Skin generation status" width="271" height="87" loading="lazy" decoding="async"></a></span><figcaption><small>03 · Generate</small><strong>Wait for the skin job</strong></figcaption></figure></li>
-        <li><figure><span class="fight-avatar-shot"><a href="assets/fightgame/avatar-flow/04-generated-avatar.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/avatar-flow/04-generated-avatar.png" alt="Generated FightGame pixel avatar" width="260" height="255" loading="lazy" decoding="async"></a></span><figcaption><small>04 · Review</small><strong>Confirm the generated avatar</strong></figcaption></figure></li>
-        <li><figure><span class="fight-avatar-shot"><a href="assets/fightgame/avatar-flow/05-shared-world.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/avatar-flow/05-shared-world.png" alt="Generated avatar active in the FightGame shared world" width="189" height="192" loading="lazy" decoding="async"></a></span><figcaption><small>05 · Explore</small><strong>Use the same identity in-world</strong></figcaption></figure></li>
-        <li><figure><span class="fight-avatar-shot"><a href="assets/fightgame/avatar-flow/06-battle-identity.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/avatar-flow/06-battle-identity.png" alt="Generated avatar carried into a FightGame battle" width="296" height="256" loading="lazy" decoding="async"></a></span><figcaption><small>06 · Battle</small><strong>Carry the identity into combat</strong></figcaption></figure></li>
+        <li><figure><span class="fight-avatar-shot"><a href="/assets/fightgame/avatar-flow/01-select-custom-skin.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/avatar-flow/01-select-custom-skin.png" alt="FightGame Custom Skin upload dialog" width="714" height="304" loading="lazy" decoding="async"></a></span><figcaption><small>01 · Select</small><strong>Open Custom Skin</strong></figcaption></figure></li>
+        <li><figure><span class="fight-avatar-shot"><a href="/assets/fightgame/avatar-flow/02-upload-reference.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/avatar-flow/02-upload-reference.png" alt="FightGame skin reference upload in progress" width="615" height="82" loading="lazy" decoding="async"></a></span><figcaption><small>02 · Upload</small><strong>Submit a reference image</strong></figcaption></figure></li>
+        <li><figure><span class="fight-avatar-shot"><a href="/assets/fightgame/avatar-flow/03-generation-status.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/avatar-flow/03-generation-status.png" alt="FightGame Custom Skin generation status" width="271" height="87" loading="lazy" decoding="async"></a></span><figcaption><small>03 · Generate</small><strong>Wait for the skin job</strong></figcaption></figure></li>
+        <li><figure><span class="fight-avatar-shot"><a href="/assets/fightgame/avatar-flow/04-generated-avatar.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/avatar-flow/04-generated-avatar.png" alt="Generated FightGame pixel avatar" width="260" height="255" loading="lazy" decoding="async"></a></span><figcaption><small>04 · Review</small><strong>Confirm the generated avatar</strong></figcaption></figure></li>
+        <li><figure><span class="fight-avatar-shot"><a href="/assets/fightgame/avatar-flow/05-shared-world.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/avatar-flow/05-shared-world.png" alt="Generated avatar active in the FightGame shared world" width="189" height="192" loading="lazy" decoding="async"></a></span><figcaption><small>05 · Explore</small><strong>Use the same identity in-world</strong></figcaption></figure></li>
+        <li><figure><span class="fight-avatar-shot"><a href="/assets/fightgame/avatar-flow/06-battle-identity.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/avatar-flow/06-battle-identity.png" alt="Generated avatar carried into a FightGame battle" width="296" height="256" loading="lazy" decoding="async"></a></span><figcaption><small>06 · Battle</small><strong>Carry the identity into combat</strong></figcaption></figure></li>
       </ol>
       <p class="fight-flow-note"><strong>One identity, three contexts.</strong> The generated skin is not a detached demo output; it becomes the active avatar used by profile, overworld and battle views.</p>
     </section>
@@ -129,8 +129,8 @@
           <p>The complete collection board shows all 79 cards at once: 40 Common, 30 Uncommon and nine Premium cards across Rare, Epic and Legendary tiers. Together they support deck limits, elements, counters, statuses and combo setup/payoff.</p>
         </div>
         <figure class="skill-catalogue-figure">
-          <a class="skill-catalogue-media" href="assets/fightgame/skill-card-collection-board.webp" target="_blank" rel="noreferrer" aria-label="Open the full 79-card FightGame collection board"><img src="assets/fightgame/skill-card-collection-board.webp" alt="Complete FightGame collection board showing all 79 skill cards by rarity" width="1920" height="2422" loading="lazy" decoding="async"></a>
-          <figcaption><span>Complete collection board</span><strong>79 cards · one inspectable system</strong><small>40 Common · 30 Uncommon · 9 Premium across Rare, Epic and Legendary tiers.</small><a href="assets/fightgame/skill-card-collection-board.webp" target="_blank" rel="noreferrer">View full collection ↗</a></figcaption>
+          <a class="skill-catalogue-media" href="/assets/fightgame/skill-card-collection-board.webp" target="_blank" rel="noreferrer" aria-label="Open the full 79-card FightGame collection board"><img src="/assets/fightgame/skill-card-collection-board.webp" alt="Complete FightGame collection board showing all 79 skill cards by rarity" width="1920" height="2422" loading="lazy" decoding="async"></a>
+          <figcaption><span>Complete collection board</span><strong>79 cards · one inspectable system</strong><small>40 Common · 30 Uncommon · 9 Premium across Rare, Epic and Legendary tiers.</small><a href="/assets/fightgame/skill-card-collection-board.webp" target="_blank" rel="noreferrer">View full collection ↗</a></figcaption>
         </figure>
       </div>
     </section>
@@ -185,7 +185,7 @@
 
     <section class="section wrap contact">
       <div><p class="eyebrow">Next case</p><h2>Four Agents. One shared timeline.</h2></div>
-      <div class="contact-copy"><p>Continue with Niulai Squad, a four-Agent system with a validated technical baseline and ongoing operations.</p><div class="actions"><a class="button primary" href="niulai.html">View next case</a><a class="button" href="projects.html">All projects</a></div></div>
+      <div class="contact-copy"><p>Continue with Niulai Squad, a four-Agent system with a validated technical baseline and ongoing operations.</p><div class="actions"><a class="button primary" href="/niulai.html">View next case</a><a class="button" href="/projects.html">All projects</a></div></div>
     </section>
   </main>
 

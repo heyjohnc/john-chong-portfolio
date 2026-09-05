@@ -2,6 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "outputDirectory": "public",
   "rewrites": [
+    { "source": "/from-stripe/home", "destination": "/index.html" },
+    { "source": "/from-stripe/projects", "destination": "/projects.html" },
+    { "source": "/from-stripe/about", "destination": "/about.html" },
+    { "source": "/from-stripe/fightgame", "destination": "/fightgame.html" },
+    { "source": "/from-stripe/niulai", "destination": "/niulai.html" },
     {
       "source": "/from-stripe",
       "destination": "/services.html"
