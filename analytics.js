@@ -8,6 +8,7 @@
   ];
   const GITHUB_ENTRY_PATHS = ["/from-github"];
   const PUBLIC_PATHS = new Set([
+    "/from-stripe",
     "/",
     "/index.html",
     "/about",

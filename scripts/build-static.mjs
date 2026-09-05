@@ -12,6 +12,7 @@ const publicFiles = [
   "about.html",
   "fightgame.html",
   "niulai.html",
+  "services.html",
   "styles.css",
   "site.js",
   "analytics.js",
