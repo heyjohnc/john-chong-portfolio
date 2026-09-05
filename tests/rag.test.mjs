@@ -114,14 +114,27 @@ test("flagship visuals lead with architecture while retaining real product evide
     assert.match(page, /flagship-architecture--niulai/);
     assert.match(page, /assets\/niulai\/in-game-decision-layer\.png/);
     assert.match(page, /assets\/niulai\/agent-dialogue-window\.png/);
-    assert.match(page, /Four roles vote before the shared result\./);
-    assert.match(page, /Distinct voices react to one recorded state\./);
     assert.doesNotMatch(page, /assets\/niulai\/agent-window\.png/);
   }
+
+  assert.match(projects, /Four roles, one recorded story/);
+  assert.match(niulai, /Four roles vote before the shared result\./);
+  assert.match(niulai, /Distinct voices react to one recorded state\./);
 
   for (const image of [niulaiDecisionLayer, niulaiDialogueWindow]) {
     assert.deepEqual([...image.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
   }
+});
+
+test("homepage recruitment card prioritizes eligibility without decorative identity or repeated slogans", async () => {
+  const home = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const card = home.match(/<aside class="profile-card"[\s\S]*?<\/aside>/)[0];
+  assert.match(card, /Hong Kong permanent resident/);
+  assert.match(card, /No visa sponsorship required/);
+  assert.match(card, /href="about.html"/);
+  assert.doesNotMatch(card, /profile-visual|orbit-tag|Founder experience/);
+  assert.match(home, /<span>Product definition<\/span>/);
+  assert.match(home, /<span>System design<\/span>/);
 });
 
 test("FightGame presents the custom-skin product flow and complete 79-card collection board", async () => {

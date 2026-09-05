@@ -78,3 +78,29 @@ verification shows white background, #111 text, zero hidden reveal elements, and
 the original screen gradient unchanged. Screenshot: ignored
 `output/playwright/polish-print-contrast-fixed.png`. Regression suite: 69/69.
 No routes, analytics, corpus, credentials or backend behavior changed.
+
+### Compact recruitment card and overview labels (2026-09-05)
+
+Owner requested implementation and deployment for visual review. This Level 1
+UI delta removes the decorative JC/orbit tags and repeated slogans, prioritizes
+existing Hong Kong work eligibility, and retains location, languages and About.
+No career fact was added; visa sponsorship wording already appears in Contact.
+Product definition / System design replace abstract button labels in EN/ZH.
+Projects overview labels are simplified and enlarged; original screenshots and
+full case-study explanations remain. No generated image or dependency added.
+
+Acceptance: compact card, working About and explanation links, bilingual copy,
+desktop/mobile layouts, existing print contrast, and unchanged privacy/backend.
+Agent implements and verifies; John's visual acceptance remains pending.
+Local checks: 70/70 tests, 54/54 RAG eval, build and syntax/diff checks pass.
+Home/Projects inspected at 1440/390/320px; no horizontal overflow. Card is
+315px high at 390px in English. Chinese card and overview labels verified;
+light/dark themes and white/#111 print card checked. Both explanation panels
+open and dismiss using Escape. Screenshots: ignored output/playwright/compact-*.
+Initial regression expected detailed Niulai captions on the overview; updated
+it to require those captions on the unchanged detail page and concise overview
+labels separately. Source index build-only timestamp change removed.
+Limits: screenshot text is still evidence to inspect on detail pages, not all
+readable at card scale. No production Ask questions or private data accessed.
+Release identifiers and live checks are recorded in the PR. Rollback is the
+preceding production commit efc166d through an Owner-approved release.
