@@ -55,7 +55,7 @@ function executeAnalytics({ pathname = "/about.html", optedOut = false, search =
 test("all and only public portfolio pages load the analytics bootstrap", async () => {
   for (const page of PUBLIC_PAGES) {
     const html = await readFile(new URL(`../${page}`, import.meta.url), "utf8");
-    assert.equal((html.match(/<script src="analytics\.js" defer><\/script>/g) || []).length, 1, page);
+    assert.equal((html.match(/<script src="\/analytics\.js" defer><\/script>/g) || []).length, 1, page);
     assert.equal((html.match(/<meta name="referrer" content="strict-origin-when-cross-origin">/g) || []).length, 1, page);
   }
 
@@ -143,6 +143,7 @@ test("the owner opt-out also suppresses CV and GitHub entry-path reporting", () 
 test("GitHub entries preserve separate paths, destination canonicals and privacy filtering", async () => {
   const config = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
   assert.deepEqual(config.rewrites.filter(route => !route.source.startsWith("/presentation")), [
+    ...["home", "projects", "about", "fightgame", "niulai"].map(name => ({ source: `/from-stripe/${name}`, destination: `/${name === "home" ? "index" : name}.html` })),
     { source: "/from-stripe", destination: "/services.html" },
     ...GITHUB_ENTRY_ROUTES,
     ...CV_ENTRY_PATHS.map(source => ({ source, destination: "/index.html" }))
@@ -187,6 +188,18 @@ test("Stripe service entry is exact, sanitized and owner-excludable", async () =
   }
   for (const options of [{ optedOut: true }, { hash: "#analytics-opt-out" }]) {
     assert.equal(executeAnalytics({ pathname: "/from-stripe", ...options }).appendedScripts.length, 0);
+  }
+});
+
+test("Stripe public subpages are independently counted with the same privacy filter", () => {
+  for (const name of ["home", "projects", "about", "fightgame", "niulai"]) {
+    const pathname = `/from-stripe/${name}`;
+    const result = executeAnalytics({ pathname });
+    assert.equal(result.appendedScripts.length, 1);
+    assert.equal(result.queuedCalls[0][1]({ type: "pageview", url: `https://johnchong.info${pathname}?private=x#private` }).url, `https://johnchong.info${pathname}`);
+    assert.equal(executeAnalytics({ pathname, optedOut: true }).appendedScripts.length, 0);
+    assert.equal(executeAnalytics({ pathname, hash: "#analytics-opt-out" }).appendedScripts.length, 0);
+    assert.equal(executeAnalytics({ pathname: pathname + "/" }).appendedScripts.length, 0);
   }
 });
 

@@ -314,6 +314,35 @@ nor Agent verification implies recruiter identity, user adoption or a business
 result.
 # Stripe-designated service entry (draft, 2026-09-05)
 
+## Public navigation extension (pending PR / not deployed)
+
+Level 2 privacy/attribution increment authorized for implementation. Add five
+exact routes: `/from-stripe/home`, `/from-stripe/projects`, `/from-stripe/about`,
+`/from-stripe/fightgame`, `/from-stripe/niulai`. Each rewrites to its original
+public HTML with unchanged canonical. `/from-stripe` still shows services.
+No wildcard. Public pages use root-relative assets/links, so nested entries
+do not break resources. On these six approved paths only, shared JS rewrites
+existing public-page links to the corresponding Stripe path, preserves anchor
+fragments and drops queries. Private Presentation, API, email, external and
+asset links remain untouched. Normal/GitHub/CV navigation remains untagged.
+
+Goal: observe aggregate public-page depth within this entry family without
+visitor/session identifiers, new storage, cookies, fingerprinting or content
+collection. It is not a per-person journey, confirmed Stripe staff or source
+verification. Shared links carry the same label. Manually opening a normal
+URL, JavaScript disabled, or dynamically created links outside this static
+navigation mapping can leave the family. Existing Ask aggregation cannot be
+joined to these pages. Historical traffic cannot be reconstructed.
+
+Verification: 80/80 tests, 54/54 RAG eval, static build and diff checks. Browser
+1440/390px all six routes HTTP200, correct root assets, no horizontal overflow;
+clicked services -> projects -> FightGame retains prefix. Chinese toggle and
+protected link isolation checked. FightGame initially showed unloaded lazy
+images; scrolling/decoding all images confirmed no broken images. Owner opt-out
+gave zero insights resources; no production pageview or Ask requests made.
+Owner approved approach; Agent implements/tests; merge/deploy pending separate
+instruction. Rollback pre-increment main 6182ff4 through approved release.
+
 Pending service-page/terms approval and release: exact `/from-stripe` rewrites
 to `/services.html` while keeping its pathname, and is separately allowlisted.
 It denotes use of the designated link, not proof of Stripe staff or referrer.

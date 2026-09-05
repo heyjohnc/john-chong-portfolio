@@ -4,6 +4,27 @@
   const LANGUAGE_KEY = "csy-portfolio-language";
   const THEME_KEY = "csy-portfolio-theme";
 
+  function preserveStripeSource() {
+    const routes = new Map([
+      ["/services.html", "/from-stripe"],
+      ["/index.html", "/from-stripe/home"],
+      ["/projects.html", "/from-stripe/projects"],
+      ["/about.html", "/from-stripe/about"],
+      ["/fightgame.html", "/from-stripe/fightgame"],
+      ["/niulai.html", "/from-stripe/niulai"]
+    ]);
+    if (![...routes.values()].includes(location.pathname)) return;
+    routes.set("/", "/from-stripe/home");
+    document.querySelectorAll("a[href]").forEach(link => {
+      const raw = link.getAttribute("href");
+      if (raw.startsWith("#")) return;
+      const url = new URL(raw, location.href);
+      const target = url.origin === location.origin && routes.get(url.pathname);
+      if (target) link.setAttribute("href", target + url.hash);
+    });
+  }
+  preserveStripeSource();
+
   const zh = {
     "Primary navigation": "主要導覽",
     "Display controls": "顯示設定",

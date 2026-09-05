@@ -9,6 +9,11 @@
   const GITHUB_ENTRY_PATHS = ["/from-github"];
   const PUBLIC_PATHS = new Set([
     "/from-stripe",
+    "/from-stripe/home",
+    "/from-stripe/projects",
+    "/from-stripe/about",
+    "/from-stripe/fightgame",
+    "/from-stripe/niulai",
     "/",
     "/index.html",
     "/about",
