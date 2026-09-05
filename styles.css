@@ -1032,7 +1032,7 @@ html.motion-enabled.motion-started .name-accent { background-size: 100% 100%; }
   .hero, .projects-hero, .content-grid, .contact { display: block; }
   .hero, .profile-card { min-height: 0; }
   .hero { padding-block: 20px; }
-  .profile-card { margin-top: 20px; }
+  .profile-card { margin-top: 20px; background: #fff !important; border: 1px solid #ccc; }
   h1, h2, h3 { break-after: avoid; }
   figure, .case-facts div, .ownership-flow li { break-inside: avoid; }
   .case-visual, .project-media, .skill-catalogue-figure { print-color-adjust: exact; -webkit-print-color-adjust: exact; }

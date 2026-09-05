@@ -69,3 +69,12 @@ the visual result has already been accepted.
 Share-preview metadata and the PNG are verified locally; social platforms may
 cache old previews after a future release. The full-size image action uses a
 normal browser tab and native zoom rather than adding a new modal/dependency.
+
+### Print contrast release correction (2026-09-05)
+
+Release screenshot review caught a dark profile-card background with dark print
+text. The follow-up overrides only the print card background and border. Browser
+verification shows white background, #111 text, zero hidden reveal elements, and
+the original screen gradient unchanged. Screenshot: ignored
+`output/playwright/polish-print-contrast-fixed.png`. Regression suite: 69/69.
+No routes, analytics, corpus, credentials or backend behavior changed.
