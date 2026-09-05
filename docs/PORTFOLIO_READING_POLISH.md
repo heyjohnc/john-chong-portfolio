@@ -1,6 +1,8 @@
 # Portfolio reading polish — 5 September 2026
 
-Status: TESTED locally; Owner visual acceptance PENDING; Draft PR only.
+Status: TESTED locally; Owner authorized merge/deployment on 5 September 2026;
+visual acceptance of the deployed result remains PENDING. Release identity and
+production verification are recorded in PR #36.
 Evidence level: Level 2 public UI batch. This is separate from the subsequently
 authorized GitHub-entry attribution release.
 
@@ -29,7 +31,8 @@ auth boundary, model behavior or analytics collection is changed.
 
 ## Verification
 
-- Existing tests: 67/67 pass; RAG retrieval/policy eval: 54/54 pass.
+- Existing tests: 67/67 pass; after synchronizing GitHub entry PR #37,
+  the combined release suite passes 69/69. RAG retrieval/policy eval: 54/54 pass.
 - Static build and syntax checks pass; corpus hash unchanged. Timestamp-only
   index rebuild differences were removed, leaving Ask evidence unchanged.
 - Playwright: all five public pages at 1440, 390 and 320px in English and
@@ -58,7 +61,10 @@ John chooses positioning, disclosure and visual acceptance. hksub-agent edits
 public UI/copy and validates the result. The existing public corpus supports
 the summaries; no business impact, visitor count or authorship was invented.
 Presentation, Ask backend, analytics allowlist and deployment routes are out
-of this PR. Owner has not authorized this UI batch for merge/deployment.
+of this PR. Before release this branch was synchronized with main to preserve
+the separately released GitHub entry in PR #37. Owner subsequently requested
+deployment to review the live UI; this authorizes release, not a claim that
+the visual result has already been accepted.
 
 Share-preview metadata and the PNG are verified locally; social platforms may
 cache old previews after a future release. The full-size image action uses a
