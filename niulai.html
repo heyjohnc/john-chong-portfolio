@@ -12,7 +12,12 @@
   <meta property="og:title" content="Four-Agent Decision &amp; Publishing System — Niulai Squad | John Chong">
   <meta property="og:description" content="Niulai Squad case study by John Chong: a four-Agent BNB Smart Chain market-event product with traceable evidence, controlled execution and coordinated publishing.">
   <meta property="og:url" content="https://johnchong.info/niulai.html">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://johnchong.info/assets/social/portfolio-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="John Chong — AI Product &amp; Solutions Builder. Open to Hong Kong roles.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://johnchong.info/assets/social/portfolio-card.png">
   <meta name="twitter:title" content="Four-Agent Decision &amp; Publishing System — Niulai Squad | John Chong">
   <meta name="twitter:description" content="Niulai Squad case study by John Chong: a four-Agent BNB Smart Chain market-event product with traceable evidence, controlled execution and coordinated publishing.">
   <meta name="theme-color" content="#f7f7f4">
@@ -38,29 +43,37 @@
       <p class="eyebrow">Niulai Squad · End-to-End Product</p>
       <h1>Four-Agent Decision &amp; Publishing System</h1>
       <p class="page-lead">A four-Agent product that turns live BNB Smart Chain market signals into a traceable story—from sourced evidence and voting to controlled execution and channel publishing.</p>
-      <dl class="case-facts">
-        <div><dt>Status</dt><dd>Validated technical baseline · active operations</dd></div>
-        <div><dt>My role</dt><dd>Product &amp; architecture owner</dd></div>
-        <div><dt>System</dt><dd>Four Agents · separated control planes</dd></div>
-        <div><dt>Frozen evidence</dt><dd>779 / 779 baseline tests + funded UAT</dd></div>
+      <h2 class="case-summary-title">The case in 30 seconds</h2>
+      <dl class="case-facts case-summary">
+        <div><dt>Problem</dt><dd>Turn market events into a replayable four-Agent story while keeping facts, dialogue and real actions separate.</dd></div>
+        <div><dt>My role</dt><dd>Define the product, voting and permission rules; review failures and approve releases.</dd></div>
+        <div><dt>Result</dt><dd>A read-only public demo backed by separately controlled execution and publishing.</dd></div>
+        <div><dt>Evidence</dt><dd>779/779 tests at the accepted 29 August 2026 baseline, plus controlled real-action acceptance checks.</dd></div>
       </dl>
+      <nav class="case-jump-links" aria-label="Case study sections"><a href="#niulai-walkthrough">Product walkthrough</a><a href="#decision-control-title">Architecture &amp; delivery</a><a href="#niulai-evidence">Verified results</a><a href="#niulai-boundary">Status &amp; limits</a></nav>
       <div class="actions"><a class="button primary" href="https://niulaishengmi.lol" target="_blank" rel="noreferrer">Open live read-only demo ↗</a><a class="button" href="https://github.com/heyjohnc/niulai-shengmi-squad" target="_blank" rel="noreferrer">View public repository ↗</a></div>
-      <div class="case-visual flagship-architecture flagship-architecture--niulai" role="img" aria-label="Niulai Squad architecture connecting four bounded Agent roles through evidence, voting, policy gates and one canonical timeline">
+      <div class="case-visual flagship-architecture flagship-architecture--niulai" id="niulai-walkthrough">
         <span class="architecture-kicker"><span>Controlled multi-Agent system</span><b>Four roles · separated authority</b></span>
-        <span class="niulai-demo-grid" aria-hidden="true">
+        <span class="niulai-demo-grid">
           <span class="niulai-demo-panel niulai-demo-panel--decision">
             <small>01 · In-game decision layer</small>
-            <span class="niulai-capture-frame"><img src="assets/niulai/in-game-decision-layer.png" alt="" width="710" height="168"></span>
+            <a class="niulai-capture-frame" href="assets/niulai/in-game-decision-layer.png" target="_blank" rel="noreferrer" aria-label="Open decision-layer screenshot at full size"><img src="assets/niulai/in-game-decision-layer.png" alt="Four Agent characters in the shared decision scene" width="710" height="168"></a>
             <b>Four roles vote before the shared result.</b>
           </span>
           <span class="niulai-demo-panel niulai-demo-panel--dialogue">
             <small>02 · Agent dialogue window</small>
-            <span class="niulai-capture-frame"><img src="assets/niulai/agent-dialogue-window.png" alt="" width="388" height="664"></span>
+            <a class="niulai-capture-frame" href="assets/niulai/agent-dialogue-window.png" target="_blank" rel="noreferrer" aria-label="Open Agent-dialogue screenshot at full size"><img src="assets/niulai/agent-dialogue-window.png" alt="Chinese dialogue from four Agents reacting to a recorded event" width="388" height="664"></a>
             <b>Distinct voices react to one recorded state.</b>
           </span>
         </span>
         <span class="niulai-control-flow" aria-hidden="true"><span>Evidence</span><i></i><span>4 votes</span><i></i><strong>Policy gates</strong><i></i><span>Timeline</span></span>
         <span class="architecture-stack" aria-hidden="true"><span>Lark · discovery</span><span>Niulai · vote</span><span>Mama &amp; Baola · publishing</span></span>
+      </div>
+      <div class="capture-guide">
+        <p><strong>How to read these captures</strong></p>
+        <p>The game scene shows the four roles together. The dialogue window shows their different reactions to the same recorded event; it is not four independent authorizations to act.</p>
+        <p>Votes are fixed before model dialogue. Execution and publishing still require their own permission checks.</p>
+        <p class="image-help">Select either screenshot to open it at full size.</p>
       </div>
     </section>
 
@@ -129,7 +142,7 @@
 
     <section class="case-section wrap">
       <div class="content-grid">
-        <h2>What is already evidenced</h2>
+        <h2 id="niulai-evidence">What is already evidenced</h2>
         <ol class="decision-list">
           <li><span>01</span><div><h3>Decision and expression are separated</h3><p>Models speak only after the four random votes are frozen. A model timeout, fallback or weak line cannot alter candidate eligibility, the vote or execution authority.</p></div></li>
           <li><span>02</span><div><h3>Controlled real lifecycles were validated</h3><p>The frozen baseline records three funded route UATs, real TP, SL and time-exit outcomes, one confirmed-revert recovery path, and zero-exposure closure checks.</p></div></li>
@@ -184,9 +197,9 @@
 
     <section class="case-section wrap">
       <div class="content-grid">
-        <h2>Status and boundary</h2>
+        <h2 id="niulai-boundary">Status and boundary</h2>
         <div class="content-body">
-          <div class="notice"><p><strong>The Level 3 technical portfolio baseline is frozen; the product remains in active operation and development.</strong></p><p>Post-baseline work has added a controlled project-token lifecycle, a bounded X editorial cadence and standing Square lifecycle publishing. These are separately evidenced increments, not a claim of unrestricted autonomy.</p></div>
+          <div class="notice"><p><strong>The accepted technical baseline is preserved; the product remains in active operation and development.</strong></p><p>Post-baseline work has added a controlled project-token lifecycle, a bounded X editorial cadence and standing Square lifecycle publishing. These are separately evidenced increments, not a claim of unrestricted autonomy.</p></div>
           <p style="margin-top:24px">The public website is a read-only view and never receives the protected signer. I do not claim long-term unattended reliability, formal SLA, verified user adoption, revenue or business impact; unified cost and stable-window operating metrics remain incomplete.</p>
           <p style="margin-top:16px">The project is an unofficial fan-parody work and does not claim an official relationship, cooperation, sponsorship or endorsement. Public portfolio material excludes credentials, private infrastructure, raw provider responses and sensitive transaction data.</p>
         </div>

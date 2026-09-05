@@ -1,0 +1,65 @@
+# Portfolio reading polish — 5 September 2026
+
+Status: TESTED locally; Owner visual acceptance PENDING; Draft PR only.
+Evidence level: Level 2 public UI batch. This is separate from the subsequently
+authorized GitHub-entry attribution release.
+
+## Objective and scope
+
+Help a first-time reader understand John and navigate the evidence without
+moving project cards onto the homepage. Owner approved the suggested changes
+and explicitly kept projects on Projects. No career fact, project status,
+auth boundary, model behavior or analytics collection is changed.
+
+- Homepage: concrete application-delivery introduction, Contact me action,
+  shorter delivery-method section; existing interactive explanations retained.
+- Projects: remove duplicate introduction; link the three existing categories.
+- Cases: replace terse facts with a four-part summary and section links. Keep
+  the original detailed evidence and qualification of project outcomes.
+- Niulai: retain Owner-selected captures; add full-size links and bilingual
+  explanations of what the game and dialogue views mean. Votes remain random
+  and frozen before model expression; no model decision authority is implied.
+- FightGame: link walkthrough captures to original images, keeping the verified
+  79-card board and all source captures intact.
+- Simplify visible internal maturity jargon without upgrading any claim.
+- Show Ask John / 問問 John on both desktop and mobile.
+- Print previously unrevealed content; hide interactive controls on paper.
+- Add one 1200×630 social preview PNG, rendered from the checked-in SVG using
+  Chromium. No generated illustration or third-party visual asset is used.
+
+## Verification
+
+- Existing tests: 67/67 pass; RAG retrieval/policy eval: 54/54 pass.
+- Static build and syntax checks pass; corpus hash unchanged. Timestamp-only
+  index rebuild differences were removed, leaving Ask evidence unchanged.
+- Playwright: all five public pages at 1440, 390 and 320px in English and
+  Traditional Chinese: no horizontal overflow, missing fragment targets or
+  JavaScript page errors. Ask open/close works without submitting a question.
+- Local browser inspection: category anchors and homepage Contact action work;
+  Niulai image opens its original asset in a new tab with noreferrer.
+- Print regression: fresh homepage before scrolling has zero hidden reveal
+  elements under print media; PDF saved for visual review.
+- At 390px English, Projects first card moves from about 1,057px to 648px below
+  the page top. Homepage height changes from about 3,320px to 3,055px. These
+  are local rendering measurements, not recruiter conversion claims.
+- Detailed cases remain long; summaries and anchors support selective reading.
+  Niulai is not claimed to be materially shorter after adding its explanation.
+- Existing analytics/QA/auth regression suite passes. No production Ask
+  requests, credentials, content logs or private Presentation data were used.
+
+Review artifacts are in ignored `output/playwright/`: `polish-home-desktop.png`,
+`polish-*-mobile-zh.png`, and `polish-home-print.pdf`. During social-card
+rendering, the temporary local HTML replacement caused an unneeded favicon
+request to return 404; regular pages retain their existing inline favicon.
+
+## Boundaries and release
+
+John chooses positioning, disclosure and visual acceptance. hksub-agent edits
+public UI/copy and validates the result. The existing public corpus supports
+the summaries; no business impact, visitor count or authorship was invented.
+Presentation, Ask backend, analytics allowlist and deployment routes are out
+of this PR. Owner has not authorized this UI batch for merge/deployment.
+
+Share-preview metadata and the PNG are verified locally; social platforms may
+cache old previews after a future release. The full-size image action uses a
+normal browser tab and native zoom rather than adding a new modal/dependency.

@@ -12,7 +12,12 @@
   <meta property="og:title" content="Personalized-Avatar Multiplayer Pixel RPG — FightGame | John Chong">
   <meta property="og:description" content="FightGame case study by John Chong: a personalized-avatar multiplayer pixel RPG with synchronized online skill-card battles.">
   <meta property="og:url" content="https://johnchong.info/fightgame.html">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://johnchong.info/assets/social/portfolio-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="John Chong — AI Product &amp; Solutions Builder. Open to Hong Kong roles.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://johnchong.info/assets/social/portfolio-card.png">
   <meta name="twitter:title" content="Personalized-Avatar Multiplayer Pixel RPG — FightGame | John Chong">
   <meta name="twitter:description" content="FightGame case study by John Chong: a personalized-avatar multiplayer pixel RPG with synchronized online skill-card battles.">
   <meta name="theme-color" content="#f7f7f4">
@@ -38,12 +43,14 @@
       <p class="eyebrow">FightGame · End-to-End Product</p>
       <h1>Personalized-Avatar Multiplayer Pixel RPG</h1>
       <p class="page-lead">A personalized-avatar multiplayer pixel RPG where player identity, online presence, skill-card state and turn resolution have to remain coherent across a branching client–server product.</p>
-      <dl class="case-facts">
-        <div><dt>Status</dt><dd>Core playability completed</dd></div>
-        <div><dt>My role</dt><dd>Product direction &amp; acceptance</dd></div>
-        <div><dt>Delivery</dt><dd>Persistent multi-Agent workflow</dd></div>
-        <div><dt>Evidence</dt><dd>Code paths, checks &amp; browser captures</dd></div>
+      <h2 class="case-summary-title">The case in 30 seconds</h2>
+      <dl class="case-facts case-summary">
+        <div><dt>Problem</dt><dd>Keep one player identity and battle result consistent across online players.</dd></div>
+        <div><dt>My role</dt><dd>Set scope and system boundaries, coordinate Agents and accept complete playable flows.</dd></div>
+        <div><dt>Result</dt><dd>Core playability completed: custom avatars, a shared world and a 79-card battle system.</dd></div>
+        <div><dt>Evidence</dt><dd>Code, automated checks and hands-on desktop, mobile and two-player acceptance.</dd></div>
       </dl>
+      <nav class="case-jump-links" aria-label="Case study sections"><a href="#fight-avatar-title">Product walkthrough</a><a href="#fight-delivery-title">Architecture &amp; delivery</a><a href="#fight-acceptance">Testing &amp; corrections</a><a href="#fight-boundary">Status &amp; limits</a></nav>
       <div class="case-visual flagship-architecture flagship-architecture--fight" role="img" aria-label="FightGame architecture connecting persistent identity, shared-world presence and synchronized battle through an authoritative server">
         <span class="architecture-kicker"><span>Client–server product</span><b>Three connected contexts</b></span>
         <span class="fight-contexts">
@@ -65,23 +72,23 @@
         </div>
       </div>
       <div class="media-pair">
-        <figure><img src="assets/fightgame/world-and-npcs.png" alt="FightGame shared world with a player and named NPCs" width="1178" height="560"><figcaption>Shared world and NPC layer</figcaption></figure>
-        <figure><img src="assets/fightgame/profile-and-loadout.png" alt="FightGame profile with avatar and equipped cards" width="1178" height="560"><figcaption>Persistent identity and card loadout</figcaption></figure>
+        <figure><a href="assets/fightgame/world-and-npcs.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/world-and-npcs.png" alt="FightGame shared world with a player and named NPCs" width="1178" height="560" loading="lazy" decoding="async"></a><figcaption>Shared world and NPC layer</figcaption></figure>
+        <figure><a href="assets/fightgame/profile-and-loadout.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/profile-and-loadout.png" alt="FightGame profile with avatar and equipped cards" width="1178" height="560" loading="lazy" decoding="async"></a><figcaption>Persistent identity and card loadout</figcaption></figure>
       </div>
     </section>
 
     <section class="case-section wrap fight-avatar-section" aria-labelledby="fight-avatar-title">
       <div class="case-map-heading">
-        <div><p class="eyebrow">Playable personalization loop</p><h2 id="fight-avatar-title">One reference image becomes one identity across the game.</h2></div>
+        <div><p class="eyebrow">Playable personalization loop</p><h2 id="fight-avatar-title">One reference image becomes one identity across the game.</h2><p class="image-help">Select a capture to open the original image.</p></div>
         <p>Six product captures show the complete path: request a custom skin, let the asynchronous generation job finish, then carry the approved avatar into the shared world and battle.</p>
       </div>
       <ol class="fight-avatar-flow" aria-label="FightGame custom skin generation and use flow">
-        <li><figure><span class="fight-avatar-shot"><img src="assets/fightgame/avatar-flow/01-select-custom-skin.png" alt="FightGame Custom Skin upload dialog" width="714" height="304"></span><figcaption><small>01 · Select</small><strong>Open Custom Skin</strong></figcaption></figure></li>
-        <li><figure><span class="fight-avatar-shot"><img src="assets/fightgame/avatar-flow/02-upload-reference.png" alt="FightGame skin reference upload in progress" width="615" height="82"></span><figcaption><small>02 · Upload</small><strong>Submit a reference image</strong></figcaption></figure></li>
-        <li><figure><span class="fight-avatar-shot"><img src="assets/fightgame/avatar-flow/03-generation-status.png" alt="FightGame Custom Skin generation status" width="271" height="87"></span><figcaption><small>03 · Generate</small><strong>Wait for the skin job</strong></figcaption></figure></li>
-        <li><figure><span class="fight-avatar-shot"><img src="assets/fightgame/avatar-flow/04-generated-avatar.png" alt="Generated FightGame pixel avatar" width="260" height="255"></span><figcaption><small>04 · Review</small><strong>Confirm the generated avatar</strong></figcaption></figure></li>
-        <li><figure><span class="fight-avatar-shot"><img src="assets/fightgame/avatar-flow/05-shared-world.png" alt="Generated avatar active in the FightGame shared world" width="189" height="192"></span><figcaption><small>05 · Explore</small><strong>Use the same identity in-world</strong></figcaption></figure></li>
-        <li><figure><span class="fight-avatar-shot"><img src="assets/fightgame/avatar-flow/06-battle-identity.png" alt="Generated avatar carried into a FightGame battle" width="296" height="256"></span><figcaption><small>06 · Battle</small><strong>Carry the identity into combat</strong></figcaption></figure></li>
+        <li><figure><span class="fight-avatar-shot"><a href="assets/fightgame/avatar-flow/01-select-custom-skin.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/avatar-flow/01-select-custom-skin.png" alt="FightGame Custom Skin upload dialog" width="714" height="304" loading="lazy" decoding="async"></a></span><figcaption><small>01 · Select</small><strong>Open Custom Skin</strong></figcaption></figure></li>
+        <li><figure><span class="fight-avatar-shot"><a href="assets/fightgame/avatar-flow/02-upload-reference.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/avatar-flow/02-upload-reference.png" alt="FightGame skin reference upload in progress" width="615" height="82" loading="lazy" decoding="async"></a></span><figcaption><small>02 · Upload</small><strong>Submit a reference image</strong></figcaption></figure></li>
+        <li><figure><span class="fight-avatar-shot"><a href="assets/fightgame/avatar-flow/03-generation-status.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/avatar-flow/03-generation-status.png" alt="FightGame Custom Skin generation status" width="271" height="87" loading="lazy" decoding="async"></a></span><figcaption><small>03 · Generate</small><strong>Wait for the skin job</strong></figcaption></figure></li>
+        <li><figure><span class="fight-avatar-shot"><a href="assets/fightgame/avatar-flow/04-generated-avatar.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/avatar-flow/04-generated-avatar.png" alt="Generated FightGame pixel avatar" width="260" height="255" loading="lazy" decoding="async"></a></span><figcaption><small>04 · Review</small><strong>Confirm the generated avatar</strong></figcaption></figure></li>
+        <li><figure><span class="fight-avatar-shot"><a href="assets/fightgame/avatar-flow/05-shared-world.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/avatar-flow/05-shared-world.png" alt="Generated avatar active in the FightGame shared world" width="189" height="192" loading="lazy" decoding="async"></a></span><figcaption><small>05 · Explore</small><strong>Use the same identity in-world</strong></figcaption></figure></li>
+        <li><figure><span class="fight-avatar-shot"><a href="assets/fightgame/avatar-flow/06-battle-identity.png" target="_blank" rel="noreferrer"><img src="assets/fightgame/avatar-flow/06-battle-identity.png" alt="Generated avatar carried into a FightGame battle" width="296" height="256" loading="lazy" decoding="async"></a></span><figcaption><small>06 · Battle</small><strong>Carry the identity into combat</strong></figcaption></figure></li>
       </ol>
       <p class="fight-flow-note"><strong>One identity, three contexts.</strong> The generated skin is not a detached demo output; it becomes the active avatar used by profile, overworld and battle views.</p>
     </section>
@@ -130,7 +137,7 @@
 
     <section class="case-section section--soft">
       <div class="wrap content-grid">
-        <div><p class="eyebrow">Hands-on acceptance</p><h2>My UAT correction loop</h2></div>
+        <div><p class="eyebrow">Hands-on acceptance</p><h2 id="fight-acceptance">My UAT correction loop</h2></div>
         <div class="content-body">
           <p>I personally tested the complete flows. When an Agent-delivered feature looked finished but failed inside the product, I turned the failure into a specific correction cycle.</p>
           <ol class="uat-loop" aria-label="User acceptance testing correction loop">
@@ -168,7 +175,7 @@
 
     <section class="case-section wrap">
       <div class="content-grid">
-        <h2>Status and boundary</h2>
+        <h2 id="fight-boundary">Status and boundary</h2>
         <div class="content-body">
           <div class="notice"><p><strong>The core-playability milestone was completed.</strong></p><p>A later phase covering tournaments, live streaming and operations was planned or partially scaffolded, but the client did not commission that expansion.</p></div>
           <p style="margin-top:24px">This case does not claim public launch, production readiness, revenue, user count or verified business impact. The selected captures use an ephemeral guest identity and contain no wallet address, credential, client material or transaction data.</p>
@@ -178,7 +185,7 @@
 
     <section class="section wrap contact">
       <div><p class="eyebrow">Next case</p><h2>Four Agents. One shared timeline.</h2></div>
-      <div class="contact-copy"><p>Continue with the Level 3 Niulai Squad multi-Agent system and its active operating model.</p><div class="actions"><a class="button primary" href="niulai.html">View next case</a><a class="button" href="projects.html">All projects</a></div></div>
+      <div class="contact-copy"><p>Continue with Niulai Squad, a four-Agent system with a validated technical baseline and ongoing operations.</p><div class="actions"><a class="button primary" href="niulai.html">View next case</a><a class="button" href="projects.html">All projects</a></div></div>
     </section>
   </main>
 

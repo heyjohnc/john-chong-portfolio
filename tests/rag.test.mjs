@@ -51,7 +51,7 @@ test("dedicated projects page exposes the approved nine-item hierarchy without h
   assert.equal((projects.match(/class="system-project-card"/g) || []).length, 5);
   assert.equal((projects.match(/class="tool-project-card"/g) || []).length, 2);
   for (const [label, count] of [["End-to-End Products", "02"], ["Applied AI Workflows", "05"], ["Open-Source Utilities", "02"]]) {
-    assert.match(projects, new RegExp(`<dt>${label}</dt><dd>${count}</dd>`));
+    assert.match(projects, new RegExp(`<dt><a href="#[a-z]+">${label}</a></dt><dd>${count}</dd>`));
   }
   for (const retiredLabel of ["Flagship cases", "Selected AI systems", "Open-source tools", "Flagship · playable milestone", "01 · Flagship case"]) {
     assert.doesNotMatch(projects, new RegExp(retiredLabel, "i"));
@@ -156,12 +156,13 @@ test("FightGame presents the custom-skin product flow and complete 79-card colle
     && /40 Common, 30 Uncommon and 9 Premium/.test(chunk.text)));
 });
 
-test("Ask John launcher uses the approved Ask label on desktop and mobile", async () => {
+test("Ask John launcher names the assistant in both languages without a conflicting mobile label", async () => {
   const widget = await readFile(new URL("../ask-widget.js", import.meta.url), "utf8");
   const styles = await readFile(new URL("../styles.css", import.meta.url), "utf8");
-  assert.equal((widget.match(/launcher: "Ask"/g) || []).length, 2);
+  assert.match(widget, /launcher: "Ask John"/);
+  assert.match(widget, /launcher: "問問 John"/);
   assert.doesNotMatch(widget, /launcher: "(?:Ask me|問問我)"/);
-  assert.match(styles, /\.ask-widget-launcher::after \{ content: "Ask";/);
+  assert.doesNotMatch(styles, /\.ask-widget-launcher::after \{ content:/);
   assert.doesNotMatch(styles, /\.ask-widget-launcher::after \{ content: "AI";/);
 });
 
