@@ -3,6 +3,10 @@
   "outputDirectory": "public",
   "rewrites": [
     {
+      "source": "/from-github",
+      "destination": "/index.html"
+    },
+    {
       "source": "/cv-application-20260907",
       "destination": "/index.html"
     },

@@ -6,6 +6,7 @@
     "/cv-application-20260907",
     "/cv-product-20260907"
   ];
+  const GITHUB_ENTRY_PATHS = ["/from-github"];
   const PUBLIC_PATHS = new Set([
     "/",
     "/index.html",
@@ -17,7 +18,8 @@
     "/fightgame.html",
     "/niulai",
     "/niulai.html",
-    ...CV_ENTRY_PATHS
+    ...CV_ENTRY_PATHS,
+    ...GITHUB_ENTRY_PATHS
   ]);
 
   let requestedOptOut = window.location.hash === "#analytics-opt-out";

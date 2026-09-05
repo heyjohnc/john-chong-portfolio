@@ -1,10 +1,10 @@
 # Privacy-friendly Web Analytics
 
-Status: production-validated base; CV entry attribution increment tested in a Draft PR and not deployed
+Status: production-validated base and CV entries; GitHub entry tested, release authorized and pending deployment
 
 Evidence level: Level 3 base; Level 2 privacy/analytics increment
 
-Last updated: 2026-09-04
+Last updated: 2026-09-05
 
 ## Objective and scope
 
@@ -21,8 +21,9 @@ Production-baseline public paths:
 - `/niulai` and `/niulai.html`.
 
 `/presentation/`, every protected presentation API or asset and `/api/ask`
-remain excluded in both the production baseline and the Draft increment below.
-Apart from the two proposed CV entry paths, all other paths are excluded.
+remain excluded in the production baseline and the increment below.
+The two released CV paths and the exact `/from-github` increment are the only
+additional entry paths. All other paths are excluded.
 Presentation source files do not load the analytics bootstrap. The public-page
 bootstrap also uses an exact path allowlist and a `beforeSend` guard, so copying
 or navigating it outside the approved pages does not report a view.
@@ -44,9 +45,10 @@ browser. The data must not be used to infer a visitor's name, employer,
 recruiter identity or hiring intent.
 
 There was no Web Analytics collection before this release. Historical visits
-cannot be reconstructed, and Ask John's existing aggregate request count cannot
-separate John, QA and external visitors. Any observation begins only after the
-feature is enabled and this code is deployed.
+cannot be reconstructed. Ask John's aggregate request count at the initial
+Analytics release could not separate John, QA and external visitors. The later
+Owner QA release separates marked requests prospectively; it does not identify
+people or repair historical counts. Observation begins only after deployment.
 
 The project remains on the Vercel Hobby plan. Web Analytics Plus, paid
 Observability metrics and any plan upgrade are outside scope and must not be
@@ -54,8 +56,11 @@ purchased for this change.
 
 ## CV source-category and batch attribution — 2026-09-07 increment
 
-Claim state: `TESTED`; scoped Owner result review: `PENDING`; production
-deployment: not authorized by this Draft PR.
+Claim state: `PRODUCTION_VALIDATED`. Owner subsequently approved PR #35;
+merge `bcaa5100f9981d4eb8fcd8fb688e19d5473af140` was deployed on 4 September
+2026 as `dpl_J8TNkZwZSbVHscrp1BobydExw3mU`. Both CV paths returned HTTP 200,
+served byte-identical homepage HTML and retained their path in the browser.
+The original pre-release scope and verification below remain the design record.
 
 ### Objective, operator and scope
 
@@ -155,6 +160,61 @@ rewrites, allowlist, tests, documentation and bounded browser verification.
 Vercel supplies anonymous aggregated page-view reporting. A passing Agent check
 does not imply Owner acceptance, production release, recruiter identity, user
 adoption or a business result.
+
+## GitHub source entry — 5 September 2026
+
+Evidence level: Level 2 privacy/analytics increment. Claim state: `TESTED`;
+Owner authorized merge and production release after checks. Final deployment
+identity and production verification are recorded in the release PR comment.
+
+### Scope and acceptance
+
+- Add exactly `/from-github` → `/index.html` as a Vercel internal rewrite.
+  It serves the unchanged homepage and retains `/from-github` in the address
+  bar; canonical remains `https://johnchong.info/`.
+- Add that one path to the existing Analytics allowlist. It remains distinct
+  from `/cv-application-20260907` and `/cv-product-20260907`.
+- Preserve first-visit and stored owner opt-out, query/hash removal, public
+  assets, EN/ZH controls, internal navigation, Ask and Presentation isolation.
+- Unknown source variants continue to return 404 and cannot report views.
+- GitHub profile README Portfolio and Ask John links point to the same entry.
+  The existing FightGame direct URL stays `https://johnchong.info/fightgame.html`.
+
+### Design and limits
+
+An exact static rewrite avoids redirects, runtime services and user-specific
+identifiers. No cookie, custom event, fingerprint, raw IP, Ask content or
+server-side identity is added. The entry indicates an intended GitHub source;
+it does not prove an actual GitHub referral, recruiter identity or hiring intent.
+Links can be copied, shared or opened by the Owner. It does not attribute a
+whole later session across pages, distinguish the two README links, or backfill
+historic visits. Vercel's existing aggregate reporting supplies view timing.
+No purchase, plan upgrade or Ask backend deployment is needed.
+
+### Validation and release boundary
+
+- 69/69 tests and 54/54 retrieval/policy evaluations pass; static build,
+  syntax checks and diff checks pass. The generated corpus is unchanged.
+- Local HTTP checks: GitHub and both CV entries return 200 with the exact
+  homepage body. Unapproved variants return 404.
+- Desktop 1440px and mobile 390px browsers: correct pathname/canonical,
+  translations, Ask open/close, no overflow or broken images, and no Analytics
+  resources with owner opt-out. No question submitted.
+- A separate local browser with a stubbed Analytics transport verified that
+  default-visitor beforeSend retains `/from-github` and strips query/hash.
+- Privacy regressions cover excluded Presentation/API paths, exact routes,
+  stored opt-out and first-visit opt-out. Production verification uses HTTP
+  reads and opted-out browsers only; it does not create synthetic page views.
+- UI work remains separately unmerged in PR #36. This branch starts at released
+  main and contains no UI, content, image, Ask or Presentation changes.
+
+John approved scope and release and corrected the scope to one entry. hk owns
+the profile README changes; hksub-agent implements and verifies the website
+route, then merges the separately reviewed two-link profile PR only after the
+route is live. UI acceptance is not implied by this authorization. Rollback is
+the prior Vercel deployment plus reverting this exact route/allowlist increment;
+restore the two profile links if the entry is withdrawn. Neither rollback nor
+deployment needs a service restart or a production Ask question.
 
 ## John-only browser opt-out
 
