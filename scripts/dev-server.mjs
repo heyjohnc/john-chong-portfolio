@@ -7,9 +7,10 @@ import { handleOwnerQaRevokeRequest, handleOwnerQaStatusRequest } from "../api/_
 
 const root = new URL("../", import.meta.url).pathname.replace(/^\/(?:[A-Za-z]:)/, (match) => match.slice(1));
 const port = Number(process.env.PORT || 4174);
-const cvEntryPaths = new Set([
-  "/cv-application-20260907",
-  "/cv-product-20260907"
+const publicEntryRoutes = new Map([
+  ["/cv-application-20260907", "index.html"],
+  ["/cv-product-20260907", "index.html"],
+  ["/from-github", "index.html"]
 ]);
 process.env.NODE_ENV = "development";
 process.env.ASK_JOHN_ENABLED ||= "true";
@@ -54,9 +55,8 @@ const server = http.createServer(async (req, res) => {
       res.end(Buffer.from(await response.arrayBuffer()));
       return;
     }
-    const relative = url.pathname === "/" || cvEntryPaths.has(url.pathname)
-      ? "index.html"
-      : decodeURIComponent(url.pathname.slice(1));
+    const relative = publicEntryRoutes.get(url.pathname)
+      || (url.pathname === "/" ? "index.html" : decodeURIComponent(url.pathname.slice(1)));
     const resolved = normalize(join(root, relative));
     if (!resolved.startsWith(normalize(root))) throw new Error("Invalid path");
     const fileStat = await stat(resolved);
