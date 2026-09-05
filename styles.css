@@ -783,12 +783,9 @@ html.motion-enabled.motion-started .name-accent { background-size: 100% 100%; }
   .actions { display: grid; }
   .button { width: 100%; }
   .ask-widget { right: 12px; bottom: 12px; }
-  .ask-widget-launcher { width: 48px; min-width: 48px; min-height: 48px; padding: 0; gap: 0; border-radius: 50%; }
-  .ask-widget-launcher [data-ask-widget-launcher] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .ask-widget-launcher::after { content: "Ask"; font: 800 12px/1 var(--display); letter-spacing: -.02em; }
+  .ask-widget-launcher { min-width: 96px; min-height: 44px; padding: 0 14px; gap: 0; }
   .ask-widget-signal { display: none; }
-  .ask-widget.is-open .ask-widget-launcher { width: 48px; min-width: 48px; }
-  .ask-widget.is-open .ask-widget-launcher::after { content: "×"; font-size: 22px; font-weight: 500; }
+  .ask-widget.is-open .ask-widget-launcher { min-width: 76px; }
   .ask-widget-panel { width: calc(100vw - 24px); height: min(610px, calc(100dvh - 84px)); bottom: 60px; }
   .profile-card { min-height: 410px; padding: 24px; }
   .profile-visual { height: 148px; }
@@ -994,4 +991,49 @@ html.motion-enabled.motion-started .name-accent { background-size: 100% 100%; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition: none !important; transform: none !important; }
+}
+
+/* Reading paths stay useful without script or animation. */
+[id] { scroll-margin-top: 90px; }
+.project-ledger dt { flex: 1; }
+.project-ledger a { display: block; padding-block: 8px; }
+.project-ledger a:hover { color: var(--accent); }
+.project-ledger div { align-items: center; padding-block: 5px; }
+.projects-hero + #projects { padding-top: 32px; }
+#responsibility { padding-block: 60px; }
+#responsibility .section-heading { margin-bottom: 30px; }
+.ownership-flow li { min-height: 180px; padding: 24px 20px; }
+.case-summary-title { margin: 32px 0 14px; font-size: 18px; letter-spacing: -.02em; }
+.case-summary { margin-top: 0; }
+.case-summary dd { font-size: 14px; line-height: 1.55; font-weight: 500; }
+.case-jump-links { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 22px; }
+.case-jump-links a { padding: 10px 14px; min-height: 44px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; font-weight: 650; }
+.case-jump-links a:hover { background: var(--soft); color: var(--accent); }
+.capture-guide { max-width: 760px; margin-top: 24px; color: var(--body-copy); }
+.capture-guide p { margin-bottom: 10px; }
+.image-help { color: var(--muted); font-size: 13px; }
+.case-section figure a, .niulai-capture-frame[href] { display: block; cursor: zoom-in; }
+.case-section figure a:hover img, .niulai-capture-frame[href]:hover img { filter: brightness(1.08); }
+@media (max-width: 600px) {
+  .ownership-flow li, .ownership-flow li:nth-child(odd), .ownership-flow li:last-child { padding-block: 16px; min-height: 0; }
+  .ownership-flow h3 { margin: 10px 0 6px; font-size: 20px; }
+  .case-section { padding-block: 42px; }
+  .page-hero { padding-bottom: 40px; }
+  .case-summary div { padding: 12px 15px; }
+}
+@media print {
+  @page { margin: 15mm; }
+  :root, :root[data-theme="dark"] { --bg: #fff; --surface: #fff; --soft: #f3f3f3; --text: #111; --body-copy: #333; --muted: #555; --accent: #284ab5; --line: #ccc; --card-line: #ccc; --glass-bg: #fff; }
+  html, body { background: white !important; color: #111 !important; }
+  html.motion-enabled .motion-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  *, *::before, *::after { animation: none !important; box-shadow: none !important; }
+  .site-header, .site-tools, .ask-widget, .owner-toggle-group, .ownership-explainer, .ownership-scrim, .case-jump-links { display: none !important; }
+  .section, .case-section, .page-hero, #responsibility { padding-block: 20px; }
+  .hero, .projects-hero, .content-grid, .contact { display: block; }
+  .hero, .profile-card { min-height: 0; }
+  .hero { padding-block: 20px; }
+  .profile-card { margin-top: 20px; }
+  h1, h2, h3 { break-after: avoid; }
+  figure, .case-facts div, .ownership-flow li { break-inside: avoid; }
+  .case-visual, .project-media, .skill-catalogue-figure { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 }

@@ -686,6 +686,45 @@
     "FightGame shows how the same product-direction and acceptance role applies to a branching multiplayer product.": "FightGame 展示相同的產品方向與驗收角色，如何應用於多分支的多人產品。"
   };
 
+  Object.assign(zh, {
+    "I turn business needs into working AI applications—from defining the workflow and integrating APIs to testing and deployment.": "我把業務需求轉化為可運作的 AI 應用，從定義工作流程、整合 API，到測試與部署。",
+    "Contact me": "聯絡我",
+    "How I deliver.": "我如何交付。",
+    "Agents help implement and test. I set the direction, review the work and personally accept the complete user flow.": "Agent 協助實作與測試；我設定方向、審查成果，並親自驗收完整使用流程。",
+    "Explore two end-to-end products, five applied AI workflows and two open-source utilities, with my role and the evidence behind each.": "瀏覽兩個端到端產品、五個應用型 AI 工作流程及兩個開源實用工具，了解我在各項作品中的角色與成果證據。",
+    "Tested simulation": "已測試模擬流程",
+    "Simulation tested · not a live channel": "模擬流程已測試 · 尚非線上頻道",
+    "The case in 30 seconds": "30 秒了解案例",
+    "Problem": "問題",
+    "Result": "成果",
+    "Case study sections": "案例章節",
+    "Product walkthrough": "產品流程",
+    "Architecture & delivery": "架構與交付",
+    "Testing & corrections": "測試與修正",
+    "Verified results": "已驗證成果",
+    "Status & limits": "狀態與限制",
+    "Keep one player identity and battle result consistent across online players.": "讓線上玩家的角色身份與對戰結果保持一致。",
+    "Set scope and system boundaries, coordinate Agents and accept complete playable flows.": "定義範圍與系統邊界、協調 Agent，並驗收完整可玩流程。",
+    "Core playability completed: custom avatars, a shared world and a 79-card battle system.": "完成基本可玩流程：自訂角色、共享世界及 79 張技能卡的對戰系統。",
+    "Code, automated checks and hands-on desktop, mobile and two-player acceptance.": "程式碼、自動化檢查，以及親自進行的桌面、手機和雙人流程驗收。",
+    "Turn market events into a replayable four-Agent story while keeping facts, dialogue and real actions separate.": "把市場事件轉化為可回看的四 Agent 故事，同時分開事實、對話與真實操作。",
+    "Define the product, voting and permission rules; review failures and approve releases.": "定義產品、投票及權限規則，審查失敗並決定發佈。",
+    "A read-only public demo backed by separately controlled execution and publishing.": "公開只讀示範，配合獨立受控的執行與發佈流程。",
+    "779/779 tests at the accepted 29 August 2026 baseline, plus controlled real-action acceptance checks.": "2026 年 8 月 29 日獲驗收基線通過 779/779 項測試，並完成受控真實操作驗收。",
+    "How to read these captures": "如何閱讀這些截圖",
+    "The game scene shows the four roles together. The dialogue window shows their different reactions to the same recorded event; it is not four independent authorizations to act.": "遊戲場景把四個角色放在一起；對話視窗呈現他們對同一已記錄事件的不同反應，不代表四份獨立操作授權。",
+    "Votes are fixed before model dialogue. Execution and publishing still require their own permission checks.": "投票在模型對話前已固定；執行與發佈仍須各自通過權限檢查。",
+    "Select either screenshot to open it at full size.": "點選任一截圖即可開啟原圖。",
+    "Select a capture to open the original image.": "點選截圖即可開啟原圖。",
+    "Open decision-layer screenshot at full size": "開啟決策場景原圖",
+    "Open Agent-dialogue screenshot at full size": "開啟 Agent 對話原圖",
+    "Four Agent characters in the shared decision scene": "共享決策場景中的四個 Agent 角色",
+    "Chinese dialogue from four Agents reacting to a recorded event": "四個 Agent 對已記錄事件作出反應的中文對話",
+    "Continue with Niulai Squad, a four-Agent system with a validated technical baseline and ongoing operations.": "繼續了解牛来生米小队：具已驗證技術基線、並持續運作的四 Agent 系統。",
+    "FightGame demonstrates a completed core-playability milestone. Niulai Squad demonstrates a validated multi-Agent technical baseline with ongoing operations.": "FightGame 展示已完成的基本可玩性里程碑；牛来生米小队展示已驗證、並持續運作的多 Agent 技術基線。",
+    "The accepted technical baseline is preserved; the product remains in active operation and development.": "已驗收的技術基線已留存；產品仍在持續運作及開發。"
+  });
+
   const pageMetaZh = {
     "John Chong — AI Product & Solutions Builder": "John Chong — AI 產品與解決方案建構者",
     "Projects — John Chong": "項目 — John Chong",
