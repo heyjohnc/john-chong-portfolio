@@ -1,5 +1,18 @@
 # Website services and Stripe entry — review draft
 
+## Release authorization update
+
+Owner approved deployment and confirmed individual provider Shing Yip Chong,
+public brand JohnChong. Owner rejected the proposed refund formula and accepted
+the short policy: project-specific delivery/cancellation/refund terms agreed in
+writing before payment; email requests; statutory rights unaffected. This
+supersedes the proposed formula and prepublication gates described below.
+Draft banners removed. Retention is purpose/obligation-based, with no invented
+fixed duration. No payment integration, Stripe approval or universal legal
+adequacy claimed. Actual quotes must specify cancellation/refund conditions;
+Stripe may request further information. Noindex retained for low discovery,
+not access control. Release receipt and production checks will be in PR #42.
+
 2026-09-05 · Level 2 public business-content / attribution increment.
 Owner approved JohnChong as the public name, existing aryipc@gmail.com contact,
 personal/portfolio sites, small-business sites, landing pages and improvements,
