@@ -687,6 +687,14 @@
   };
 
   Object.assign(zh, {
+    "Product definition": "產品定義",
+    "System design": "系統設計",
+    "No visa sponsorship required": "無需工作簽證擔保",
+    "About my background": "了解我的背景",
+    "Shared game state": "共享遊戲狀態",
+    "Four roles, one recorded story": "四個角色，一段可回看的故事",
+    "Game scene": "遊戲場景",
+    "Agent dialogue": "Agent 對話",
     "I turn business needs into working AI applications—from defining the workflow and integrating APIs to testing and deployment.": "我把業務需求轉化為可運作的 AI 應用，從定義工作流程、整合 API，到測試與部署。",
     "Contact me": "聯絡我",
     "How I deliver.": "我如何交付。",

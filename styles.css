@@ -1021,6 +1021,38 @@ html.motion-enabled.motion-started .name-accent { background-size: 100% 100%; }
   .page-hero { padding-bottom: 40px; }
   .case-summary div { padding: 12px 15px; }
 }
+/* Compact recruitment facts; detailed screenshots remain in the case studies. */
+.hero > .profile-card { min-height: 0; align-self: center; padding: 32px; gap: 28px; box-shadow: none; background: linear-gradient(145deg, #f5f4fc, #eeedf6); }
+.profile-card::after { display: none; }
+:root[data-theme="dark"] .hero > .profile-card { background: linear-gradient(145deg, #1d1d2b, #171820); border-color: #343344; }
+.profile-card .availability { margin: 0; letter-spacing: 0; }
+.profile-card .availability span { flex-shrink: 0; }
+.profile-eligibility h2 { margin: 0 0 10px; font-size: clamp(25px, 2.3vw, 32px); line-height: 1.15; letter-spacing: -.035em; }
+.profile-eligibility p { margin: 0; color: var(--body-copy); font-size: 14px; }
+.profile-details { display: grid; gap: 16px; margin: 0; }
+.profile-details dt { margin-bottom: 4px; color: var(--muted); font-size: 12px; }
+.profile-details dd { margin: 0; font-size: 14px; line-height: 1.5; }
+.profile-background-link { padding-top: 20px; border-top: 1px solid var(--line); font-size: 14px; }
+.project-media .overview-heading { font-size: 22px; font-weight: 650; line-height: 1.25; letter-spacing: -.025em; }
+.project-media .architecture-shot b { font-size: 16px; }
+.project-media .fight-authority-flow { display: flex; justify-content: center; }
+.project-media .fight-authority-flow strong { width: 100%; min-height: 48px; font-size: 16px; }
+.project-media .niulai-demo-panel { grid-template-rows: auto minmax(0, 1fr); align-content: center; }
+.project-media .niulai-demo-panel--decision { align-self: center; grid-template-rows: auto auto; }
+.project-media .niulai-demo-panel > b { font-size: 15px; line-height: 1.3; }
+.project-media .niulai-control-flow > span, .project-media .niulai-control-flow > strong { font-size: 12px; }
+@media (max-width: 600px) {
+  .hero > .profile-card { padding: 24px; gap: 20px; width: 100%; }
+  .profile-eligibility h2 { max-width: 280px; font-size: 27px; }
+  .profile-details { gap: 10px; }
+  .profile-details div { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; }
+  .profile-details dt { margin: 0; line-height: 21px; }
+  .profile-background-link { padding-top: 16px; }
+  .project-media .overview-heading { font-size: 20px; }
+  .project-media .architecture-shot b { font-size: 14px; }
+  .project-media .niulai-control-flow > span, .project-media .niulai-control-flow > strong { font-size: 11px; }
+}
+
 @media print {
   @page { margin: 15mm; }
   :root, :root[data-theme="dark"] { --bg: #fff; --surface: #fff; --soft: #f3f3f3; --text: #111; --body-copy: #333; --muted: #555; --accent: #284ab5; --line: #ccc; --card-line: #ccc; --glass-bg: #fff; }
