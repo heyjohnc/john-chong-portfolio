@@ -934,9 +934,44 @@
   languageButton.addEventListener("click", () => {
     applyLanguage(document.documentElement.dataset.language === "zh" ? "en" : "zh", true);
   });
-  themeButton.addEventListener("click", () => {
-    applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark", true);
-  });
+  let themeTransitionBusy = false;
+  async function toggleTheme() {
+    if (themeTransitionBusy) return;
+    const root = document.documentElement;
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!document.startViewTransition || motion.matches) {
+      applyTheme(next, true);
+      return;
+    }
+    themeTransitionBusy = true;
+    const box = themeButton.getBoundingClientRect();
+    const x = box.left + box.width / 2;
+    const y = box.top + box.height / 2;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    root.style.setProperty("--theme-reveal-x", `${x}px`);
+    root.style.setProperty("--theme-reveal-y", `${y}px`);
+    root.style.setProperty("--theme-reveal-radius", `${Math.ceil(radius)}px`);
+    root.classList.add("theme-revealing");
+    let transition;
+    const skip = () => transition?.skipTransition();
+    motion.addEventListener("change", skip);
+    window.addEventListener("resize", skip);
+    try {
+      transition = document.startViewTransition(() => applyTheme(next, true));
+      await transition.finished;
+    } catch (_) {
+      // Unsupported capture or skipped animation must never prevent switching.
+      applyTheme(next, true);
+    } finally {
+      motion.removeEventListener("change", skip);
+      window.removeEventListener("resize", skip);
+      root.classList.remove("theme-revealing");
+      for (const key of ["--theme-reveal-x", "--theme-reveal-y", "--theme-reveal-radius"]) root.style.removeProperty(key);
+      themeTransitionBusy = false;
+    }
+  }
+  themeButton.addEventListener("click", toggleTheme);
 
   applyTheme(readPreference(THEME_KEY, "dark"), false);
   applyLanguage(readPreference(LANGUAGE_KEY, "en"), false);
