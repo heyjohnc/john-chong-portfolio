@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 const read = name => readFileSync(new URL('../'+name, import.meta.url), 'utf8');
-test('homepage exposes two real product previews then three delivery steps, not the nine-item archive', () => {
+test('homepage exposes two product text cards then three delivery steps, not the nine-item archive', () => {
   const home=read('index.html');
   assert.equal((home.match(/class="home-product-card"/g)||[]).length,2);
   const flow=home.match(/<ol class="ownership-flow delivery-three">[\s\S]*?<\/ol>/)[0];
@@ -35,12 +35,15 @@ test('workflow contributions remain on demand and factual About boundaries stay 
   const about=read('about.html');
   for(const text of ['2015–Present','University of Wollongong','Shenzhen University','not ML research','substantial implementation and testing','Hong Kong permanent resident']) assert.ok(about.includes(text));
 });
-test('Niulai home preview discloses its crop and preserves the approved original image link', () => {
-  const home=read('index.html');
-  assert.match(home,/product-screenshot--dialogue" href="\/niulai.html"/);
-  assert.match(home,/Agent dialogue · cropped preview/);
-  assert.match(home,/class="screenshot-original-link" href="\/assets\/niulai\/agent-dialogue-window.png" target="_blank" rel="noreferrer"/);
-  assert.match(home,/width="388" height="664"/);
-  assert.match(read('styles.css'),/product-screenshot--dialogue img \{ object-fit: cover; object-position: 50% 50%; \}/);
-  for(const text of ['Agent dialogue · cropped preview','View full screenshot']) assert.ok(read('site.js').includes('"'+text+'":'));
+test('Home uses two single-link text cards without images or nested interactive elements', () => {
+  const cards=[...read('index.html').matchAll(/<article class="home-product-card">([\s\S]*?)<\/article>/g)].map(x=>x[1]);
+  assert.equal(cards.length,2);
+  for(const card of cards){
+    assert.equal((card.match(/<a /g)||[]).length,1);
+    assert.match(card,/class="home-product-copy home-product-link" href="\/(fightgame|niulai).html" aria-label="Read the/);
+    assert.doesNotMatch(card,/<img|<button|tabindex|onclick|cropped preview|View full screenshot/);
+    assert.match(card,/class="project-name"/);assert.match(card,/class="product-status"/);
+    assert.match(card,/<span class="text-link">Read case study/);
+  }
+  assert.match(read('styles.css'),/\.home-product-link:focus-visible/);
 });
