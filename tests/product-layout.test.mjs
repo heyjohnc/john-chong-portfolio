@@ -35,3 +35,12 @@ test('workflow contributions remain on demand and factual About boundaries stay 
   const about=read('about.html');
   for(const text of ['2015–Present','University of Wollongong','Shenzhen University','not ML research','substantial implementation and testing','Hong Kong permanent resident']) assert.ok(about.includes(text));
 });
+test('Niulai home preview discloses its crop and preserves the approved original image link', () => {
+  const home=read('index.html');
+  assert.match(home,/product-screenshot--dialogue" href="\/niulai.html"/);
+  assert.match(home,/Agent dialogue · cropped preview/);
+  assert.match(home,/class="screenshot-original-link" href="\/assets\/niulai\/agent-dialogue-window.png" target="_blank" rel="noreferrer"/);
+  assert.match(home,/width="388" height="664"/);
+  assert.match(read('styles.css'),/product-screenshot--dialogue img \{ object-fit: cover; object-position: 50% 50%; \}/);
+  for(const text of ['Agent dialogue · cropped preview','View full screenshot']) assert.ok(read('site.js').includes('"'+text+'":'));
+});

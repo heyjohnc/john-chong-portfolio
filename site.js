@@ -708,6 +708,9 @@
   };
 
   Object.assign(zh, {
+    "Cropped preview of Agent avatars and recorded dialogue; full screenshot linked below": "Agent 頭像與已記錄對話的局部預覽；下方可查看完整截圖",
+    "Agent dialogue · cropped preview": "Agent 對話 · 局部預覽",
+    "View full screenshot": "查看完整截圖",
     "When multiplayer results differed across devices, I recorded reproduction steps, expected and actual results, and screenshots. I routed the defect to the responsible Agent, then repeated cross-device regression after the correction before accepting the playable flow.": "多人遊戲結果在不同裝置出現差異時，我記錄重現步驟、預期與實際結果及截圖，交由負責的 Agent 修復，再重跑跨裝置回歸測試，確認完整可玩流程後才驗收。",
     "Website services": "網站設計服務",
     "Product definition": "產品定義",

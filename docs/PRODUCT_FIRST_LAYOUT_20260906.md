@@ -1,6 +1,9 @@
 # Product-first layout — 6 September 2026
 
 Status: implemented and locally tested; **Draft PR only, not released**.
+Latest follow-up: Niulai Home now uses a **labelled dialogue crop** and a full
+screenshot link; see the follow-up evidence below. Earlier full-page captures
+show the initial PR iteration, not this latest card.
 Evidence level: **Level 2 public UI/content batch**.
 Rollback/review baseline: `dc53c7f140dc2a6cdd677e6d2a6b1edce6205d5a` (main).
 Branch: `hksub-agent/product-first-layout-20260906`.
@@ -108,6 +111,45 @@ build; no private screenshots or generated artwork were introduced.
 Additional: [Home mobile ZH](review-assets/layout-20260906/home-after-mobile-zh.png),
 [Projects desktop](review-assets/layout-20260906/projects-after-desktop.png),
 [About mobile ZH](review-assets/layout-20260906/about-after-mobile-zh.png).
+
+## PR #44 follow-up — clearer Niulai mobile preview
+
+Owner/hk approved a non-blocking visual refinement on the same Draft PR.
+Reviewed the two already approved public captures: the 710×168 scene and
+388×664 dialogue window. The latter better exposes avatars and actual dialogue
+at card width. Only Home changes; Projects/case originals remain available.
+
+The source PNG is unchanged. CSS uses an undistorted centre crop, labelled
+“Agent dialogue · cropped preview” in EN/ZH, with a separate “View full
+screenshot” link. The mobile viewport is 4:3; desktop keeps the existing card
+ratio. This is intentionally a partial view, not all four roles at once, and
+does not suggest that the screenshot is live. No generated/reconstructed image,
+private asset, dependency or tracking change was introduced.
+
+- Full tests **85/85**, RAG **54/54**, full build and syntax/diff checks pass.
+- Additional **12 Home combinations**: 1440/390/320 × EN/ZH × light/dark;
+  no overflow, original image loaded. Actual desktop/390/320 captures reviewed.
+- Stripe image/case link remains `/from-stripe/niulai`; original PNG link stays
+  `/assets/niulai/agent-dialogue-window.png`, with `_blank`/`noreferrer`.
+  Actual case click and original-image popup pass. Unit tests verify all six
+  Stripe family paths plus ordinary/GitHub/CV behavior.
+- Opt-out `1`, zero insights scripts, nonlocal requests blocked; no production
+  Ask request, analytics event, session read or QA-mode modification.
+- Original PNG, routing, analytics, Ask, services and checked-in RAG indexes
+  remain unchanged. Generated timestamp-only index differences removed.
+
+| Card comparison | Before | After |
+| --- | --- | --- |
+| Desktop 1440 | [Before](review-assets/layout-20260906/niulai-card-before-1440.png) | [After](review-assets/layout-20260906/niulai-card-after-1440.png) |
+| Mobile 390 | [Before](review-assets/layout-20260906/niulai-card-before-390.png) | [After](review-assets/layout-20260906/niulai-card-after-390.png) |
+| Mobile 320 | [Before](review-assets/layout-20260906/niulai-card-before-320.png) | [After](review-assets/layout-20260906/niulai-card-after-320.png) |
+
+These focused comparisons render the initial PR's exact card markup versus
+the updated markup with the same common styles. Fixed navigation/Ask overlays
+are hidden only during screenshot capture to avoid covering the card region;
+they remain present in the website and interaction checks. Playwright was used
+for browser verification; the existing native HTML/CSS stack was retained per
+the design-resource rules. Still Draft-only; no merge/deployment authorization.
 
 ## Owner/Agent boundaries, limits and release gate
 
