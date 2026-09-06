@@ -708,6 +708,10 @@
   };
 
   Object.assign(zh, {
+    "Cropped preview of Agent avatars and recorded dialogue; full screenshot linked below": "Agent 頭像與已記錄對話的局部預覽；下方可查看完整截圖",
+    "Agent dialogue · cropped preview": "Agent 對話 · 局部預覽",
+    "View full screenshot": "查看完整截圖",
+    "When multiplayer results differed across devices, I recorded reproduction steps, expected and actual results, and screenshots. I routed the defect to the responsible Agent, then repeated cross-device regression after the correction before accepting the playable flow.": "多人遊戲結果在不同裝置出現差異時，我記錄重現步驟、預期與實際結果及截圖，交由負責的 Agent 修復，再重跑跨裝置回歸測試，確認完整可玩流程後才驗收。",
     "Website services": "網站設計服務",
     "Product definition": "產品定義",
     "System design": "系統設計",
@@ -753,6 +757,51 @@
     "Continue with Niulai Squad, a four-Agent system with a validated technical baseline and ongoing operations.": "繼續了解牛来生米小队：具已驗證技術基線、並持續運作的四 Agent 系統。",
     "FightGame demonstrates a completed core-playability milestone. Niulai Squad demonstrates a validated multi-Agent technical baseline with ongoing operations.": "FightGame 展示已完成的基本可玩性里程碑；牛来生米小队展示已驗證、並持續運作的多 Agent 技術基線。",
     "The accepted technical baseline is preserved; the product remains in active operation and development.": "已驗收的技術基線已留存；產品仍在持續運作及開發。"
+  });
+
+  Object.assign(zh, {
+    "I turn business needs into usable AI products—from client conversations and workflow design to testing and delivery.": "我把業務需求轉化為可用的 AI 產品——從客戶溝通、工作流程設計，到測試與交付。",
+    "Two products, from idea to working experience.": "兩個產品，從想法到可體驗的成果。",
+    "AI-personalized multiplayer game": "AI 個人化多人遊戲",
+    "Upload an image, generate your avatar and carry one identity into a shared world and battle.": "上傳圖片、生成角色，以同一個形象進入共享世界與戰鬥。",
+    "Core playability accepted · not a public launch": "核心可玩性已驗收 · 並非公開上線",
+    "Four-Agent Web3 story system": "四 Agent Web3 故事系統",
+    "Watch four Agents turn on-chain events into a replayable character story, with distinct voices and one shared timeline.": "觀看四個 Agent 以不同角色聲線，把鏈上事件轉化為可回放的故事，共用同一條時間線。",
+    "Read-only public demo · controlled actions stay separate": "只讀公開演示 · 實際操作獨立受控",
+    "Explore all nine projects": "查看全部九個項目",
+    "Read the FightGame case study": "閱讀 FightGame 案例",
+    "Read the Niulai Squad case study": "閱讀牛来生米小队案例",
+    "Client needs, scope and acceptance criteria.": "客戶需求、範圍與驗收標準。",
+    "Build & Integrate": "開發與整合",
+    "Agent-assisted development, with interfaces, APIs and workflows connected.": "透過 Agent 輔助開發，整合介面、API 與工作流程。",
+    "Test & Deliver": "測試與交付",
+    "I personally test the full experience, direct fixes and accept the delivery.": "我親自測試完整體驗、指導修復，並驗收交付成果。",
+    "The case studies show the permissions, review decisions and failure-recovery loops behind these steps.": "案例進一步展示各步驟背後的權限、審查決策與故障恢復流程。",
+    "Client delivery and digital-studio experience since 2015; AI product work since 2024.": "2015 年起從事客戶交付與數碼工作室業務；2024 年起投入 AI 產品。",
+    "From client delivery": "從客戶交付",
+    "to AI products.": "走向 AI 產品。",
+    "Client-facing delivery, digital-studio ownership and hands-on AI product acceptance.": "面向客戶的交付、數碼工作室經營，以及親自參與 AI 產品驗收。",
+    "My background": "我的背景",
+    "Agents carry out substantial implementation and testing. I own product direction, boundaries, integration choices, failure review and full-flow acceptance. This is application delivery, not ML research or a claim that I manually wrote every line.": "Agent 承擔大量實作與測試。我負責產品方向、邊界、整合選擇、故障審查與完整流程驗收。這是應用交付，而非機器學習研究，也不代表每行程式碼都由我手寫。",
+    "Made AI products the main focus from 2024, carrying the same end-to-end ownership into product definition, workflow and system design, API integration, automation and deployment. I carry projects through workflow design, integration, failure review and full-flow acceptance.": "2024 年起以 AI 產品為主要方向，將端到端責任延伸至產品定義、工作流程與系統設計、API 整合、自動化及部署。我持續參與流程設計、整合、故障審查與完整驗收。",
+    "Upload a reference image, generate a pixel avatar and play as that same character in a shared multiplayer world and skill-card battles.": "上傳參考圖片、生成像素角色，並以同一角色進入多人共享世界與技能卡戰鬥。",
+    "A four-Agent Web3 interaction system: watch on-chain market events become a replayable character story in a read-only public demo.": "四 Agent Web3 互動系統：在只讀公開演示中，觀看鏈上市場事件變成可回放的角色故事。",
+    "Watch an event become a shared story.": "看一個事件變成共同的故事。",
+    "The public demo is read-only. Viewing the story does not authorize trades or publishing.": "公開演示僅供閱讀。觀看故事不會授權交易或發佈。",
+    "Follow an event": "追蹤事件",
+    "Public market evidence enters one recorded timeline.": "公開市場證據進入同一條有記錄的時間線。",
+    "Watch four reactions": "觀看四種反應",
+    "Four characters respond in distinct voices to the same recorded state.": "四個角色以不同聲線回應同一個已記錄狀態。",
+    "Replay the story": "回放故事",
+    "Follow the recorded result and dialogue without controlling real actions.": "追看已記錄的結果與對話，不控制實際操作。",
+    "One public observer described the conversation interface as live and interactive. This is an informal observation, not a customer testimonial or formal user research.": "一位公開觀察者形容對話介面是即時且可互動的。這屬非正式觀察，並非客戶證言或正式用戶研究。",
+    "Open public post ↗": "查看公開帖文 ↗",
+    "One shared timeline": "同一條時間線",
+    "Keep evidence, votes, results and dialogue addressable from the same event history.": "讓證據、投票、結果與對話都能從同一事件歷史追溯。",
+    "Decide before dialogue": "先決定，再對話",
+    "Freeze the four votes before models narrate the outcome.": "先固定四票結果，再由模型講述。",
+    "Separate viewing from authority": "觀看與權限分離",
+    "Keep the public demo read-only; execution and publishing require separate server-side gates.": "公開演示保持只讀；執行與發佈需要獨立的伺服器端門禁。"
   });
 
   const pageMetaZh = {
