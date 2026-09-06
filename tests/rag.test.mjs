@@ -97,27 +97,28 @@ test("public repository links stay explicit and limited to verified targets", as
   ].sort());
 });
 
-test("flagship visuals lead with architecture while retaining real product evidence", async () => {
+test("product previews use real screenshots and cases retain architecture evidence", async () => {
   const projects = await readFile(new URL("../projects.html", import.meta.url), "utf8");
   const fightgame = await readFile(new URL("../fightgame.html", import.meta.url), "utf8");
   const niulai = await readFile(new URL("../niulai.html", import.meta.url), "utf8");
   const niulaiDecisionLayer = await readFile(new URL("../assets/niulai/in-game-decision-layer.png", import.meta.url));
   const niulaiDialogueWindow = await readFile(new URL("../assets/niulai/agent-dialogue-window.png", import.meta.url));
 
-  for (const page of [projects, fightgame]) {
+  for (const page of [fightgame]) {
     assert.match(page, /flagship-architecture--fight/);
     for (const asset of ["profile-and-loadout.png", "world-and-npcs.png", "turn-battle.png"]) assert.match(page, new RegExp(asset));
     assert.match(page, /Server authority/);
   }
 
-  for (const page of [projects, niulai]) {
+  for (const page of [niulai]) {
     assert.match(page, /flagship-architecture--niulai/);
     assert.match(page, /assets\/niulai\/in-game-decision-layer\.png/);
     assert.match(page, /assets\/niulai\/agent-dialogue-window\.png/);
     assert.doesNotMatch(page, /assets\/niulai\/agent-window\.png/);
   }
 
-  assert.match(projects, /Four roles, one recorded story/);
+  assert.equal((projects.match(/project-media product-screenshot/g) || []).length, 2);
+  assert.match(projects, /assets\/niulai\/in-game-decision-layer\.png/);
   assert.match(niulai, /Four roles vote before the shared result\./);
   assert.match(niulai, /Distinct voices react to one recorded state\./);
 
@@ -208,7 +209,8 @@ test("Niulai public feedback stays traceable, deduplicated and bounded", async (
   const translations = await readFile(new URL("../site.js", import.meta.url), "utf8");
   assert.equal((caseStudy.match(/class="public-feedback-card"/g) || []).length, 3);
   for (const statusId of ["2094721262237131064", "2094719033992220858", "2094723001459851689", "2094719626714497353"]) {
-    assert.equal((caseStudy.match(new RegExp(statusId, "g")) || []).length, 1);
+    // The introductory excerpt cites the same observer, not an additional testimonial.
+    assert.equal((caseStudy.match(new RegExp(statusId, "g")) || []).length, statusId === "2094721262237131064" ? 2 : 1);
   }
   assert.match(caseStudy, /Same observer as 01/);
   assert.match(caseStudy, /not customer testimonials, formal user research, or a code or security audit/i);

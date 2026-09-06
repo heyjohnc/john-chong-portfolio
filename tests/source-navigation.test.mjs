@@ -4,8 +4,7 @@ import vm from 'node:vm';
 import { readFileSync } from 'node:fs';
 const source = readFileSync(new URL('../site.js', import.meta.url), 'utf8');
 const code = source.slice(source.indexOf('  function preserveStripeSource()'), source.indexOf('  const zh ='));
-function run(pathname) {
-  const values = ['/projects.html#projects','/services.html','/index.html#contact','#top','/presentation/','/api/ask','mailto:aryipc@gmail.com','https://example.com/about.html','/assets/example.png','/from-github'];
+function run(pathname, values = ['/projects.html#projects','/services.html','/index.html#contact','#top','/presentation/','/api/ask','mailto:aryipc@gmail.com','https://example.com/about.html','/assets/example.png','/from-github']) {
   const links = values.map(href => ({ href, getAttribute() { return this.href; }, setAttribute(_, value) { this.href = value; } }));
   vm.runInNewContext(code, { URL, location: { pathname, href: 'https://johnchong.info' + pathname, origin: 'https://johnchong.info' }, document: { querySelectorAll: () => links } });
   return { values, result: links.map(x => x.href) };
@@ -16,6 +15,16 @@ test('Stripe navigation maps public pages, preserves fragments, excludes private
     assert.deepEqual(result.slice(0,3), ['/from-stripe/projects#projects','/from-stripe','/from-stripe/home#contact']);
     assert.deepEqual(result.slice(3),values.slice(3));
   }
+});
+test('new homepage screenshot and case links preserve only the approved Stripe family', () => {
+  const home = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  const cards = home.match(/<section class="section wrap home-products"[\s\S]*?<\/section>/)[0];
+  const hrefs = [...cards.matchAll(/href="([^"]+)"/g)].map(x => x[1]);
+  assert.deepEqual(hrefs, ['/fightgame.html','/fightgame.html','/niulai.html','/niulai.html','/projects.html']);
+  for (const path of ['/from-stripe','/from-stripe/home','/from-stripe/projects','/from-stripe/about','/from-stripe/fightgame','/from-stripe/niulai']) {
+    assert.deepEqual(run(path, hrefs).result, ['/from-stripe/fightgame','/from-stripe/fightgame','/from-stripe/niulai','/from-stripe/niulai','/from-stripe/projects']);
+  }
+  for (const path of ['/','/from-github','/cv-application-20260907','/cv-product-20260907']) assert.deepEqual(run(path, hrefs).result, hrefs);
 });
 test('normal and unapproved entry paths never inherit Stripe attribution', () => {
   for (const path of ['/','/projects.html','/from-github','/cv-product-20260907','/from-stripe/private']) {

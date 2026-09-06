@@ -42,7 +42,8 @@
       <a class="back-link" href="/projects.html">← Projects</a>
       <p class="eyebrow">FightGame · End-to-End Product</p>
       <h1>Personalized-Avatar Multiplayer Pixel RPG</h1>
-      <p class="page-lead">A personalized-avatar multiplayer pixel RPG where player identity, online presence, skill-card state and turn resolution have to remain coherent across a branching client–server product.</p>
+      <p class="page-lead">Upload a reference image, generate a pixel avatar and play as that same character in a shared multiplayer world and skill-card battles.</p>
+      <figure class="case-product-screenshot"><a href="/assets/fightgame/world-and-npcs.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/world-and-npcs.png" alt="FightGame shared world with a player and named NPCs" width="1178" height="560" decoding="async"></a><figcaption>Select a capture to open the original image.</figcaption></figure>
       <h2 class="case-summary-title">The case in 30 seconds</h2>
       <dl class="case-facts case-summary">
         <div><dt>Problem</dt><dd>Keep one player identity and battle result consistent across online players.</dd></div>
@@ -51,30 +52,7 @@
         <div><dt>Evidence</dt><dd>Code, automated checks and hands-on desktop, mobile and two-player acceptance.</dd></div>
       </dl>
       <nav class="case-jump-links" aria-label="Case study sections"><a href="#fight-avatar-title">Product walkthrough</a><a href="#fight-delivery-title">Architecture &amp; delivery</a><a href="#fight-acceptance">Testing &amp; corrections</a><a href="#fight-boundary">Status &amp; limits</a></nav>
-      <div class="case-visual flagship-architecture flagship-architecture--fight" role="img" aria-label="FightGame architecture connecting persistent identity, shared-world presence and synchronized battle through an authoritative server">
-        <span class="architecture-kicker"><span>Client–server product</span><b>Three connected contexts</b></span>
-        <span class="fight-contexts">
-          <span class="architecture-shot"><img src="/assets/fightgame/profile-and-loadout.png" alt="" width="1178" height="560"><span><small>01 · Identity</small><b>Profile &amp; loadout</b></span></span>
-          <span class="architecture-shot"><img src="/assets/fightgame/world-and-npcs.png" alt="" width="1178" height="560"><span><small>02 · Presence</small><b>Shared world</b></span></span>
-          <span class="architecture-shot"><img src="/assets/fightgame/turn-battle.png" alt="" width="1178" height="560"><span><small>03 · Resolution</small><b>Online battle</b></span></span>
-        </span>
-        <span class="fight-authority-flow" aria-hidden="true"><span>Player intentions</span><i></i><strong>Server authority<small>Validate · resolve · persist</small></strong><i></i><span>One shared outcome</span></span>
-        <span class="architecture-stack" aria-hidden="true"><span>Phaser client</span><span>Colyseus rooms</span><span>Express APIs</span></span>
-      </div>
-    </section>
 
-    <section class="case-section wrap">
-      <div class="content-grid">
-        <h2>The challenge</h2>
-        <div class="content-body">
-          <p>The difficult part was not producing another game screen. The same player identity had to survive the profile, overworld, remote-player and battle contexts. Two online players also needed to submit different actions but receive one shared, authoritative round result.</p>
-          <p>I translated the broad game direction into staged systems, set module boundaries and acceptance priorities, coordinated persistent Agent ownership, and reviewed the actual playable flows as the product grew.</p>
-        </div>
-      </div>
-      <div class="media-pair">
-        <figure><a href="/assets/fightgame/world-and-npcs.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/world-and-npcs.png" alt="FightGame shared world with a player and named NPCs" width="1178" height="560" loading="lazy" decoding="async"></a><figcaption>Shared world and NPC layer</figcaption></figure>
-        <figure><a href="/assets/fightgame/profile-and-loadout.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/profile-and-loadout.png" alt="FightGame profile with avatar and equipped cards" width="1178" height="560" loading="lazy" decoding="async"></a><figcaption>Persistent identity and card loadout</figcaption></figure>
-      </div>
     </section>
 
     <section class="case-section wrap fight-avatar-section" aria-labelledby="fight-avatar-title">
@@ -93,10 +71,47 @@
       <p class="fight-flow-note"><strong>One identity, three contexts.</strong> The generated skin is not a detached demo output; it becomes the active avatar used by profile, overworld and battle views.</p>
     </section>
 
+    <section class="case-section wrap">
+      <div class="content-grid">
+        <h2>The challenge</h2>
+        <div class="content-body">
+          <p>The difficult part was not producing another game screen. The same player identity had to survive the profile, overworld, remote-player and battle contexts. Two online players also needed to submit different actions but receive one shared, authoritative round result.</p>
+          <p>I translated the broad game direction into staged systems, set module boundaries and acceptance priorities, coordinated persistent Agent ownership, and reviewed the actual playable flows as the product grew.</p>
+        </div>
+      </div>
+      <div class="media-pair">
+        <figure><a href="/assets/fightgame/world-and-npcs.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/world-and-npcs.png" alt="FightGame shared world with a player and named NPCs" width="1178" height="560" loading="lazy" decoding="async"></a><figcaption>Shared world and NPC layer</figcaption></figure>
+        <figure><a href="/assets/fightgame/profile-and-loadout.png" target="_blank" rel="noreferrer"><img src="/assets/fightgame/profile-and-loadout.png" alt="FightGame profile with avatar and equipped cards" width="1178" height="560" loading="lazy" decoding="async"></a><figcaption>Persistent identity and card loadout</figcaption></figure>
+      </div>
+    </section>
+
+
+
+    <section class="case-section wrap">
+      <div class="content-grid">
+        <h2>Three product decisions</h2>
+        <ol class="decision-list">
+          <li><span>01</span><div><h3>Separate intention from resolution</h3><p>Each player submits a command; the server owns the authoritative round result instead of trusting either client.</p></div></li>
+          <li><span>02</span><div><h3>Keep identity consistent</h3><p>Profile, overworld, remote-player and battle views use the same player identity rather than disconnected representations.</p></div></li>
+          <li><span>03</span><div><h3>Make mechanical depth readable</h3><p>A code-verified 79-card catalogue supports limits, elements, counters, statuses and combo setup/payoff while preserving an explainable core loop.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
     <section class="case-section wrap case-map-section" aria-labelledby="fight-delivery-title">
       <div class="case-map-heading">
         <div><p class="eyebrow">Product delivery map</p><h2 id="fight-delivery-title">From a broad game idea to an accepted playable system.</h2></div>
         <p>The difficult work sits between the brief and the build: defining what “playable” means, dividing persistent ownership, integrating the parts and sending failures back through the loop.</p>
+      </div>
+      <div class="case-visual flagship-architecture flagship-architecture--fight" role="img" aria-label="FightGame architecture connecting persistent identity, shared-world presence and synchronized battle through an authoritative server">
+        <span class="architecture-kicker"><span>Client–server product</span><b>Three connected contexts</b></span>
+        <span class="fight-contexts">
+          <span class="architecture-shot"><img src="/assets/fightgame/profile-and-loadout.png" alt="" width="1178" height="560"><span><small>01 · Identity</small><b>Profile &amp; loadout</b></span></span>
+          <span class="architecture-shot"><img src="/assets/fightgame/world-and-npcs.png" alt="" width="1178" height="560"><span><small>02 · Presence</small><b>Shared world</b></span></span>
+          <span class="architecture-shot"><img src="/assets/fightgame/turn-battle.png" alt="" width="1178" height="560"><span><small>03 · Resolution</small><b>Online battle</b></span></span>
+        </span>
+        <span class="fight-authority-flow" aria-hidden="true"><span>Player intentions</span><i></i><strong>Server authority<small>Validate · resolve · persist</small></strong><i></i><span>One shared outcome</span></span>
+        <span class="architecture-stack" aria-hidden="true"><span>Phaser client</span><span>Colyseus rooms</span><span>Express APIs</span></span>
       </div>
       <div class="fight-delivery-map">
         <ol class="delivery-track">
@@ -122,24 +137,14 @@
       </div>
     </section>
 
-    <section class="case-section section--soft" aria-labelledby="fight-cards-title">
-      <div class="wrap">
-        <div class="case-map-heading">
-          <div><p class="eyebrow">Mechanical breadth</p><h2 id="fight-cards-title">A complete 79-card system makes tactical depth inspectable.</h2></div>
-          <p>The complete collection board shows all 79 cards at once: 40 Common, 30 Uncommon and nine Premium cards across Rare, Epic and Legendary tiers. Together they support deck limits, elements, counters, statuses and combo setup/payoff.</p>
-        </div>
-        <figure class="skill-catalogue-figure">
-          <a class="skill-catalogue-media" href="/assets/fightgame/skill-card-collection-board.webp" target="_blank" rel="noreferrer" aria-label="Open the full 79-card FightGame collection board"><img src="/assets/fightgame/skill-card-collection-board.webp" alt="Complete FightGame collection board showing all 79 skill cards by rarity" width="1920" height="2422" loading="lazy" decoding="async"></a>
-          <figcaption><span>Complete collection board</span><strong>79 cards · one inspectable system</strong><small>40 Common · 30 Uncommon · 9 Premium across Rare, Epic and Legendary tiers.</small><a href="/assets/fightgame/skill-card-collection-board.webp" target="_blank" rel="noreferrer">View full collection ↗</a></figcaption>
-        </figure>
-      </div>
-    </section>
+
 
     <section class="case-section section--soft">
       <div class="wrap content-grid">
         <div><p class="eyebrow">Hands-on acceptance</p><h2 id="fight-acceptance">My UAT correction loop</h2></div>
         <div class="content-body">
           <p>I personally tested the complete flows. When an Agent-delivered feature looked finished but failed inside the product, I turned the failure into a specific correction cycle.</p>
+          <p>When multiplayer results differed across devices, I recorded reproduction steps, expected and actual results, and screenshots. I routed the defect to the responsible Agent, then repeated cross-device regression after the correction before accepting the playable flow.</p>
           <ol class="uat-loop" aria-label="User acceptance testing correction loop">
             <li><span>01</span><strong>Observe</strong><small>See the failure in context</small></li>
             <li><span>02</span><strong>Reproduce</strong><small>Make the defect repeatable</small></li>
@@ -152,14 +157,18 @@
       </div>
     </section>
 
-    <section class="case-section wrap">
-      <div class="content-grid">
-        <h2>Three product decisions</h2>
-        <ol class="decision-list">
-          <li><span>01</span><div><h3>Separate intention from resolution</h3><p>Each player submits a command; the server owns the authoritative round result instead of trusting either client.</p></div></li>
-          <li><span>02</span><div><h3>Keep identity consistent</h3><p>Profile, overworld, remote-player and battle views use the same player identity rather than disconnected representations.</p></div></li>
-          <li><span>03</span><div><h3>Make mechanical depth readable</h3><p>A code-verified 79-card catalogue supports limits, elements, counters, statuses and combo setup/payoff while preserving an explainable core loop.</p></div></li>
-        </ol>
+
+
+    <section class="case-section section--soft" aria-labelledby="fight-cards-title">
+      <div class="wrap">
+        <div class="case-map-heading">
+          <div><p class="eyebrow">Mechanical breadth</p><h2 id="fight-cards-title">A complete 79-card system makes tactical depth inspectable.</h2></div>
+          <p>The complete collection board shows all 79 cards at once: 40 Common, 30 Uncommon and nine Premium cards across Rare, Epic and Legendary tiers. Together they support deck limits, elements, counters, statuses and combo setup/payoff.</p>
+        </div>
+        <figure class="skill-catalogue-figure">
+          <a class="skill-catalogue-media" href="/assets/fightgame/skill-card-collection-board.webp" target="_blank" rel="noreferrer" aria-label="Open the full 79-card FightGame collection board"><img src="/assets/fightgame/skill-card-collection-board.webp" alt="Complete FightGame collection board showing all 79 skill cards by rarity" width="1920" height="2422" loading="lazy" decoding="async"></a>
+          <figcaption><span>Complete collection board</span><strong>79 cards · one inspectable system</strong><small>40 Common · 30 Uncommon · 9 Premium across Rare, Epic and Legendary tiers.</small><a href="/assets/fightgame/skill-card-collection-board.webp" target="_blank" rel="noreferrer">View full collection ↗</a></figcaption>
+        </figure>
       </div>
     </section>
 

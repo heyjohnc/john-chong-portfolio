@@ -1,5 +1,9 @@
 # Portfolio reading polish — 5 September 2026
 
+Later, separately authorized **Draft-only** work: [6 September product-first
+layout](PRODUCT_FIRST_LAYOUT_20260906.md). That handoff supersedes the earlier
+homepage-no-project-cards preference; this document remains historical evidence.
+
 Status: TESTED locally; Owner authorized merge/deployment on 5 September 2026;
 visual acceptance of the deployed result remains PENDING. Release identity and
 production verification are recorded in PR #36.
